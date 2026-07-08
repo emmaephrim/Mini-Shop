@@ -3,12 +3,19 @@ import 'package:mini_shop_app/data/products.dart';
 import 'package:mini_shop_app/widgets/product_item.dart';
 
 class ProductsOverviewScreen extends StatelessWidget {
+  static const routeName = '/';
+
   const ProductsOverviewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('MiniShop')),
+      appBar: AppBar(
+        title: Text('MiniShop'),
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.shopping_cart)),
+        ],
+      ),
       body: GridView.builder(
         padding: const EdgeInsets.all(10),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -24,6 +31,7 @@ class ProductsOverviewScreen extends StatelessWidget {
           imageUrl: loadedProducts[index].imageUrl,
         ),
       ),
+      drawer: Drawer(),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mini_shop_app/config/theme.dart';
 import 'package:mini_shop_app/config/util.dart';
+import 'package:mini_shop_app/screens/product_detail_screen.dart';
 import 'package:mini_shop_app/screens/products_overview_screen.dart';
 
 void main() {
@@ -34,7 +35,10 @@ class ShopApp extends StatelessWidget {
                     MaterialTheme.darkHighContrastScheme().onPrimary,
               ),
             ),
-      routes: {'/': (context) => ProductsOverviewScreen()},
+      routes: {
+        ProductsOverviewScreen.routeName: (context) => ProductsOverviewScreen(),
+        ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
+      },
     );
   }
 }
