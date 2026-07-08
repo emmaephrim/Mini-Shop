@@ -4,11 +4,11 @@ import 'package:mini_shop_app/config/util.dart';
 import 'package:mini_shop_app/screens/products_overview_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ShopApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ShopApp extends StatelessWidget {
+  const ShopApp({super.key});
 
   @override
   Widget build(BuildContext context) {
