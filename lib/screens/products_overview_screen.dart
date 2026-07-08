@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:mini_shop_app/data/products.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mini_shop_app/providers/product_provider.dart';
 import 'package:mini_shop_app/widgets/product_item.dart';
 
-class ProductsOverviewScreen extends StatelessWidget {
+class ProductsOverviewScreen extends ConsumerWidget {
   static const routeName = '/';
 
   const ProductsOverviewScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final products = ref.watch(productsProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('MiniShop'),
@@ -24,11 +27,11 @@ class ProductsOverviewScreen extends StatelessWidget {
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
         ),
-        itemCount: loadedProducts.length,
+        itemCount: products.length,
         itemBuilder: (ctx, index) => ProductItem(
-          id: loadedProducts[index].id,
-          title: loadedProducts[index].title,
-          imageUrl: loadedProducts[index].imageUrl,
+          id: products[index].id,
+          title: products[index].title,
+          imageUrl: products[index].imageUrl,
         ),
       ),
       drawer: Drawer(),

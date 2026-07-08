@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/config/theme.dart';
 import 'package:mini_shop_app/config/util.dart';
 import 'package:mini_shop_app/screens/product_detail_screen.dart';
 import 'package:mini_shop_app/screens/products_overview_screen.dart';
 
 void main() {
-  runApp(const ShopApp());
+  runApp(ProviderScope(child: const ShopApp()));
 }
 
 class ShopApp extends StatelessWidget {

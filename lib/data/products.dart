@@ -1,6 +1,6 @@
 import 'package:mini_shop_app/models/product.dart';
 
-List<Product> loadedProducts = [
+List<Product> products = [
   Product(
     id: 'p1',
     title: 'Red Shirt',
