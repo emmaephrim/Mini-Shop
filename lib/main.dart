@@ -12,27 +12,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return MaterialApp(
-    //   debugShowCheckedModeBanner: false,
-    //   title: 'Mini Shop',
-    //   theme: ThemeData(
-    //     useMaterial3: true,
-    //     fontFamily: 'Lato',
-    //     colorScheme: MaterialTheme.darkHighContrastScheme(),
-    //     appBarTheme: AppBarTheme(
-    //       backgroundColor: Colors.amber,
-    //       titleTextStyle: TextStyle(color: Colors.black, fontSize: 22),
-    //     ),
-    //   ),
-    //   routes: {'/': (context) => ProductsOverviewScreen()},
-    // );
-
     final brightness = View.of(context).platformDispatcher.platformBrightness;
 
-    // Retrieves the default theme for the platform
-    //TextTheme textTheme = Theme.of(context).textTheme;
-
-    // Use with Google Fonts package to use downloadable fonts
     TextTheme textTheme = createTextTheme(context, "Lato", "Anton");
 
     MaterialTheme theme = MaterialTheme(textTheme);
@@ -40,16 +21,19 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Mini Shop',
       theme: brightness == Brightness.light
-          ? theme.light()
-          : theme.darkHighContrast(),
-
-      // theme: ThemeData(
-      //   colorScheme: MaterialTheme.darkHighContrastScheme(),
-      //   appBarTheme: AppBarTheme(
-      //     backgroundColor: MaterialTheme.darkHighContrastScheme().surfaceTint,
-      //     // foregroundColor: Theme.of(context).,
-      //   ),
-      // ),
+          ? theme.light().copyWith(
+              appBarTheme: AppBarTheme(
+                backgroundColor: MaterialTheme.lightScheme().primary,
+                foregroundColor: MaterialTheme.lightScheme().onPrimary,
+              ),
+            )
+          : theme.darkHighContrast().copyWith(
+              appBarTheme: AppBarTheme(
+                backgroundColor: MaterialTheme.darkHighContrastScheme().primary,
+                foregroundColor:
+                    MaterialTheme.darkHighContrastScheme().onPrimary,
+              ),
+            ),
       routes: {'/': (context) => ProductsOverviewScreen()},
     );
   }
