@@ -15,7 +15,16 @@ class ProductsOverviewScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text('MiniShop'),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.shopping_cart)),
+          IconButton(
+            onPressed: () {},
+            icon: Badge.count(
+              textColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: Theme.of(context).colorScheme.scrim,
+              count: 2,
+              child: const Icon(Icons.shopping_cart),
+            ),
+          ),
+
           PopupMenuButton(
             itemBuilder: (_) => [
               PopupMenuItem(
