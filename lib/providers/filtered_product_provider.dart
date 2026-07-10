@@ -9,7 +9,7 @@ final filteredProductsProvider = Provider<List<Product>>((ref) {
   final showFavoritesOnly = ref.watch(showFavoritesOnlyProvider);
 
   if (showFavoritesOnly) {
-    return allProducts.where((item) => item.isFavorite == false).toList();
+    return allProducts.where((item) => item.isFavorite == true).toList();
   }
 
   return allProducts;
