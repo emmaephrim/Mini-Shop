@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mini_shop_app/providers/filtered_product_provider.dart';
 import 'package:mini_shop_app/providers/product_provider.dart';
+
 import 'package:mini_shop_app/screens/product_detail_screen.dart';
 
 class ProductItem extends ConsumerWidget {
@@ -19,7 +21,7 @@ class ProductItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isFavorite = ref.watch(
-      productsProvider.select(
+      filteredProductsProvider.select(
         (list) => list.firstWhere((item) => item.id == id).isFavorite,
       ),
     );

@@ -10,6 +10,15 @@ class ProductNotifier extends Notifier<List<Product>> {
   @override
   build() => products;
 
+  bool showFavoritesOnly = false;
+
+  List<Product> get items {
+    if (showFavoritesOnly) {
+      return state.where((item) => item.isFavorite == true).toList();
+    }
+    return state;
+  }
+
   void addProduct(Product product) {
     state = [...state, product];
   }
