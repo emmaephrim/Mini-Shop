@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mini_shop_app/models/product.dart';
 import 'package:mini_shop_app/providers/cart_provider.dart';
 import 'package:mini_shop_app/providers/filtered_product_provider.dart';
 import 'package:mini_shop_app/providers/product_provider.dart';
@@ -18,7 +19,18 @@ class ProductItem extends ConsumerWidget {
 
     final bool isFavorite = ref.watch(
       filteredProductsProvider.select(
-        (list) => list.firstWhere((item) => item.id == id).isFavorite,
+        (list) => list
+            .firstWhere(
+              (item) => item.id == id,
+              orElse: () => Product(
+                id: '',
+                title: '',
+                description: '',
+                price: 0,
+                imageUrl: '',
+              ),
+            )
+            .isFavorite,
       ),
     );
 
