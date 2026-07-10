@@ -10,10 +10,10 @@ class ProductDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final products = ref.watch(productsProvider);
+    final products = ref.read(productsProvider.notifier);
 
     final productId = ModalRoute.of(context)!.settings.arguments as String;
-    final Product product = products.firstWhere((item) => item.id == productId);
+    final Product product = products.findById(productId);
     return Scaffold(
       appBar: AppBar(title: Text(product.title)),
       body: Placeholder(),

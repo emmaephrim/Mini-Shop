@@ -13,4 +13,16 @@ class ProductNotifier extends Notifier<List<Product>> {
   void addProduct(Product product) {
     state = [...state, product];
   }
+
+  Product findById(String id) => state.firstWhere((item) => item.id == id);
+
+  void toggleFavoriteStatus(String id) {
+    state = [
+      for (final item in state)
+        if (item.id == id)
+          item.copyWith(isFavorite: !item.isFavorite)
+        else
+          item,
+    ];
+  }
 }

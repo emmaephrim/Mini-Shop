@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mini_shop_app/providers/product_provider.dart';
 import 'package:mini_shop_app/screens/product_detail_screen.dart';
 
-class ProductItem extends StatelessWidget {
+class ProductItem extends ConsumerWidget {
   final String id;
   final String title;
   final String imageUrl;
@@ -15,7 +17,13 @@ class ProductItem extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isFavorite = ref.watch(
+      productsProvider.select(
+        (list) => list.firstWhere((item) => item.id == id).isFavorite,
+      ),
+    );
+
     return GestureDetector(
       onTap: () => Navigator.of(
         context,
@@ -23,9 +31,10 @@ class ProductItem extends StatelessWidget {
       child: GridTile(
         footer: GridTileBar(
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () =>
+                ref.read(productsProvider.notifier).toggleFavoriteStatus(id),
             icon: Icon(
-              Icons.favorite_outline_outlined,
+              (isFavorite ? Icons.favorite : Icons.favorite_outline_outlined),
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
