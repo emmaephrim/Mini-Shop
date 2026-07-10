@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mini_shop_app/providers/cart_provider.dart';
 import 'package:mini_shop_app/providers/filtered_product_provider.dart';
 import 'package:mini_shop_app/providers/product_provider.dart';
 
@@ -8,22 +9,21 @@ import 'package:mini_shop_app/screens/product_detail_screen.dart';
 
 class ProductItem extends ConsumerWidget {
   final String id;
-  final String title;
-  final String imageUrl;
 
-  const ProductItem({
-    super.key,
-    required this.id,
-    required this.title,
-    required this.imageUrl,
-  });
+  const ProductItem({super.key, required this.id});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isFavorite = ref.watch(
+    final product = ref.read(productsProvider.notifier).findById(id);
+
+    final bool isFavorite = ref.watch(
       filteredProductsProvider.select(
         (list) => list.firstWhere((item) => item.id == id).isFavorite,
       ),
+    );
+
+    final bool isCartItem = ref.watch(
+      cartProvider.select((map) => map.containsKey(id)),
     );
 
     return GestureDetector(
@@ -41,14 +41,16 @@ class ProductItem extends ConsumerWidget {
             ),
           ),
           title: Text(
-            title,
+            product.title,
             textAlign: TextAlign.center,
             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           ),
           trailing: IconButton(
-            onPressed: () {},
+            onPressed: () => ref
+                .read(cartProvider.notifier)
+                .addItem(id, product.price, product.title),
             icon: Icon(
-              Icons.shopping_cart_outlined,
+              isCartItem ? Icons.shopping_cart : Icons.shopping_cart_outlined,
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
@@ -58,7 +60,7 @@ class ProductItem extends ConsumerWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
-          child: Image.network(imageUrl, fit: BoxFit.cover),
+          child: Image.network(product.imageUrl, fit: BoxFit.cover),
         ),
       ),
     );
