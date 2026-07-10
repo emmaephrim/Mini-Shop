@@ -9,4 +9,8 @@ final productsProvider = NotifierProvider<ProductNotifier, List<Product>>(
 class ProductNotifier extends Notifier<List<Product>> {
   @override
   build() => products;
+
+  void addProduct(Product product) {
+    state = [...state, product];
+  }
 }
