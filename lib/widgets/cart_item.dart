@@ -12,29 +12,45 @@ class CartItem extends ConsumerWidget {
 
     if (itemInCart == null) return const SizedBox.shrink();
 
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-      child: Padding(
-        padding: EdgeInsets.all(8),
-        child: ListTile(
-          subtitle: Text(
-            'Total: \$${(itemInCart.price * itemInCart.quantity).toStringAsFixed(2)}',
-          ),
-          title: Text(itemInCart.title),
-          leading: CircleAvatar(
-            child: Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: FittedBox(child: Text('\$${itemInCart.price}')),
-            ),
-          ),
-          trailing: Text('${itemInCart.quantity} x'),
-          //   trailing: ListTile(
-          //     title: Text('${itemInCart.quantity} x'),
-          //     leading: IconButton(onPressed: () {}, icon: Icon(Icons.minimize)),
-          //     trailing: IconButton(onPressed: () {}, icon: Icon(Icons.add)),
-          //   ),
+    return Dismissible(
+      direction: DismissDirection.endToStart,
+      key: ValueKey(itemInCart.id),
+      background: Container(
+        color: Theme.of(context).colorScheme.error,
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.only(right: 20),
+        child: Icon(
+          Icons.delete,
+          size: 40,
+          color: Theme.of(context).colorScheme.onError,
         ),
       ),
+      child: Card(
+        margin: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: ListTile(
+            subtitle: Text(
+              'Total: \$${(itemInCart.price * itemInCart.quantity).toStringAsFixed(2)}',
+            ),
+            title: Text(itemInCart.title),
+            leading: CircleAvatar(
+              child: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: FittedBox(child: Text('\$${itemInCart.price}')),
+              ),
+            ),
+            trailing: Text('${itemInCart.quantity} x'),
+            //   trailing: ListTile(
+            //     title: Text('${itemInCart.quantity} x'),
+            //     leading: IconButton(onPressed: () {}, icon: Icon(Icons.minimize)),
+            //     trailing: IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+            //   ),
+          ),
+        ),
+      ),
+      onDismissed: (direction) =>
+          ref.read(cartProvider.notifier).removeItem(id),
     );
   }
 }

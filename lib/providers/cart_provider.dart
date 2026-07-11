@@ -35,4 +35,10 @@ class CartProvider extends Notifier<CartState> {
       );
     }
   }
+
+  void removeItem(String key) {
+    final currentItems = state.items;
+    currentItems.remove(key);
+    state = CartState(items: currentItems);
+  }
 }
