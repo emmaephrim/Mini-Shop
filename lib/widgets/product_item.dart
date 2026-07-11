@@ -35,7 +35,7 @@ class ProductItem extends ConsumerWidget {
     );
 
     final bool isCartItem = ref.watch(
-      cartProvider.select((map) => map.containsKey(id)),
+      cartProvider.select((map) => map.items.containsKey(id)),
     );
 
     return GestureDetector(

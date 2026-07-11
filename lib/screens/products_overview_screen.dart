@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/constants/filter_options.dart';
 import 'package:mini_shop_app/providers/cart_provider.dart';
 import 'package:mini_shop_app/providers/show_favorite_only_provider.dart';
+import 'package:mini_shop_app/screens/cart_screen.dart';
 import 'package:mini_shop_app/widgets/products_grid.dart';
 
 class ProductsOverviewScreen extends ConsumerWidget {
@@ -17,12 +18,15 @@ class ProductsOverviewScreen extends ConsumerWidget {
         title: Text('MiniShop'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () =>
+                Navigator.of(context).pushNamed(CartScreen.routeName),
             icon: Badge.count(
               textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
               textColor: Theme.of(context).colorScheme.onErrorContainer,
               backgroundColor: Theme.of(context).colorScheme.errorContainer,
-              count: ref.watch(cartProvider.select((list) => list.length)),
+              count: ref.watch(
+                cartProvider.select((list) => list.items.length),
+              ),
               child: const Icon(Icons.shopping_cart),
             ),
           ),

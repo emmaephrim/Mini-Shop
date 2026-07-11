@@ -1,33 +1,38 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/models/cart.dart';
+import 'package:mini_shop_app/models/cart_state.dart';
 
-final cartProvider = NotifierProvider<CartProvider, Map<String, Cart>>(
+final cartProvider = NotifierProvider<CartProvider, CartState>(
   CartProvider.new,
 );
 
-class CartProvider extends Notifier<Map<String, Cart>> {
+class CartProvider extends Notifier<CartState> {
   @override
-  Map<String, Cart> build() {
-    return {};
-  }
+  CartState build() => CartState(items: {});
 
   void addItem(String productId, double price, String title) {
-    if (state.containsKey(productId)) {
-      final existingCart = state[productId]!;
-      state = {
-        ...state,
-        productId: existingCart.copyWith(quantity: existingCart.quantity + 1),
-      };
+    final currentItems = state.items;
+
+    if (currentItems.containsKey(productId)) {
+      final existingCart = currentItems[productId]!;
+      state = CartState(
+        items: {
+          ...currentItems,
+          productId: existingCart.copyWith(quantity: existingCart.quantity + 1),
+        },
+      );
     } else {
-      state = {
-        ...state,
-        productId: Cart(
-          id: DateTime.now().toString(),
-          title: title,
-          quantity: 1,
-          price: price,
-        ),
-      };
+      state = CartState(
+        items: {
+          ...currentItems,
+          productId: Cart(
+            id: DateTime.now().toString(),
+            title: title,
+            quantity: 1,
+            price: price,
+          ),
+        },
+      );
     }
   }
 }
