@@ -18,25 +18,36 @@ class CartScreen extends ConsumerWidget {
       body: Column(
         children: [
           Card(
+            color: Theme.of(context).colorScheme.secondaryContainer,
             margin: EdgeInsets.all(15),
             child: Padding(
               padding: EdgeInsets.all(8),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Total", style: TextStyle(fontSize: 20)),
-                  SizedBox(width: 10),
+                  Text(
+                    "Total",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    ),
+                  ),
                   Chip(
-                    label: Text(
-                      '\$$totalFormatted',
-                      // ref.watch(
-                      //   cartProvider.select((cartItems) {
-                      //     final total = cartItems.values.fold<double>(
-                      //       0,
-                      //       (sum, cartItem) =>
-                      //           sum + cartItem.price * cartItem.quantity,
-                      //     );
-                      //     return total.toStringAsFixed(2);
-                      //   }),
+                    labelStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.onInverseSurface,
+                    ),
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.inverseSurface,
+                    label: Text('\$$totalFormatted'),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Order Now",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
                     ),
                   ),
                 ],
