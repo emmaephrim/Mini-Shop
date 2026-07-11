@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/providers/cart_provider.dart';
+import 'package:mini_shop_app/widgets/cart_item.dart';
 
 class CartScreen extends ConsumerWidget {
   static const routeName = '/cart-screen';
@@ -9,6 +10,8 @@ class CartScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final cartItems = ref.watch(cartProvider).items;
+
     final totalFormatted = ref.watch(
       cartProvider.select((state) => state.totalAmount.toStringAsFixed(2)),
     );
@@ -32,6 +35,7 @@ class CartScreen extends ConsumerWidget {
                       color: Theme.of(context).colorScheme.surface,
                     ),
                   ),
+                  Spacer(),
                   Chip(
                     labelStyle: TextStyle(
                       color: Theme.of(context).colorScheme.onSecondary,
@@ -51,6 +55,13 @@ class CartScreen extends ConsumerWidget {
                   ),
                 ],
               ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: cartItems.length,
+              itemBuilder: (ctx, index) =>
+                  CartItem(id: cartItems.keys.toList()[index]),
             ),
           ),
         ],
