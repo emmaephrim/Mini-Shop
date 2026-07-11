@@ -18,7 +18,7 @@ class CartScreen extends ConsumerWidget {
       body: Column(
         children: [
           Card(
-            color: Theme.of(context).colorScheme.secondary,
+            color: Theme.of(context).colorScheme.onSurface,
             margin: EdgeInsets.all(15),
             child: Padding(
               padding: EdgeInsets.all(8),
@@ -29,16 +29,14 @@ class CartScreen extends ConsumerWidget {
                     "Total",
                     style: TextStyle(
                       fontSize: 20,
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      color: Theme.of(context).colorScheme.surface,
                     ),
                   ),
                   Chip(
                     labelStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.onInverseSurface,
+                      color: Theme.of(context).colorScheme.onSecondary,
                     ),
-                    backgroundColor: Theme.of(
-                      context,
-                    ).colorScheme.inverseSurface,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     label: Text('\$$totalFormatted'),
                   ),
                   TextButton(
@@ -47,7 +45,7 @@ class CartScreen extends ConsumerWidget {
                       "Order Now",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.errorContainer,
+                        color: Theme.of(context).colorScheme.primaryFixedDim,
                       ),
                     ),
                   ),
