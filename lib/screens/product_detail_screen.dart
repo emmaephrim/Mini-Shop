@@ -16,7 +16,35 @@ class ProductDetailScreen extends ConsumerWidget {
     final Product product = products.findById(productId);
     return Scaffold(
       appBar: AppBar(title: Text(product.title)),
-      body: Placeholder(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 300,
+              width: double.infinity,
+              child: Image.network(product.imageUrl, fit: BoxFit.cover),
+            ),
+            SizedBox(height: 10),
+            Text(
+              '\$${product.price}',
+              style: TextStyle(
+                fontSize: 20,
+                color: Theme.of(context).colorScheme.surfaceTint,
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              width: double.infinity,
+              child: Text(
+                product.description,
+                textAlign: TextAlign.center,
+                softWrap: true,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
