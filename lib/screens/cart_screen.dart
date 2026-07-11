@@ -18,7 +18,7 @@ class CartScreen extends ConsumerWidget {
       body: Column(
         children: [
           Card(
-            color: Theme.of(context).colorScheme.secondaryContainer,
+            color: Theme.of(context).colorScheme.secondary,
             margin: EdgeInsets.all(15),
             child: Padding(
               padding: EdgeInsets.all(8),
@@ -46,7 +46,8 @@ class CartScreen extends ConsumerWidget {
                     child: Text(
                       "Order Now",
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.errorContainer,
                       ),
                     ),
                   ),
