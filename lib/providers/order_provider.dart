@@ -2,6 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/models/cart.dart';
 import 'package:mini_shop_app/models/order.dart';
 
+final oderProvider = NotifierProvider<OrderProvider, List<Order>>(
+  OrderProvider.new,
+);
+
 class OrderProvider extends Notifier<List<Order>> {
   @override
   List<Order> build() => [];
