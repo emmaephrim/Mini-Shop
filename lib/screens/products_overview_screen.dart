@@ -4,6 +4,7 @@ import 'package:mini_shop_app/constants/filter_options.dart';
 import 'package:mini_shop_app/providers/cart_provider.dart';
 import 'package:mini_shop_app/providers/show_favorite_only_provider.dart';
 import 'package:mini_shop_app/screens/cart_screen.dart';
+import 'package:mini_shop_app/screens/orders_screen.dart';
 import 'package:mini_shop_app/widgets/products_grid.dart';
 
 class ProductsOverviewScreen extends ConsumerWidget {
@@ -50,7 +51,30 @@ class ProductsOverviewScreen extends ConsumerWidget {
         ],
       ),
       body: ProductsGrid(),
-      drawer: Drawer(),
+      drawer: Drawer(
+        // backgroundColor: Theme.of(context).colorScheme.secondary,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 15,
+            top: 30,
+            bottom: 10,
+            right: 10,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onTap: () =>
+                    Navigator.of(context).pushNamed(OrdersScreen.routeName),
+                child: ListTile(
+                  leading: Icon(Icons.shopping_bag_outlined),
+                  title: Text("Orders"),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
