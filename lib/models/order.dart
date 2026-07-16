@@ -4,7 +4,7 @@ import 'package:mini_shop_app/widgets/cart_item.dart';
 
 class Order {
   final String id;
-  final String amount;
+  final double amount;
   final List<CartItem> products;
   final DateTime dateTime;
 
@@ -17,7 +17,7 @@ class Order {
 
   Order copyWith({
     String? id,
-    String? amount,
+    double? amount,
     List<CartItem>? products,
     DateTime? dateTime,
   }) {
