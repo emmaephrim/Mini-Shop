@@ -4,6 +4,7 @@ import 'package:mini_shop_app/config/theme.dart';
 import 'package:mini_shop_app/config/util.dart';
 import 'package:mini_shop_app/providers/theme_mode_provider.dart';
 import 'package:mini_shop_app/screens/cart_screen.dart';
+import 'package:mini_shop_app/screens/orders_screen.dart';
 import 'package:mini_shop_app/screens/product_detail_screen.dart';
 import 'package:mini_shop_app/screens/products_overview_screen.dart';
 
@@ -41,6 +42,7 @@ class ShopApp extends ConsumerWidget {
         ProductsOverviewScreen.routeName: (context) => ProductsOverviewScreen(),
         ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
         CartScreen.routeName: (context) => CartScreen(),
+        OrdersScreen.routeName: (context) => OrdersScreen(),
       },
     );
   }
