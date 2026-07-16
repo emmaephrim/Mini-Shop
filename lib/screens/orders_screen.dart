@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/providers/order_provider.dart';
+import 'package:mini_shop_app/widgets/app_drawer.dart';
 import 'package:mini_shop_app/widgets/order_item.dart';
 
 class OrdersScreen extends ConsumerWidget {
@@ -18,6 +19,7 @@ class OrdersScreen extends ConsumerWidget {
         itemCount: orders.length,
         itemBuilder: (ctx, index) => OrderItem(order: orders[index]),
       ),
+      drawer: AppDrawer(),
     );
   }
 }
