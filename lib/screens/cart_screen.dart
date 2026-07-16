@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/providers/cart_provider.dart';
+import 'package:mini_shop_app/providers/order_provider.dart';
 import 'package:mini_shop_app/widgets/cart_item.dart';
 
 class CartScreen extends ConsumerWidget {
@@ -44,7 +45,15 @@ class CartScreen extends ConsumerWidget {
                     label: Text('\$$totalFormatted'),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ref
+                          .read(orderProvider.notifier)
+                          .addOrder(
+                            cartItems.values.toList(),
+                            double.parse(totalFormatted),
+                          );
+                      ref.read(cartProvider.notifier).clear();
+                    },
                     child: Text(
                       "Order Now",
                       style: TextStyle(
