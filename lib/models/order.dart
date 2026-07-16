@@ -1,11 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/foundation.dart';
-import 'package:mini_shop_app/widgets/cart_item.dart';
+import 'package:mini_shop_app/models/cart.dart';
 
 class Order {
   final String id;
   final double amount;
-  final List<CartItem> products;
+  final List<Cart> products;
   final DateTime dateTime;
 
   Order({
@@ -18,7 +18,7 @@ class Order {
   Order copyWith({
     String? id,
     double? amount,
-    List<CartItem>? products,
+    List<Cart>? products,
     DateTime? dateTime,
   }) {
     return Order(

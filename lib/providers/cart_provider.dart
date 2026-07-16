@@ -41,4 +41,8 @@ class CartProvider extends Notifier<CartState> {
     currentItems.remove(key);
     state = CartState(items: currentItems);
   }
+
+  void clear() {
+    state = CartState(items: {});
+  }
 }
