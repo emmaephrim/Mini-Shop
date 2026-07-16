@@ -4,13 +4,18 @@ import 'package:mini_shop_app/providers/order_provider.dart';
 import 'package:mini_shop_app/widgets/app_drawer.dart';
 import 'package:mini_shop_app/widgets/order_item.dart';
 
-class OrdersScreen extends ConsumerWidget {
+class OrdersScreen extends ConsumerStatefulWidget {
   static const routeName = '/orders-screen';
 
   const OrdersScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<OrdersScreen> createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends ConsumerState<OrdersScreen> {
+  @override
+  Widget build(BuildContext context) {
     final orders = ref.watch(orderProvider);
 
     return Scaffold(
