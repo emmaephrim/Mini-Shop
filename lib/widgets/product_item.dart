@@ -62,6 +62,7 @@ class ProductItem extends ConsumerWidget {
               ref
                   .read(cartProvider.notifier)
                   .addItem(id, product.price, product.title);
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   action: SnackBarAction(
