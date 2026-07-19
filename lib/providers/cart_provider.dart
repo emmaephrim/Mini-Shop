@@ -42,6 +42,27 @@ class CartProvider extends Notifier<CartState> {
     state = CartState(items: currentItems);
   }
 
+  void removeSingleItem(String key) {
+    if (!state.items.containsKey(key)) {
+      return;
+    }
+
+    final existingCart = state.items[key]!;
+
+    if (existingCart.quantity > 1) {
+      state = CartState(
+        items: {
+          ...state.items,
+          key: existingCart.copyWith(quantity: existingCart.quantity - 1),
+        },
+      );
+    } else {
+      final updatedItems = {...state.items};
+      updatedItems.remove(key);
+      state = CartState(items: updatedItems);
+    }
+  }
+
   void clear() {
     state = CartState(items: {});
   }

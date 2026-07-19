@@ -58,9 +58,23 @@ class ProductItem extends ConsumerWidget {
             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           ),
           trailing: IconButton(
-            onPressed: () => ref
-                .read(cartProvider.notifier)
-                .addItem(id, product.price, product.title),
+            onPressed: () {
+              ref
+                  .read(cartProvider.notifier)
+                  .addItem(id, product.price, product.title);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  action: SnackBarAction(
+                    label: "UNDO",
+                    onPressed: () {
+                      ref.read(cartProvider.notifier).removeSingleItem(id);
+                    },
+                  ),
+                  duration: Duration(seconds: 2),
+                  content: Text("${product.title} added to cart!"),
+                ),
+              );
+            },
             icon: Icon(
               isCartItem ? Icons.shopping_cart : Icons.shopping_cart_outlined,
               color: Theme.of(context).colorScheme.primary,
