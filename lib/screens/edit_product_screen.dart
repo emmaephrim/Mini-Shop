@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 
 class EditProductScreen extends ConsumerStatefulWidget {
   static const routeName = '/edit-product';
@@ -12,6 +13,14 @@ class EditProductScreen extends ConsumerStatefulWidget {
 }
 
 class _EditProductScreenState extends ConsumerState<EditProductScreen> {
+  final _imageUrlController = TextEditingController();
+
+  @override
+  void dispose() {
+    _imageUrlController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +43,44 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
                 maxLines: 3,
                 decoration: InputDecoration(labelText: "Description"),
                 keyboardType: TextInputType.multiline,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  ValueListenableBuilder<TextEditingValue>(
+                    valueListenable: _imageUrlController,
+                    builder: (context, value, child) {
+                      final url = value.text;
+                      return Container(
+                        width: 100,
+                        height: 100,
+                        margin: EdgeInsets.only(top: 8, right: 10),
+                        decoration: BoxDecoration(
+                          border: BoxBorder.all(width: 1, color: Colors.grey),
+                        ),
+                        child: url.isEmpty
+                            ? Text("Enter a URL")
+                            : FittedBox(
+                                fit: BoxFit.contain,
+                                child: Image.network(
+                                  url,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      const Icon(Icons.error),
+                                ),
+                              ),
+                      );
+                    },
+                  ),
+
+                  Expanded(
+                    child: TextFormField(
+                      decoration: InputDecoration(labelText: "Image URL"),
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.url,
+                      controller: _imageUrlController,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
