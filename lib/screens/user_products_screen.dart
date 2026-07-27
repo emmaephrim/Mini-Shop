@@ -15,15 +15,19 @@ class UserProductsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Your products"),
+        title: Text("Your Products"),
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.add))],
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
         child: ListView.builder(
           itemCount: products.length,
-          itemBuilder: ((context, index) =>
-              UserProductItem(id: products[index].id)),
+          itemBuilder: ((context, index) => Column(
+            children: [
+              UserProductItem(id: products[index].id),
+              Divider(),
+            ],
+          )),
         ),
       ),
       drawer: AppDrawer(),
