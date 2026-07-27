@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/providers/product_provider.dart';
+import 'package:mini_shop_app/screens/edit_product_screen.dart';
 import 'package:mini_shop_app/widgets/app_drawer.dart';
 import 'package:mini_shop_app/widgets/user_product_item.dart';
 
@@ -16,7 +17,13 @@ class UserProductsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Your Products"),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.add))],
+        actions: [
+          IconButton(
+            onPressed: () =>
+                Navigator.of(context).pushNamed(EditProductScreen.routeName),
+            icon: Icon(Icons.add),
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
