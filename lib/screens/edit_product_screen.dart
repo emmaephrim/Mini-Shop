@@ -25,6 +25,16 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
                 decoration: InputDecoration(labelText: "Title"),
                 textInputAction: TextInputAction.next,
               ),
+              TextFormField(
+                decoration: InputDecoration(labelText: "Price"),
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
+              ),
+              TextFormField(
+                maxLines: 3,
+                decoration: InputDecoration(labelText: "Description"),
+                keyboardType: TextInputType.multiline,
+              ),
             ],
           ),
         ),
