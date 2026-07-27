@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/misc.dart';
 
 class EditProductScreen extends ConsumerStatefulWidget {
   static const routeName = '/edit-product';
@@ -71,7 +70,6 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
                       );
                     },
                   ),
-
                   Expanded(
                     child: TextFormField(
                       decoration: InputDecoration(labelText: "Image URL"),
