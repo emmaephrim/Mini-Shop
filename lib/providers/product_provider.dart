@@ -25,4 +25,11 @@ class ProductNotifier extends Notifier<List<Product>> {
           item,
     ];
   }
+
+  void updateProduct(Product product) {
+    state = [
+      for (final item in state)
+        if (item.id == product.id) product else item,
+    ];
+  }
 }

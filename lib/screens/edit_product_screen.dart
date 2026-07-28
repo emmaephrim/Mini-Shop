@@ -1,8 +1,7 @@
-// removed unused import
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/models/product.dart';
+import 'package:mini_shop_app/providers/product_provider.dart';
 
 class EditProductScreen extends ConsumerStatefulWidget {
   static const routeName = '/edit-product';
@@ -18,6 +17,9 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
   final _imageUrlController = TextEditingController();
   final _form = GlobalKey<FormState>();
 
+  var _isInit = true;
+  var _isEditMode = false;
+
   var _editedProduct = Product(
     id: '',
     title: '',
@@ -25,6 +27,37 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
     price: 0,
     imageUrl: '',
   );
+
+  // Initial Values for non-controller fields
+  var _initValues = {'title': '', 'description': '', 'price': ''};
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final rawArguments = ModalRoute.of(context)?.settings.arguments;
+      final productId = rawArguments is String ? rawArguments : null;
+
+      if (productId != null && productId.isNotEmpty) {
+        final existingProduct = ref
+            .read(productsProvider.notifier)
+            .findById(productId);
+
+        _isEditMode = true;
+        _editedProduct = existingProduct;
+
+        _initValues = {
+          'id': _editedProduct.id,
+          'title': _editedProduct.title,
+          'description': _editedProduct.description,
+          'price': _editedProduct.price.toString(),
+        };
+
+        _imageUrlController.text = _editedProduct.imageUrl;
+      }
+      _isInit = false; // Prevent this block from running again on rebuilds
+    }
+    super.didChangeDependencies();
+  }
 
   @override
   void dispose() {
@@ -36,14 +69,26 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
     final isValid = _form.currentState?.validate();
     if (isValid != null && !isValid) return;
     _form.currentState?.save();
-    print(_editedProduct);
+
+    final notifier = ref.read(productsProvider.notifier);
+
+    if (_isEditMode) {
+      notifier.updateProduct(_editedProduct);
+    } else {
+      // creates new product and assigns id here.
+      notifier.addProduct(
+        _editedProduct.copyWith(id: DateTime.now().toString()),
+      );
+    }
+
+    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Product'),
+        title: Text(_isEditMode ? 'Edit Product' : 'Add Product'),
         actions: [
           IconButton(onPressed: () => _saveForm(), icon: Icon(Icons.save)),
         ],
@@ -55,6 +100,7 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _initValues['title'],
                 decoration: InputDecoration(labelText: "Title"),
                 textInputAction: TextInputAction.next,
                 onSaved: (newValue) =>
@@ -67,6 +113,7 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
                 },
               ),
               TextFormField(
+                initialValue: _initValues['price'],
                 decoration: InputDecoration(labelText: "Price"),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
@@ -88,8 +135,10 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
                 },
               ),
               TextFormField(
+                initialValue: _initValues['description'],
                 maxLines: 3,
                 decoration: InputDecoration(labelText: "Description"),
+                autocorrect: true,
                 keyboardType: TextInputType.multiline,
                 validator: (value) {
                   if (value!.isEmpty) {

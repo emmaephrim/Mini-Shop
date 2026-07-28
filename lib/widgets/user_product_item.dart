@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/providers/product_provider.dart';
+import 'package:mini_shop_app/screens/edit_product_screen.dart';
 
 class UserProductItem extends ConsumerWidget {
   final String id;
@@ -21,7 +22,9 @@ class UserProductItem extends ConsumerWidget {
         child: Row(
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () => Navigator.of(
+                context,
+              ).pushNamed(EditProductScreen.routeName, arguments: id),
               icon: Icon(
                 Icons.edit,
                 color: Theme.of(context).colorScheme.primary,
