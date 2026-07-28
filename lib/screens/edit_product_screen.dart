@@ -70,6 +70,18 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
                 decoration: InputDecoration(labelText: "Price"),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Please enter a price";
+                  }
+                  if (double.tryParse(value) == null) {
+                    return "Please enter a valid number";
+                  }
+                  if (double.parse(value) <= 0) {
+                    return "Please enter a number greater than zero(0)";
+                  }
+                  return null;
+                },
                 onSaved: (newValue) {
                   final parsed = double.tryParse(newValue ?? '0') ?? 0.0;
                   _editedProduct = _editedProduct.copyWith(price: parsed);
