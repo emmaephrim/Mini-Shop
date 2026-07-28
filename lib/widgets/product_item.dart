@@ -59,12 +59,14 @@ class ProductItem extends ConsumerWidget {
           ),
           trailing: IconButton(
             onPressed: () {
+              final messenger = ScaffoldMessenger.of(context);
               ref
                   .read(cartProvider.notifier)
                   .addItem(id, product.price, product.title);
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              ScaffoldMessenger.of(context).showSnackBar(
+              messenger.hideCurrentSnackBar();
+              messenger.showSnackBar(
                 SnackBar(
+                  persist: false,
                   action: SnackBarAction(
                     label: "UNDO",
                     onPressed: () {
