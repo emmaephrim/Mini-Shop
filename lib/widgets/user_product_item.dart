@@ -38,7 +38,7 @@ class UserProductItem extends ConsumerWidget {
                     builder: (context) {
                       return AlertDialog(
                         title: Text("Are you sure?"),
-                        content: Text("Do you want to delete do product?"),
+                        content: Text("Do you want to delete this product?"),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(),
@@ -46,13 +46,18 @@ class UserProductItem extends ConsumerWidget {
                           ),
                           TextButton(
                             onPressed: () {
+                              Navigator.of(context).pop();
                               ref
                                   .read(productsProvider.notifier)
                                   .deleteProductById(id);
-                              Navigator.of(context).pop();
                             },
 
-                            child: Text("Yes"),
+                            child: Text(
+                              "Yes",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.error,
+                              ),
+                            ),
                           ),
                         ],
                       );
