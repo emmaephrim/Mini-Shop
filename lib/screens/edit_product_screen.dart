@@ -91,6 +91,15 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
                 maxLines: 3,
                 decoration: InputDecoration(labelText: "Description"),
                 keyboardType: TextInputType.multiline,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Please enter a description";
+                  }
+                  if (value.length < 10) {
+                    return "Should be at least 10 characters long.";
+                  }
+                  return null;
+                },
                 onSaved: (newValue) => _editedProduct = _editedProduct.copyWith(
                   description: newValue,
                 ),
