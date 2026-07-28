@@ -137,6 +137,21 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
                       textInputAction: TextInputAction.done,
                       keyboardType: TextInputType.url,
                       controller: _imageUrlController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Please enter an image URL.";
+                        }
+                        if (!value.startsWith('http') &&
+                            !value.startsWith('https')) {
+                          return "Please enter a valid URL.";
+                        }
+                        if (!value.endsWith('.jpg') &&
+                            !value.endsWith('.png') &&
+                            !value.endsWith('.jpeg')) {
+                          return "Please provide a  valid image URL.";
+                        }
+                        return null;
+                      },
                       onSaved: (newValue) => _editedProduct = _editedProduct
                           .copyWith(imageUrl: newValue),
                       onFieldSubmitted: (value) {
