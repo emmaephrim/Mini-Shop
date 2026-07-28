@@ -33,6 +33,8 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
   }
 
   void _saveForm() {
+    final isValid = _form.currentState?.validate();
+    if (isValid != null && !isValid) return;
     _form.currentState?.save();
     print(_editedProduct);
   }
@@ -57,16 +59,20 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
                 textInputAction: TextInputAction.next,
                 onSaved: (newValue) =>
                     _editedProduct = _editedProduct.copyWith(title: newValue),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Please provide a value";
+                  }
+                  return null;
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: "Price"),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
                 onSaved: (newValue) {
-                  //   final parsed = double.tryParse(newValue ?? '0') ?? 0.0;
-                  _editedProduct = _editedProduct.copyWith(
-                    price: double.parse(newValue!),
-                  );
+                  final parsed = double.tryParse(newValue ?? '0') ?? 0.0;
+                  _editedProduct = _editedProduct.copyWith(price: parsed);
                 },
               ),
               TextFormField(
