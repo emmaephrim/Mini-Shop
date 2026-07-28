@@ -31,7 +31,33 @@ class UserProductItem extends ConsumerWidget {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () =>
+                  //   ref.read(productsProvider.notifier).deleteProductById(id),
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text("Are you sure?"),
+                        content: Text("Do you want to delete do product?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: Text("No"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              ref
+                                  .read(productsProvider.notifier)
+                                  .deleteProductById(id);
+                              Navigator.of(context).pop();
+                            },
+
+                            child: Text("Yes"),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
               icon: Icon(
                 Icons.delete,
                 color: Theme.of(context).colorScheme.error,

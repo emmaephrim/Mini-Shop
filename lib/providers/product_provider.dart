@@ -32,4 +32,11 @@ class ProductNotifier extends Notifier<List<Product>> {
         if (item.id == product.id) product else item,
     ];
   }
+
+  void deleteProductById(String id) {
+    // create a new list and remove the matching item for clarity
+    final updated = List<Product>.from(state)
+      ..removeWhere((item) => item.id == id);
+    state = updated;
+  }
 }
