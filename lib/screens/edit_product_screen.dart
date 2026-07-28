@@ -1,5 +1,8 @@
+// removed unused import
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mini_shop_app/models/product.dart';
 
 class EditProductScreen extends ConsumerStatefulWidget {
   static const routeName = '/edit-product';
@@ -13,6 +16,15 @@ class EditProductScreen extends ConsumerStatefulWidget {
 
 class _EditProductScreenState extends ConsumerState<EditProductScreen> {
   final _imageUrlController = TextEditingController();
+  final _form = GlobalKey<FormState>();
+
+  var _editedProduct = Product(
+    id: '',
+    title: '',
+    description: '',
+    price: 0,
+    imageUrl: '',
+  );
 
   @override
   void dispose() {
@@ -20,28 +32,50 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
     super.dispose();
   }
 
+  void _saveForm() {
+    _form.currentState?.save();
+    print(_editedProduct);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Edit Product')),
+      appBar: AppBar(
+        title: Text('Edit Product'),
+        actions: [
+          IconButton(onPressed: () => _saveForm(), icon: Icon(Icons.save)),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
+          key: _form,
           child: ListView(
             children: [
               TextFormField(
                 decoration: InputDecoration(labelText: "Title"),
                 textInputAction: TextInputAction.next,
+                onSaved: (newValue) =>
+                    _editedProduct = _editedProduct.copyWith(title: newValue),
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: "Price"),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
+                onSaved: (newValue) {
+                  //   final parsed = double.tryParse(newValue ?? '0') ?? 0.0;
+                  _editedProduct = _editedProduct.copyWith(
+                    price: double.parse(newValue!),
+                  );
+                },
               ),
               TextFormField(
                 maxLines: 3,
                 decoration: InputDecoration(labelText: "Description"),
                 keyboardType: TextInputType.multiline,
+                onSaved: (newValue) => _editedProduct = _editedProduct.copyWith(
+                  description: newValue,
+                ),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -55,7 +89,7 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
                         height: 100,
                         margin: EdgeInsets.only(top: 8, right: 10),
                         decoration: BoxDecoration(
-                          border: BoxBorder.all(width: 1, color: Colors.grey),
+                          border: Border.all(width: 1, color: Colors.grey),
                         ),
                         child: url.isEmpty
                             ? Text("Enter a URL")
@@ -76,6 +110,11 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
                       textInputAction: TextInputAction.done,
                       keyboardType: TextInputType.url,
                       controller: _imageUrlController,
+                      onSaved: (newValue) => _editedProduct = _editedProduct
+                          .copyWith(imageUrl: newValue),
+                      onFieldSubmitted: (value) {
+                        _saveForm();
+                      },
                     ),
                   ),
                 ],
