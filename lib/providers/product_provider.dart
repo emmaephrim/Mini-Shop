@@ -13,12 +13,12 @@ class ProductNotifier extends Notifier<List<Product>> {
   @override
   build() => products;
 
-  void addProduct(Product product) async {
+  Future<void> addProduct(Product product) {
     var url = Uri.https(
       'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
       'products.json',
     );
-    http
+    return http
         .post(
           url,
           body: json.encode({
