@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/data/products.dart';
 import 'package:mini_shop_app/models/product.dart';
+import 'package:http/http.dart' as http;
 
 final productsProvider = NotifierProvider<ProductNotifier, List<Product>>(
   ProductNotifier.new,
@@ -10,8 +13,31 @@ class ProductNotifier extends Notifier<List<Product>> {
   @override
   build() => products;
 
-  void addProduct(Product product) {
-    state = [...state, product];
+  void addProduct(Product product) async {
+    var url = Uri.https(
+      'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
+      'products.json',
+    );
+    http
+        .post(
+          url,
+          body: json.encode({
+            'description': product.description,
+            'imageUrl': product.imageUrl,
+            'isFavorite': product.isFavorite,
+            'price': product.price,
+            'title': product.title,
+          }),
+        )
+        .then((res) {
+          state = [
+            ...state,
+            product.copyWith(id: json.decode(res.body)['name']),
+          ];
+        })
+        .catchError(((error) {
+          print(error);
+        }));
   }
 
   Product findById(String id) => state.firstWhere((item) => item.id == id);
