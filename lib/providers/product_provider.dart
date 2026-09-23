@@ -16,7 +16,7 @@ class ProductNotifier extends Notifier<List<Product>> {
   Future<void> addProduct(Product product) {
     var url = Uri.https(
       'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
-      'products.json',
+      'products',
     );
     return http
         .post(
@@ -37,6 +37,7 @@ class ProductNotifier extends Notifier<List<Product>> {
         })
         .catchError(((error) {
           print(error);
+          throw error;
         }));
   }
 
