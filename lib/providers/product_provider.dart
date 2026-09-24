@@ -87,11 +87,33 @@ class ProductNotifier extends Notifier<List<Product>> {
     ];
   }
 
-  void updateProduct(Product product) {
-    state = [
-      for (final item in state)
-        if (item.id == product.id) product else item,
-    ];
+  Future<void> updateProduct(Product product) async {
+    try {
+      var baseUrl = Uri.https(
+        'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
+        'products/${product.id}.json',
+      );
+      final res = await http.patch(
+        url,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        }),
+      );
+      developer.log(
+        name: "Product update:",
+        res.statusCode.toString() + res.body,
+      );
+      state = [
+        for (final item in state)
+          if (item.id == product.id) product else item,
+      ];
+    } catch (e) {
+      rethrow;
+    }
   }
 
   void deleteProductById(String id) {

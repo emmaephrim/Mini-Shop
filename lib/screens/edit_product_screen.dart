@@ -77,13 +77,16 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
     final notifier = ref.read(productsProvider.notifier);
 
     if (_isEditMode) {
-      notifier.updateProduct(_editedProduct);
-    } else {
-      // creates new product and assigns id here.
       notifier
-          .addProduct(_editedProduct.copyWith(id: DateTime.now().toString()))
+          .updateProduct(_editedProduct)
+          .then((_) {
+            setState(() {
+              _isLoading = false;
+            });
+            Navigator.of(context).pop();
+          })
           .catchError((error) {
-            return showDialog(
+            showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
                 title: Text("An error occurred"),
@@ -101,12 +104,36 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
                 ],
               ),
             );
-          })
+          });
+    } else {
+      // creates new product and assigns id here.
+      notifier
+          .addProduct(_editedProduct.copyWith(id: DateTime.now().toString()))
           .then((_) {
             setState(() {
               _isLoading = false;
             });
             Navigator.of(context).pop();
+          })
+          .catchError((error) {
+            showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: Text("An error occurred"),
+                content: Text("Something went wrong!"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _isLoading = false;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Cancel'),
+                  ),
+                ],
+              ),
+            );
           });
     }
   }
