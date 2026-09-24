@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:developer' as developer;
 import 'package:mini_shop_app/data/products.dart';
 import 'package:mini_shop_app/models/product.dart';
 import 'package:http/http.dart' as http;
@@ -10,14 +11,59 @@ final productsProvider = NotifierProvider<ProductNotifier, List<Product>>(
 );
 
 class ProductNotifier extends Notifier<List<Product>> {
+  var url = Uri.https(
+    'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
+    'products.json',
+  );
+
   @override
-  build() => products;
+  List<Product> build() {
+    _fetchAndSetProducts();
+    return [];
+  }
+
+  Future<List<Product>> _fetchAndSetProducts() async {
+    try {
+      final List<Product> loadedProducts = [];
+      final res = await http.get(url);
+      final decoded = json.decode(res.body) as Map<String, dynamic>?;
+      developer.log(res.body, name: 'ProductNotifier._fetchAndSetProducts');
+      if (decoded == null) loadedProducts;
+
+      decoded!.forEach((prodId, prodData) {
+        loadedProducts.add(
+          Product(
+            id: prodId,
+            title: prodData['title'] ?? '',
+            description: prodData['description'] ?? '',
+            price: (prodData['price'] as num?)?.toDouble() ?? 0.0,
+            imageUrl: prodData['imageUrl'] ?? '',
+            isFavorite: prodData['isFavorite'] ?? false,
+          ),
+        );
+      });
+
+      // final fetched = decoded.entries.map((entry) {
+      //   final val = entry.value as Map<String, dynamic>;
+      //   return Product(
+      //     id: entry.key,
+      //     title: val['title'] ?? '',
+      //     description: val['description'] ?? '',
+      //     price: (val['price'] as num?)?.toDouble() ?? 0.0,
+      //     imageUrl: val['imageUrl'] ?? '',
+      //     isFavorite: val,
+      //   );
+      // }).toList();
+
+      state = loadedProducts;
+      return loadedProducts;
+    } catch (e) {
+      // on error, keep local sample products
+      rethrow;
+    }
+  }
 
   Future<void> addProduct(Product product) async {
-    var url = Uri.https(
-      'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
-      'products.json',
-    );
     try {
       final res = await http.post(
         url,

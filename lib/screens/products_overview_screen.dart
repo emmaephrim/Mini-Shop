@@ -7,13 +7,20 @@ import 'package:mini_shop_app/screens/cart_screen.dart';
 import 'package:mini_shop_app/widgets/app_drawer.dart';
 import 'package:mini_shop_app/widgets/products_grid.dart';
 
-class ProductsOverviewScreen extends ConsumerWidget {
+class ProductsOverviewScreen extends ConsumerStatefulWidget {
   static const routeName = '/';
 
   const ProductsOverviewScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProductsOverviewScreen> createState() =>
+      _ProductsOverviewScreenState();
+}
+
+class _ProductsOverviewScreenState
+    extends ConsumerState<ProductsOverviewScreen> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('MiniShop'),
