@@ -18,13 +18,13 @@ class ProductNotifier extends Notifier<List<Product>> {
 
   @override
   List<Product> build() {
-    _fetchAndSetProducts();
+    fetchAndSetProducts();
     return [];
   }
 
   bool isLoading = false;
 
-  Future<List<Product>> _fetchAndSetProducts() async {
+  Future<List<Product>> fetchAndSetProducts() async {
     isLoading = true;
 
     try {

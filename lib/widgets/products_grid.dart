@@ -18,16 +18,21 @@ class _ProductsGridState extends ConsumerState<ProductsGrid> {
 
     return ref.read(productsProvider.notifier).isLoading
         ? Center(child: CircularProgressIndicator())
-        : GridView.builder(
-            padding: const EdgeInsets.all(10),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 3 / 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+        : RefreshIndicator(
+            onRefresh: () async {
+              await ref.read(productsProvider.notifier).fetchAndSetProducts();
+            },
+            child: GridView.builder(
+              padding: const EdgeInsets.all(10),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 3 / 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemCount: products.length,
+              itemBuilder: (ctx, index) => ProductItem(id: products[index].id),
             ),
-            itemCount: products.length,
-            itemBuilder: (ctx, index) => ProductItem(id: products[index].id),
           );
   }
 }
