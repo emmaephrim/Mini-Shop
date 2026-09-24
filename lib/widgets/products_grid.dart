@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/providers/filtered_product_provider.dart';
+import 'package:mini_shop_app/providers/product_provider.dart';
 import 'package:mini_shop_app/widgets/product_item.dart';
 
-class ProductsGrid extends ConsumerWidget {
+class ProductsGrid extends ConsumerStatefulWidget {
   const ProductsGrid({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProductsGrid> createState() => _ProductsGridState();
+}
+
+class _ProductsGridState extends ConsumerState<ProductsGrid> {
+  @override
+  Widget build(BuildContext context) {
     final products = ref.watch(filteredProductsProvider);
 
-    return GridView.builder(
-      padding: const EdgeInsets.all(10),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 3 / 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
-      itemCount: products.length,
-      itemBuilder: (ctx, index) => ProductItem(id: products[index].id),
-    );
+    return ref.read(productsProvider.notifier).isLoading
+        ? Center(child: CircularProgressIndicator())
+        : GridView.builder(
+            padding: const EdgeInsets.all(10),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 3 / 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: products.length,
+            itemBuilder: (ctx, index) => ProductItem(id: products[index].id),
+          );
   }
 }

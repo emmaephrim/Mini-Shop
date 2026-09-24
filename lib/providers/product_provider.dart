@@ -22,7 +22,11 @@ class ProductNotifier extends Notifier<List<Product>> {
     return [];
   }
 
+  bool isLoading = false;
+
   Future<List<Product>> _fetchAndSetProducts() async {
+    isLoading = true;
+
     try {
       final List<Product> loadedProducts = [];
       final res = await http.get(url);
@@ -47,6 +51,8 @@ class ProductNotifier extends Notifier<List<Product>> {
       return loadedProducts;
     } catch (e) {
       rethrow;
+    } finally {
+      isLoading = false;
     }
   }
 
