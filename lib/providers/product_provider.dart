@@ -43,22 +43,9 @@ class ProductNotifier extends Notifier<List<Product>> {
         );
       });
 
-      // final fetched = decoded.entries.map((entry) {
-      //   final val = entry.value as Map<String, dynamic>;
-      //   return Product(
-      //     id: entry.key,
-      //     title: val['title'] ?? '',
-      //     description: val['description'] ?? '',
-      //     price: (val['price'] as num?)?.toDouble() ?? 0.0,
-      //     imageUrl: val['imageUrl'] ?? '',
-      //     isFavorite: val,
-      //   );
-      // }).toList();
-
       state = loadedProducts;
       return loadedProducts;
     } catch (e) {
-      // on error, keep local sample products
       rethrow;
     }
   }
