@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:developer' as developer;
-import 'package:mini_shop_app/data/products.dart';
+// import 'package:mini_shop_app/data/products.dart';
 import 'package:mini_shop_app/models/product.dart';
 import 'package:http/http.dart' as http;
 
