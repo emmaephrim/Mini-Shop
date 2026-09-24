@@ -13,32 +13,27 @@ class ProductNotifier extends Notifier<List<Product>> {
   @override
   build() => products;
 
-  Future<void> addProduct(Product product) {
+  Future<void> addProduct(Product product) async {
     var url = Uri.https(
       'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
-      'products',
+      'products.json',
     );
-    return http
-        .post(
-          url,
-          body: json.encode({
-            'description': product.description,
-            'imageUrl': product.imageUrl,
-            'isFavorite': product.isFavorite,
-            'price': product.price,
-            'title': product.title,
-          }),
-        )
-        .then((res) {
-          state = [
-            ...state,
-            product.copyWith(id: json.decode(res.body)['name']),
-          ];
-        })
-        .catchError(((error) {
-          print(error);
-          throw error;
-        }));
+    try {
+      final res = await http.post(
+        url,
+        body: json.encode({
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'isFavorite': product.isFavorite,
+          'price': product.price,
+          'title': product.title,
+        }),
+      );
+      state = [...state, product.copyWith(id: json.decode(res.body)['name'])];
+    } catch (error) {
+      print(error);
+      rethrow;
+    }
   }
 
   Product findById(String id) => state.firstWhere((item) => item.id == id);
