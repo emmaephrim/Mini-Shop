@@ -94,7 +94,7 @@ class ProductNotifier extends Notifier<List<Product>> {
         'products/${product.id}.json',
       );
       final res = await http.patch(
-        url,
+        baseUrl,
         body: json.encode({
           'title': product.title,
           'description': product.description,
@@ -116,10 +116,19 @@ class ProductNotifier extends Notifier<List<Product>> {
     }
   }
 
-  void deleteProductById(String id) {
+  Future<void> deleteProductById(String id) async {
     // create a new list and remove the matching item for clarity
-    final updated = List<Product>.from(state)
-      ..removeWhere((item) => item.id == id);
-    state = updated;
+    try {
+      var baseUrl = Uri.https(
+        'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
+        'products/$id.json',
+      );
+      await http.delete(baseUrl);
+      final updated = List<Product>.from(state)
+        ..removeWhere((item) => item.id == id);
+      state = updated;
+    } catch (e) {
+      rethrow;
+    }
   }
 }
