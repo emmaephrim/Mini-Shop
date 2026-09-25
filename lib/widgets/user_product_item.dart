@@ -68,6 +68,28 @@ class _UserProductItemState extends ConsumerState<UserProductItem> {
                                           setState(() {
                                             _isLoading = false;
                                           });
+                                        })
+                                        .catchError((error) {
+                                          showDialog(
+                                            context: context,
+                                            builder: (ctx) => AlertDialog(
+                                              title: Text("An error occurred"),
+                                              content: Text(
+                                                "Something went wrong!",
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      _isLoading = false;
+                                                    });
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text('Cancel'),
+                                                ),
+                                              ],
+                                            ),
+                                          );
                                         });
                                   },
 
