@@ -45,8 +45,18 @@ class ProductItem extends ConsumerWidget {
       child: GridTile(
         footer: GridTileBar(
           leading: IconButton(
-            onPressed: () =>
-                ref.read(productsProvider.notifier).toggleFavoriteStatus(id),
+            onPressed: () async {
+              try {
+                await ref
+                    .read(productsProvider.notifier)
+                    .toggleFavoriteStatus(id);
+              } catch (error) {
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Oops something went wrong")),
+                );
+              }
+            },
             icon: Icon(
               (isFavorite ? Icons.favorite : Icons.favorite_outline_outlined),
               color: Theme.of(context).colorScheme.primary,

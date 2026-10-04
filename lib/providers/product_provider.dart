@@ -25,6 +25,7 @@ class ProductNotifier extends Notifier<List<Product>> {
 
   bool isLoading = false;
 
+  // ============ Fetch and Set Products
   Future<List<Product>> fetchAndSetProducts() async {
     isLoading = true;
 
@@ -57,6 +58,7 @@ class ProductNotifier extends Notifier<List<Product>> {
     }
   }
 
+  //========== Add product
   Future<void> addProduct(Product product) async {
     try {
       final res = await http.post(
@@ -76,9 +78,12 @@ class ProductNotifier extends Notifier<List<Product>> {
     }
   }
 
+  // ======== find product by id
   Product findById(String id) => state.firstWhere((item) => item.id == id);
 
-  void toggleFavoriteStatus(String id) {
+  //=========== Toggle Favorite Status
+  Future<void> toggleFavoriteStatus(String id) async {
+    final oldState = state;
     state = [
       for (final item in state)
         if (item.id == id)
@@ -86,8 +91,26 @@ class ProductNotifier extends Notifier<List<Product>> {
         else
           item,
     ];
+    try {
+      final prod = state.firstWhere((item) => id == item.id);
+      var url = Uri.https(
+        'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
+        'products/${id}',
+      );
+      final res = await http.patch(
+        url,
+        body: json.encode({'isFavorite': prod.isFavorite}),
+      );
+      if (res.statusCode >= 400) {
+        throw HttpException("Oops, Could not add product to favorites!");
+      }
+    } catch (e) {
+      state = oldState;
+      rethrow;
+    }
   }
 
+  // ========== Update Products
   Future<void> updateProduct(Product product) async {
     try {
       var baseUrl = Uri.https(
@@ -117,6 +140,7 @@ class ProductNotifier extends Notifier<List<Product>> {
     }
   }
 
+  // ======== Delete Product by id
   Future<void> deleteProductById(String id) async {
     // create a new list and remove the matching item for clarity
     try {
