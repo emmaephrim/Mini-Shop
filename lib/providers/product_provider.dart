@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mini_shop_app/models/http_exception.dart';
 import 'dart:developer' as developer;
 // import 'package:mini_shop_app/data/products.dart';
 import 'package:mini_shop_app/models/product.dart';
@@ -123,7 +124,10 @@ class ProductNotifier extends Notifier<List<Product>> {
         'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
         'products/$id.json',
       );
-      await http.delete(baseUrl);
+      final response = await http.delete(baseUrl);
+      if (response.statusCode >= 500) {
+        throw HttpException("Could not delete product");
+      }
       final updated = List<Product>.from(state)
         ..removeWhere((item) => item.id == id);
       state = updated;
