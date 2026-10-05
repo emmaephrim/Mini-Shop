@@ -12,17 +12,14 @@ final productsProvider = NotifierProvider<ProductNotifier, List<Product>>(
 );
 
 class ProductNotifier extends Notifier<List<Product>> {
-  var url = Uri.https(
-    'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
-    'products.json',
-  );
-
   @override
   List<Product> build() {
     fetchAndSetProducts();
     return [];
   }
 
+  final String baseUrl =
+      'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app';
   bool isLoading = false;
 
   // ============ Fetch and Set Products
@@ -31,7 +28,7 @@ class ProductNotifier extends Notifier<List<Product>> {
 
     try {
       final List<Product> loadedProducts = [];
-      final res = await http.get(url);
+      final res = await http.get(Uri.https(baseUrl, 'products.json'));
       final decoded = json.decode(res.body) as Map<String, dynamic>?;
       developer.log(res.body, name: 'ProductNotifier._fetchAndSetProducts');
       if (decoded == null) loadedProducts;
@@ -62,7 +59,7 @@ class ProductNotifier extends Notifier<List<Product>> {
   Future<void> addProduct(Product product) async {
     try {
       final res = await http.post(
-        url,
+        Uri.https(baseUrl, 'products.json'),
         body: json.encode({
           'description': product.description,
           'imageUrl': product.imageUrl,
@@ -93,10 +90,7 @@ class ProductNotifier extends Notifier<List<Product>> {
     ];
     try {
       final prod = state.firstWhere((item) => id == item.id);
-      var url = Uri.https(
-        'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
-        'products/${id}',
-      );
+      var url = Uri.https(baseUrl, 'products/${id}.json');
       final res = await http.patch(
         url,
         body: json.encode({'isFavorite': prod.isFavorite}),
@@ -113,12 +107,8 @@ class ProductNotifier extends Notifier<List<Product>> {
   // ========== Update Products
   Future<void> updateProduct(Product product) async {
     try {
-      var baseUrl = Uri.https(
-        'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
-        'products/${product.id}.json',
-      );
       final res = await http.patch(
-        baseUrl,
+        Uri.https(baseUrl, 'products/${product.id}.json'),
         body: json.encode({
           'title': product.title,
           'description': product.description,
@@ -144,11 +134,9 @@ class ProductNotifier extends Notifier<List<Product>> {
   Future<void> deleteProductById(String id) async {
     // create a new list and remove the matching item for clarity
     try {
-      var baseUrl = Uri.https(
-        'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
-        'products/$id.json',
+      final response = await http.delete(
+        Uri.https(baseUrl, 'products/$id.json'),
       );
-      final response = await http.delete(baseUrl);
       if (response.statusCode >= 500) {
         throw HttpException("Could not delete product");
       }
