@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/models/http_exception.dart';
 import 'dart:developer' as developer;
@@ -20,12 +21,9 @@ class ProductNotifier extends Notifier<List<Product>> {
 
   final String baseUrl =
       'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app';
-  bool isLoading = false;
 
   // ============ Fetch and Set Products
   Future<List<Product>> fetchAndSetProducts() async {
-    isLoading = true;
-
     try {
       final List<Product> loadedProducts = [];
       final res = await http.get(Uri.https(baseUrl, 'products.json'));
@@ -50,9 +48,7 @@ class ProductNotifier extends Notifier<List<Product>> {
       return loadedProducts;
     } catch (e) {
       rethrow;
-    } finally {
-      isLoading = false;
-    }
+    } finally {}
   }
 
   //========== Add product
@@ -70,7 +66,7 @@ class ProductNotifier extends Notifier<List<Product>> {
       );
       state = [...state, product.copyWith(id: json.decode(res.body)['name'])];
     } catch (error) {
-      print(error);
+      debugPrint(error.toString());
       rethrow;
     }
   }
