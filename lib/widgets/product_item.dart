@@ -5,7 +5,6 @@ import 'package:mini_shop_app/models/product.dart';
 import 'package:mini_shop_app/providers/cart_provider.dart';
 import 'package:mini_shop_app/providers/filtered_product_provider.dart';
 import 'package:mini_shop_app/providers/product_provider.dart';
-
 import 'package:mini_shop_app/screens/product_detail_screen.dart';
 
 class ProductItem extends ConsumerWidget {
@@ -68,28 +67,43 @@ class ProductItem extends ConsumerWidget {
             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           ),
           trailing: IconButton(
-            onPressed: () {
-              final messenger = ScaffoldMessenger.of(context);
-              ref
-                  .read(cartProvider.notifier)
-                  .addItem(id, product.price, product.title);
-              messenger.hideCurrentSnackBar();
-              messenger.showSnackBar(
-                SnackBar(
-                  persist: false,
-                  action: SnackBarAction(
-                    label: "UNDO",
-                    onPressed: () {
-                      ref.read(cartProvider.notifier).removeSingleItem(id);
-                    },
-                  ),
-                  duration: Duration(seconds: 2),
-                  content: Text("${product.title} added to cart!"),
-                ),
-              );
+            onPressed: () async {
+              try {
+                final messenger = ScaffoldMessenger.of(context);
+                await ref
+                    .read(cartProvider.notifier)
+                    .addItem(id, product.price, product.title)
+                    .then((res) {
+                      messenger.hideCurrentSnackBar();
+                      messenger.showSnackBar(
+                        SnackBar(
+                          persist: false,
+                          action: SnackBarAction(
+                            label: "UNDO",
+                            onPressed: () {
+                              ref
+                                  .read(cartProvider.notifier)
+                                  .removeSingleItem(id);
+                            },
+                          ),
+                          duration: Duration(seconds: 2),
+                          content: Text("${product.title} added to cart!"),
+                        ),
+                      );
+                    });
+              } catch (error) {
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Oops something went wrong")),
+                );
+              }
             },
             icon: Icon(
-              isCartItem ? Icons.shopping_cart : Icons.shopping_cart_outlined,
+              ref.read(cartProvider.notifier).isLoading
+                  ? Icons.refresh
+                  : isCartItem
+                  ? Icons.shopping_cart
+                  : Icons.shopping_cart_outlined,
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
