@@ -11,6 +11,7 @@ class ProductItem extends ConsumerStatefulWidget {
   final String id;
 
   const ProductItem({super.key, required this.id});
+  @override
   ConsumerState<ProductItem> createState() => _ProductItemState();
 }
 
