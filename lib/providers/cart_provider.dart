@@ -21,7 +21,6 @@ class CartProvider extends Notifier<CartState> {
 
   final String baseUrl =
       'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app';
-  bool isLoading = false;
 
   Future<Map<String, Cart>> fetchAndSetCart() async {
     try {
@@ -29,6 +28,7 @@ class CartProvider extends Notifier<CartState> {
 
       final decoded = json.decode(res.body) as Map<String, dynamic>?;
       if (decoded == null) {
+        state = CartState(items: {});
         return {};
       }
 
@@ -37,6 +37,7 @@ class CartProvider extends Notifier<CartState> {
             MapEntry(key, Cart.fromMap(value as Map<String, dynamic>)),
       );
       developer.log(data.toString(), name: 'Cart server data:');
+      state = CartState(items: data);
       return data;
     } catch (e) {
       developer.log(e.toString(), name: 'fetchAndSetCart error:');
@@ -45,7 +46,6 @@ class CartProvider extends Notifier<CartState> {
   }
 
   Future<void> addItem(String productId, double price, String title) async {
-    isLoading = true;
     final currentItems = state.items;
     try {
       if (currentItems.containsKey(productId)) {
@@ -80,9 +80,7 @@ class CartProvider extends Notifier<CartState> {
       debugPrint(e.toString());
       state.items = currentItems;
       rethrow;
-    } finally {
-      isLoading = false;
-    }
+    } finally {}
   }
 
   void removeItem(String key) {
