@@ -110,7 +110,13 @@ class CartProvider extends Notifier<CartState> {
     }
   }
 
-  void clear() {
-    state = CartState(items: {});
+  Future<void> clear() async {
+    try {
+      state = CartState(items: {});
+      await http.delete(Uri.https(baseUrl, 'cart.json'));
+    } catch (e) {
+      developer.log(e.toString(), name: 'Cart data clear error:');
+      rethrow;
+    }
   }
 }
