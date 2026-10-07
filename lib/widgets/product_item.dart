@@ -7,20 +7,25 @@ import 'package:mini_shop_app/providers/filtered_product_provider.dart';
 import 'package:mini_shop_app/providers/product_provider.dart';
 import 'package:mini_shop_app/screens/product_detail_screen.dart';
 
-class ProductItem extends ConsumerWidget {
+class ProductItem extends ConsumerStatefulWidget {
   final String id;
 
   const ProductItem({super.key, required this.id});
+  ConsumerState<ProductItem> createState() => _ProductItemState();
+}
+
+class _ProductItemState extends ConsumerState<ProductItem> {
+  bool _isLoading = false;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final product = ref.read(productsProvider.notifier).findById(id);
+  Widget build(BuildContext context) {
+    final product = ref.read(productsProvider.notifier).findById(widget.id);
 
     final bool isFavorite = ref.watch(
       filteredProductsProvider.select(
         (list) => list
             .firstWhere(
-              (item) => item.id == id,
+              (item) => item.id == widget.id,
               orElse: () => Product(
                 id: '',
                 title: '',
@@ -34,13 +39,13 @@ class ProductItem extends ConsumerWidget {
     );
 
     final bool isCartItem = ref.watch(
-      cartProvider.select((map) => map.items.containsKey(id)),
+      cartProvider.select((map) => map.items.containsKey(widget.id)),
     );
 
     return GestureDetector(
       onTap: () => Navigator.of(
         context,
-      ).pushNamed(ProductDetailScreen.routeName, arguments: id),
+      ).pushNamed(ProductDetailScreen.routeName, arguments: widget.id),
       child: GridTile(
         footer: GridTileBar(
           leading: IconButton(
@@ -48,7 +53,7 @@ class ProductItem extends ConsumerWidget {
               try {
                 await ref
                     .read(productsProvider.notifier)
-                    .toggleFavoriteStatus(id);
+                    .toggleFavoriteStatus(widget.id);
               } catch (error) {
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -68,11 +73,14 @@ class ProductItem extends ConsumerWidget {
           ),
           trailing: IconButton(
             onPressed: () async {
+              setState(() {
+                _isLoading = true;
+              });
               try {
                 final messenger = ScaffoldMessenger.of(context);
                 await ref
                     .read(cartProvider.notifier)
-                    .addItem(id, product.price, product.title)
+                    .addItem(widget.id, product.price, product.title)
                     .then((res) {
                       messenger.hideCurrentSnackBar();
                       messenger.showSnackBar(
@@ -83,7 +91,7 @@ class ProductItem extends ConsumerWidget {
                             onPressed: () {
                               ref
                                   .read(cartProvider.notifier)
-                                  .removeSingleItem(id);
+                                  .removeSingleItem(widget.id);
                             },
                           ),
                           duration: Duration(seconds: 2),
@@ -96,11 +104,15 @@ class ProductItem extends ConsumerWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text("Oops something went wrong")),
                 );
+              } finally {
+                setState(() {
+                  _isLoading = false;
+                });
               }
             },
             icon: Icon(
-              ref.read(cartProvider.notifier).isLoading
-                  ? Icons.refresh
+              _isLoading
+                  ? Icons.sync
                   : isCartItem
                   ? Icons.shopping_cart
                   : Icons.shopping_cart_outlined,
