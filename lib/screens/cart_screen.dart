@@ -62,8 +62,8 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                               cartItems.values.toList(),
                               double.parse(totalFormatted),
                             )
-                            .then((_) {
-                              ref.read(cartProvider.notifier).clear();
+                            .then((_) async {
+                              await ref.read(cartProvider.notifier).clear();
                             });
                       } catch (e) {
                         if (!mounted) return;
