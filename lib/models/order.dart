@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-
 import 'package:mini_shop_app/models/cart.dart';
 
 class Order {
@@ -69,7 +67,7 @@ class Order {
       id: map['id'] as String,
       amount: map['amount'] as double,
       products: List<Cart>.from(
-        (map['products'] as List<int>).map<Cart>(
+        (map['products'] as List<dynamic>).map<Cart>(
           (x) => Cart.fromMap(x as Map<String, dynamic>),
         ),
       ),
