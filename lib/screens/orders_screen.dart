@@ -14,16 +14,31 @@ class OrdersScreen extends ConsumerStatefulWidget {
 }
 
 class _OrdersScreenState extends ConsumerState<OrdersScreen> {
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isLoading = true;
+    Future.wait([ref.read(orderProvider.notifier).fetchAndSetOrders()]).then(
+      (_) => setState(() {
+        _isLoading = false;
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final orders = ref.watch(orderProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text("Your Orders")),
-      body: ListView.builder(
-        itemCount: orders.length,
-        itemBuilder: (ctx, index) => OrderItem(order: orders[index]),
-      ),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: orders.length,
+              itemBuilder: (ctx, index) => OrderItem(order: orders[index]),
+            ),
       drawer: AppDrawer(),
     );
   }
