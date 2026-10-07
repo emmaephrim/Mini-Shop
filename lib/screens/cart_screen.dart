@@ -4,13 +4,19 @@ import 'package:mini_shop_app/providers/cart_provider.dart';
 import 'package:mini_shop_app/providers/order_provider.dart';
 import 'package:mini_shop_app/widgets/cart_item.dart';
 
-class CartScreen extends ConsumerWidget {
+class CartScreen extends ConsumerStatefulWidget {
   static const routeName = '/cart-screen';
 
   const CartScreen({super.key});
+  @override
+  ConsumerState<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends ConsumerState<CartScreen> {
+  bool _isLoading = false;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final cartItems = ref.watch(cartProvider).items;
 
     final totalFormatted = ref.watch(
@@ -45,22 +51,42 @@ class CartScreen extends ConsumerWidget {
                     label: Text('\$$totalFormatted'),
                   ),
                   TextButton(
-                    onPressed: () {
-                      ref
-                          .read(orderProvider.notifier)
-                          .addOrder(
-                            cartItems.values.toList(),
-                            double.parse(totalFormatted),
-                          );
-                      ref.read(cartProvider.notifier).clear();
+                    onPressed: () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      try {
+                        await ref
+                            .read(orderProvider.notifier)
+                            .addOrder(
+                              cartItems.values.toList(),
+                              double.parse(totalFormatted),
+                            )
+                            .then((_) {
+                              ref.read(cartProvider.notifier).clear();
+                            });
+                      } catch (e) {
+                        if (!mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Oops Something went wrong!')),
+                        );
+                      } finally {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
                     },
-                    child: Text(
-                      "Order Now",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primaryFixedDim,
-                      ),
-                    ),
+                    child: _isLoading
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            "Order Now",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primaryFixedDim,
+                            ),
+                          ),
                   ),
                 ],
               ),
