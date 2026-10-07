@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/models/cart.dart';
@@ -22,7 +21,7 @@ class CartProvider extends Notifier<CartState> {
 
   final String baseUrl =
       'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app';
-  bool loading = false;
+  bool isLoading = false;
 
   Future<Map<String, Cart>> fetchAndSetCart() async {
     try {
@@ -46,7 +45,7 @@ class CartProvider extends Notifier<CartState> {
   }
 
   Future<void> addItem(String productId, double price, String title) async {
-    loading = true;
+    isLoading = true;
     final currentItems = state.items;
     try {
       if (currentItems.containsKey(productId)) {
@@ -82,7 +81,7 @@ class CartProvider extends Notifier<CartState> {
       state.items = currentItems;
       rethrow;
     } finally {
-      loading = false;
+      isLoading = false;
     }
   }
 
