@@ -30,7 +30,7 @@ class OrderProvider extends Notifier<List<Order>> {
         return [];
       }
 
-      decoded.forEach(((key, value) => loadedOrders.add(value)));
+      decoded.forEach(((key, value) => loadedOrders.add(Order.fromMap(value))));
       state = loadedOrders;
       return loadedOrders;
     } catch (error) {
