@@ -19,13 +19,19 @@ class _ProductsGridState extends ConsumerState<ProductsGrid> {
     super.initState();
     _isInitLoading = true;
     Future.wait([
-      ref.read(productsProvider.notifier).fetchAndSetProducts(),
-      ref.read(cartProvider.notifier).fetchAndSetCart(),
-    ]).then((_) {
-      setState(() {
-        _isInitLoading = false;
-      });
-    });
+          ref.read(productsProvider.notifier).fetchAndSetProducts(),
+          ref.read(cartProvider.notifier).fetchAndSetCart(),
+        ])
+        .then((_) {
+          setState(() {
+            _isInitLoading = false;
+          });
+        })
+        .catchError((error) {
+          setState(() {
+            _isInitLoading = false;
+          });
+        });
   }
 
   @override
@@ -36,10 +42,21 @@ class _ProductsGridState extends ConsumerState<ProductsGrid> {
         ? Center(child: CircularProgressIndicator())
         : RefreshIndicator(
             onRefresh: () async {
-              await Future.wait([
-                ref.read(productsProvider.notifier).fetchAndSetProducts(),
-                ref.read(cartProvider.notifier).fetchAndSetCart(),
-              ]);
+              try {
+                await Future.wait([
+                  ref.read(productsProvider.notifier).fetchAndSetProducts(),
+                  ref.read(cartProvider.notifier).fetchAndSetCart(),
+                ]);
+              } catch (error) {
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("something went wrong!")),
+                );
+              } finally {
+                setState(() {
+                  _isInitLoading = false;
+                });
+              }
             },
             child: GridView.builder(
               padding: const EdgeInsets.all(10),
