@@ -56,41 +56,45 @@ class _UserProductItemState extends ConsumerState<UserProductItem> {
                                   child: Text("No"),
                                 ),
                                 TextButton(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     setState(() {
                                       _isLoading = true;
                                     });
-                                    Navigator.of(context).pop();
-                                    ref
-                                        .read(productsProvider.notifier)
-                                        .deleteProductById(widget.id)
-                                        .then((_) {
-                                          setState(() {
-                                            _isLoading = false;
+                                    try {
+                                      if (!context.mounted) return;
+                                      Navigator.of(context).pop();
+
+                                      await ref
+                                          .read(productsProvider.notifier)
+                                          .deleteProductById(widget.id)
+                                          .then((_) {
+                                            setState(() {
+                                              _isLoading = false;
+                                            });
                                           });
-                                        })
-                                        .catchError((error) {
-                                          showDialog(
-                                            context: context,
-                                            builder: (ctx) => AlertDialog(
-                                              title: Text("An error occurred"),
-                                              content: Text(
-                                                "Something went wrong!",
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      _isLoading = false;
-                                                    });
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Text('Cancel'),
-                                                ),
-                                              ],
+                                    } catch (error) {
+                                      if (!context.mounted) return;
+                                      showDialog(
+                                        context: context,
+                                        builder: (ctx) => AlertDialog(
+                                          title: Text("An error occurred"),
+                                          content: Text(
+                                            "Something went wrong!",
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  _isLoading = false;
+                                                });
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('Cancel'),
                                             ),
-                                          );
-                                        });
+                                          ],
+                                        ),
+                                      );
+                                    }
                                   },
 
                                   child: Text(
