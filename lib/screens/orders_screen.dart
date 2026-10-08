@@ -20,11 +20,17 @@ class _OrdersScreenState extends ConsumerState<OrdersScreen> {
   void initState() {
     super.initState();
     _isLoading = true;
-    Future.wait([ref.read(orderProvider.notifier).fetchAndSetOrders()]).then(
-      (_) => setState(() {
-        _isLoading = false;
-      }),
-    );
+    Future.wait([ref.read(orderProvider.notifier).fetchAndSetOrders()])
+        .then(
+          (_) => setState(() {
+            _isLoading = false;
+          }),
+        )
+        .catchError((error) {
+          setState(() {
+            _isLoading = false;
+          });
+        });
   }
 
   @override
