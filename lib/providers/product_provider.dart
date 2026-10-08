@@ -86,7 +86,7 @@ class ProductNotifier extends Notifier<List<Product>> {
     ];
     try {
       final prod = state.firstWhere((item) => id == item.id);
-      var url = Uri.https(baseUrl, 'products/${id}.json');
+      var url = Uri.https(baseUrl, 'products/$id.json');
       final res = await http.patch(
         url,
         body: json.encode({'isFavorite': prod.isFavorite}),
