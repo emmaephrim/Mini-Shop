@@ -1,7 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/config/theme.dart';
 import 'package:mini_shop_app/config/util.dart';
+import 'package:mini_shop_app/firebase_options.dart';
 import 'package:mini_shop_app/providers/theme_mode_provider.dart';
 import 'package:mini_shop_app/screens/cart_screen.dart';
 import 'package:mini_shop_app/screens/edit_product_screen.dart';
@@ -10,7 +12,9 @@ import 'package:mini_shop_app/screens/product_detail_screen.dart';
 import 'package:mini_shop_app/screens/products_overview_screen.dart';
 import 'package:mini_shop_app/screens/user_products_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(ProviderScope(child: const ShopApp()));
 }
 
