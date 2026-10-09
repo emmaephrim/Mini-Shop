@@ -56,7 +56,7 @@ class _ProductsOverviewScreenState
             icon: Icon(Icons.more_vert),
           ),
           Padding(
-            padding: EdgeInsetsGeometry.only(right: 8.0),
+            padding: EdgeInsetsGeometry.only(right: 10.0),
             child: CircleAvatar(
               child: IconButton(onPressed: () {}, icon: Icon(Icons.person)),
             ),
