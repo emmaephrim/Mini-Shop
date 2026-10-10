@@ -59,7 +59,6 @@ class DefaultFirebaseOptions {
     databaseURL: 'https://mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'mini-shop-flutter.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDhP5R0uSWtDiggAWXKzqNNqRS4V075YI4',
     appId: '1:135654089255:ios:6b40c475e6e64c04016402',
@@ -67,10 +66,10 @@ class DefaultFirebaseOptions {
     projectId: 'mini-shop-flutter',
     databaseURL: 'https://mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'mini-shop-flutter.firebasestorage.app',
+    androidClientId: '135654089255-94j6dhr75ogosoceqkrr7mssc2408gvq.apps.googleusercontent.com',
     iosClientId: '135654089255-hfo6dahu9f9u5t57r9499vh00sdg5cb5.apps.googleusercontent.com',
     iosBundleId: 'com.example.miniShopApp',
   );
-
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyDhP5R0uSWtDiggAWXKzqNNqRS4V075YI4',
     appId: '1:135654089255:ios:6b40c475e6e64c04016402',
@@ -78,6 +77,7 @@ class DefaultFirebaseOptions {
     projectId: 'mini-shop-flutter',
     databaseURL: 'https://mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'mini-shop-flutter.firebasestorage.app',
+    androidClientId: '135654089255-94j6dhr75ogosoceqkrr7mssc2408gvq.apps.googleusercontent.com',
     iosClientId: '135654089255-hfo6dahu9f9u5t57r9499vh00sdg5cb5.apps.googleusercontent.com',
     iosBundleId: 'com.example.miniShopApp',
   );
