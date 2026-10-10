@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/config/theme.dart';
 import 'package:mini_shop_app/config/util.dart';
 import 'package:mini_shop_app/firebase_options.dart';
+import 'package:mini_shop_app/providers/auth_provider.dart';
 import 'package:mini_shop_app/providers/theme_mode_provider.dart';
+import 'package:mini_shop_app/screens/auth_screen.dart';
 import 'package:mini_shop_app/screens/cart_screen.dart';
 import 'package:mini_shop_app/screens/edit_product_screen.dart';
 import 'package:mini_shop_app/screens/orders_screen.dart';
@@ -24,6 +26,7 @@ class ShopApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentThemeMode = ref.watch(themeModeProvider);
+    final authState = ref.watch(authStateProvider);
 
     TextTheme textTheme = createTextTheme(context, "Lato", "Anton");
 
@@ -44,6 +47,14 @@ class ShopApp extends ConsumerWidget {
         ),
       ),
       themeMode: currentThemeMode,
+      home: authState.when(
+        data: (user) =>
+            user != null ? const ProductsOverviewScreen() : const AuthScreen(),
+        error: (err, stack) =>
+            Scaffold(body: Center(child: Text('Error: $err'))),
+        loading: () =>
+            const Scaffold(body: Center(child: CircularProgressIndicator())),
+      ),
       routes: {
         ProductsOverviewScreen.routeName: (context) => ProductsOverviewScreen(),
         ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
