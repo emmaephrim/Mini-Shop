@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/constants/filter_options.dart';
+import 'package:mini_shop_app/providers/auth_controller.dart';
 import 'package:mini_shop_app/providers/cart_provider.dart';
 import 'package:mini_shop_app/providers/show_favorite_only_provider.dart';
 import 'package:mini_shop_app/screens/cart_screen.dart';
+import 'package:mini_shop_app/services/auth_service.dart';
 import 'package:mini_shop_app/widgets/app_drawer.dart';
 import 'package:mini_shop_app/widgets/products_grid.dart';
 
 class ProductsOverviewScreen extends ConsumerStatefulWidget {
-  static const routeName = '/';
+  static const routeName = '/products-overview';
 
   const ProductsOverviewScreen({super.key});
 
@@ -58,7 +60,20 @@ class _ProductsOverviewScreenState
           Padding(
             padding: EdgeInsetsGeometry.only(right: 10.0),
             child: CircleAvatar(
-              child: IconButton(onPressed: () {}, icon: Icon(Icons.person)),
+              child: IconButton(
+                onPressed: () async {
+                  try {
+                    await ref.read(authControllerProvider.notifier).signOut();
+                  } catch (e) {
+                    debugPrint('sign out error: ${e.toString()}');
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Something went wrong $e")),
+                    );
+                  }
+                },
+                icon: Icon(Icons.person),
+              ),
             ),
           ),
         ],
