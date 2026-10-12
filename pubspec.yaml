@@ -44,5 +44,3 @@ flutter:
   #       - asset: assets/fonts/Lato-Bold.ttf
   #         weight: 700
   #       - asset: assets/fonts/Lato-Regular.ttf
-dependency_overrides:
-  google_sign_in_android: ^7.2.17
