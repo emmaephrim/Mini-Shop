@@ -13,11 +13,11 @@ class AuthService {
     final GoogleSignInAccount? googleUser = await _googleSignIn.authenticate();
 
     if (googleUser == null) return null;
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+    final clientAuth = await googleUser.authorizationClient
+        .authorizationForScopes(['email', 'profile']);
     final AuthCredential credential = GoogleAuthProvider.credential(
-      // accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
+      accessToken: clientAuth?.accessToken,
+      idToken: googleUser.authentication.idToken,
     );
 
     return await _auth.signInWithCredential(credential);
