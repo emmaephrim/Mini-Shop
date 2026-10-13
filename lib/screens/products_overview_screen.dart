@@ -5,7 +5,6 @@ import 'package:mini_shop_app/providers/auth_controller.dart';
 import 'package:mini_shop_app/providers/cart_provider.dart';
 import 'package:mini_shop_app/providers/show_favorite_only_provider.dart';
 import 'package:mini_shop_app/screens/cart_screen.dart';
-import 'package:mini_shop_app/services/auth_service.dart';
 import 'package:mini_shop_app/widgets/app_drawer.dart';
 import 'package:mini_shop_app/widgets/products_grid.dart';
 
