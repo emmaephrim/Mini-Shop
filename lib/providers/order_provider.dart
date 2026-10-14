@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mini_shop_app/core/utils/logger.dart';
 import 'package:mini_shop_app/models/cart.dart';
 import 'package:mini_shop_app/models/order.dart';
 import 'package:http/http.dart' as http;
@@ -33,8 +33,8 @@ class OrderProvider extends Notifier<List<Order>> {
       decoded.forEach(((key, value) => loadedOrders.add(Order.fromMap(value))));
       state = loadedOrders;
       return loadedOrders;
-    } catch (error) {
-      log(error.toString(), name: 'fetchAndSetOrders error: ');
+    } catch (error, stackTrace) {
+      logger.e('Fetching orders failed', error: error, stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -54,9 +54,9 @@ class OrderProvider extends Notifier<List<Order>> {
         Uri.https(baseUrl, 'orders.json'),
         body: newItem.toJson(),
       );
-    } catch (e) {
+    } catch (error, stackTrace) {
       state = currentState;
-      log(e.toString(), name: 'addOrder error:');
+      logger.e('Adding order failed', error: error, stackTrace: stackTrace);
       rethrow;
     }
   }
