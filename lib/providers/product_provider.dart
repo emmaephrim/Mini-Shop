@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mini_shop_app/core/utils/logger.dart';
 import 'package:mini_shop_app/models/http_exception.dart';
-import 'dart:developer' as developer;
-// import 'package:mini_shop_app/data/products.dart';
 import 'package:mini_shop_app/models/product.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,7 +26,6 @@ class ProductNotifier extends Notifier<List<Product>> {
       final List<Product> loadedProducts = [];
       final res = await http.get(Uri.https(baseUrl, 'products.json'));
       final decoded = json.decode(res.body) as Map<String, dynamic>?;
-      developer.log(res.body, name: 'ProductNotifier._fetchAndSetProducts');
       if (decoded == null) loadedProducts;
 
       decoded!.forEach((prodId, prodData) {
@@ -65,8 +62,12 @@ class ProductNotifier extends Notifier<List<Product>> {
         }),
       );
       state = [...state, product.copyWith(id: json.decode(res.body)['name'])];
-    } catch (error) {
-      debugPrint(error.toString());
+    } catch (error, stackTrace) {
+      logger.e(
+        'Add item to products failed',
+        error: error,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }
@@ -103,7 +104,7 @@ class ProductNotifier extends Notifier<List<Product>> {
   // ========== Update Products
   Future<void> updateProduct(Product product) async {
     try {
-      final res = await http.patch(
+      await http.patch(
         Uri.https(baseUrl, 'products/${product.id}.json'),
         body: json.encode({
           'title': product.title,
@@ -112,10 +113,6 @@ class ProductNotifier extends Notifier<List<Product>> {
           'price': product.price,
           'isFavorite': product.isFavorite,
         }),
-      );
-      developer.log(
-        name: "Product update:",
-        res.statusCode.toString() + res.body,
       );
       state = [
         for (final item in state)
