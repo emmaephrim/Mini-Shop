@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/providers/auth_provider.dart';
 
-final authControllerProvider =
-    AsyncNotifierProvider.autoDispose<AuthController, void>(AuthController.new);
+final authControllerProvider = AsyncNotifierProvider<AuthController, void>(
+  AuthController.new,
+  isAutoDispose: true,
+);
 
-// class AuthController extends AutoDisposeAsyncNotifier<void> {
 class AuthController extends AsyncNotifier<void> {
   @override
-  //   FutureOr<void> build() {}
-  build() {}
+  FutureOr<void> build() async {}
 
   Future<bool> signInWithEmail(String email, String password) async {
     state = const AsyncValue.loading();
