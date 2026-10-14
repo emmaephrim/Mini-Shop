@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:developer' as developer;
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mini_shop_app/core/utils/logger.dart';
 import 'package:mini_shop_app/models/cart.dart';
 import 'package:mini_shop_app/models/cart_state.dart';
 import 'package:http/http.dart' as http;
@@ -36,11 +36,10 @@ class CartProvider extends Notifier<CartState> {
         (key, value) =>
             MapEntry(key, Cart.fromMap(value as Map<String, dynamic>)),
       );
-      developer.log(data.toString(), name: 'Cart server data:');
       state = CartState(items: data);
       return data;
-    } catch (e) {
-      developer.log(e.toString(), name: 'fetchAndSetCart error:');
+    } catch (error, stackTrace) {
+      logger.e('Fetching cart failed', error: error, stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -76,11 +75,11 @@ class CartProvider extends Notifier<CartState> {
           body: newItem.toJson(),
         );
       }
-    } catch (e) {
-      debugPrint(e.toString());
+    } catch (error, stackTrace) {
+      logger.e('Add item to cart failed', error: error, stackTrace: stackTrace);
       state.items = currentItems;
       rethrow;
-    } finally {}
+    }
   }
 
   void removeItem(String key) {
@@ -114,8 +113,8 @@ class CartProvider extends Notifier<CartState> {
     try {
       state = CartState(items: {});
       await http.delete(Uri.https(baseUrl, 'cart.json'));
-    } catch (e) {
-      developer.log(e.toString(), name: 'Cart data clear error:');
+    } catch (error, stackTrace) {
+      logger.e('Clearing cart failed', error: error, stackTrace: stackTrace);
       rethrow;
     }
   }
