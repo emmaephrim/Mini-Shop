@@ -50,9 +50,9 @@ class _ProductsOverviewScreenState
             ],
             onSelected: ((FilterOptions selectedValue) => {
               if (selectedValue == FilterOptions.favorites)
-                {ref.read(showFavoritesOnlyProvider.notifier).state = true}
+                {ref.read(showFavoritesOnlyProvider.notifier).showFavorites()}
               else
-                {ref.read(showFavoritesOnlyProvider.notifier).state = false},
+                {ref.read(showFavoritesOnlyProvider.notifier).showAll()},
             }),
             icon: Icon(Icons.more_vert),
           ),
