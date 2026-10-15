@@ -65,11 +65,11 @@ class _ProductsOverviewScreenState
                   try {
                     await ref.read(authControllerProvider.notifier).signOut();
                   } catch (error, stackTrace) {
-                    logger.e(
-                      'sign out error',
-                      error: error,
-                      stackTrace: stackTrace,
-                    );
+                    // logger.e(
+                    //   'sign out error',
+                    //   error: error,
+                    //   stackTrace: stackTrace,
+                    // );
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Something went wrong!")),
