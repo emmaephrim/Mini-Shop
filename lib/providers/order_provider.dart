@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:mini_shop_app/core/utils/logger.dart';
 import 'package:mini_shop_app/models/cart.dart';
 import 'package:mini_shop_app/models/order.dart';
-import 'package:http/http.dart' as http;
 
 final orderProvider = NotifierProvider<OrderProvider, List<Order>>(
   OrderProvider.new,
@@ -35,6 +36,7 @@ class OrderProvider extends Notifier<List<Order>> {
       return loadedOrders;
     } catch (error, stackTrace) {
       logger.e('Fetching orders failed', error: error, stackTrace: stackTrace);
+      await FirebaseCrashlytics.instance.recordError(error, stackTrace);
       rethrow;
     }
   }
@@ -56,7 +58,9 @@ class OrderProvider extends Notifier<List<Order>> {
       );
     } catch (error, stackTrace) {
       state = currentState;
+
       logger.e('Adding order failed', error: error, stackTrace: stackTrace);
+      await FirebaseCrashlytics.instance.recordError(error, stackTrace);
       rethrow;
     }
   }
