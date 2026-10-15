@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/core/utils/logger.dart';
 import 'package:mini_shop_app/models/cart.dart';
@@ -40,6 +41,8 @@ class CartProvider extends Notifier<CartState> {
       return data;
     } catch (error, stackTrace) {
       logger.e('Fetching cart failed', error: error, stackTrace: stackTrace);
+
+      await FirebaseCrashlytics.instance.recordError(error, stackTrace);
       rethrow;
     }
   }
@@ -77,6 +80,8 @@ class CartProvider extends Notifier<CartState> {
       }
     } catch (error, stackTrace) {
       logger.e('Add item to cart failed', error: error, stackTrace: stackTrace);
+      await FirebaseCrashlytics.instance.recordError(error, stackTrace);
+
       state.items = currentItems;
       rethrow;
     }
@@ -115,6 +120,7 @@ class CartProvider extends Notifier<CartState> {
       await http.delete(Uri.https(baseUrl, 'cart.json'));
     } catch (error, stackTrace) {
       logger.e('Clearing cart failed', error: error, stackTrace: stackTrace);
+      await FirebaseCrashlytics.instance.recordError(error, stackTrace);
       rethrow;
     }
   }
