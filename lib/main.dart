@@ -1,4 +1,6 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/config/theme.dart';
@@ -17,11 +19,18 @@ import 'package:mini_shop_app/screens/user_products_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Pass all uncaught "fatal" errors from the framework to Crashlytics
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   runApp(ProviderScope(child: const ShopApp()));
 }
 
 class ShopApp extends ConsumerWidget {
   const ShopApp({super.key});
+
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
+    analytics: analytics,
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,6 +42,7 @@ class ShopApp extends ConsumerWidget {
     MaterialTheme theme = MaterialTheme(textTheme);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [observer],
       title: 'Mini Shop',
       theme: theme.light().copyWith(
         appBarTheme: AppBarTheme(
