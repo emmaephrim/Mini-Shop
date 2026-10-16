@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mini_shop_app/providers/product_provider.dart';
+import 'package:mini_shop_app/providers/product_controller.dart';
 import 'package:mini_shop_app/screens/edit_product_screen.dart';
 import 'package:mini_shop_app/widgets/app_drawer.dart';
 import 'package:mini_shop_app/widgets/user_product_item.dart';
@@ -12,7 +12,7 @@ class UserProductsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final products = ref.watch(productsProvider);
+    final asyncProducts = ref.watch(productsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -27,14 +27,20 @@ class UserProductsScreen extends ConsumerWidget {
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
-        child: ListView.builder(
-          itemCount: products.length,
-          itemBuilder: ((context, index) => Column(
-            children: [
-              UserProductItem(id: products[index].id),
-              Divider(),
-            ],
-          )),
+        child: asyncProducts.when(
+          data: (products) {
+            return ListView.builder(
+              itemCount: products.length,
+              itemBuilder: ((context, index) => Column(
+                children: [
+                  UserProductItem(product: products[index]),
+                  Divider(),
+                ],
+              )),
+            );
+          },
+          error: (error, stackTrace) => Text('Something went wrong! \n$error'),
+          loading: () => Center(child: CircularProgressIndicator()),
         ),
       ),
       drawer: AppDrawer(),
