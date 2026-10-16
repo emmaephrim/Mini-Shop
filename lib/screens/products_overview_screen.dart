@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mini_shop_app/constants/filter_options.dart';
-import 'package:mini_shop_app/core/utils/logger.dart';
+import 'package:mini_shop_app/core/constants/filter_options.dart';
 import 'package:mini_shop_app/providers/auth_controller.dart';
 import 'package:mini_shop_app/providers/cart_provider.dart';
 import 'package:mini_shop_app/providers/show_favorite_only_provider.dart';
