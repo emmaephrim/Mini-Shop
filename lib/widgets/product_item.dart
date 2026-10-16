@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/models/product.dart';
 import 'package:mini_shop_app/providers/cart_provider.dart';
-import 'package:mini_shop_app/providers/filtered_product_provider.dart';
-import 'package:mini_shop_app/providers/product_provider.dart';
+import 'package:mini_shop_app/providers/product_controller.dart';
 import 'package:mini_shop_app/screens/product_detail_screen.dart';
 
 class ProductItem extends ConsumerStatefulWidget {
-  final String id;
+  final Product product;
 
-  const ProductItem({super.key, required this.id});
+  const ProductItem({super.key, required this.product});
   @override
   ConsumerState<ProductItem> createState() => _ProductItemState();
 }
@@ -20,95 +19,98 @@ class _ProductItemState extends ConsumerState<ProductItem> {
 
   @override
   Widget build(BuildContext context) {
-    final product = ref.read(productsProvider.notifier).findById(widget.id);
+    final product = widget.product;
 
-    final bool isFavorite = ref.watch(
-      filteredProductsProvider.select(
-        (list) => list
-            .firstWhere(
-              (item) => item.id == widget.id,
-              orElse: () => Product(
-                id: '',
-                title: '',
-                description: '',
-                price: 0,
-                imageUrl: '',
-              ),
-            )
-            .isFavorite,
-      ),
-    );
-
+    // 3. Assuming your cartProvider hasn't been upgraded to AsyncValue yet,
+    // this stays exactly the same. (If it IS an AsyncValue now, you would do
+    // .select((asyncBox) => asyncBox.value?.items.containsKey(product.id) ?? false)
     final bool isCartItem = ref.watch(
-      cartProvider.select((map) => map.items.containsKey(widget.id)),
+      cartProvider.select((map) => map.items.containsKey(product.id)),
     );
 
     return GestureDetector(
       onTap: () => Navigator.of(
         context,
-      ).pushNamed(ProductDetailScreen.routeName, arguments: widget.id),
+      ).pushNamed(ProductDetailScreen.routeName, arguments: product.id),
       child: GridTile(
         footer: GridTileBar(
+          backgroundColor: Theme.of(
+            context,
+          ).colorScheme.surface.withOpacity(0.7),
+
+          // ================= FAVORITE BUTTON =================
           leading: IconButton(
             onPressed: () async {
               try {
+                // Call the toggle method. Because of your Optimistic Update,
+                // the UI will react instantly!
                 await ref
                     .read(productsProvider.notifier)
-                    .toggleFavoriteStatus(widget.id);
+                    .toggleFavoriteStatus(product.id);
               } catch (error) {
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Oops something went wrong")),
+                  const SnackBar(content: Text("Oops, something went wrong")),
                 );
               }
             },
             icon: Icon(
-              (isFavorite ? Icons.favorite : Icons.favorite_outline_outlined),
+              product.isFavorite
+                  ? Icons.favorite
+                  : Icons.favorite_outline_outlined,
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
+
           title: Text(
             product.title,
             textAlign: TextAlign.center,
             style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           ),
+
+          // ================= CART BUTTON =================
           trailing: IconButton(
             onPressed: () async {
               setState(() {
                 _isLoading = true;
               });
+
               try {
-                final messenger = ScaffoldMessenger.of(context);
+                // 4. Clean await/try/catch block (No more .then!)
                 await ref
                     .read(cartProvider.notifier)
-                    .addItem(widget.id, product.price, product.title)
-                    .then((res) {
-                      messenger.hideCurrentSnackBar();
-                      messenger.showSnackBar(
-                        SnackBar(
-                          persist: false,
-                          action: SnackBarAction(
-                            label: "UNDO",
-                            onPressed: () {
-                              ref
-                                  .read(cartProvider.notifier)
-                                  .removeSingleItem(widget.id);
-                            },
-                          ),
-                          duration: Duration(seconds: 2),
-                          content: Text("${product.title} added to cart!"),
-                        ),
-                      );
-                    });
+                    .addItem(product.id, product.price, product.title);
+
+                if (!context.mounted) return;
+
+                final messenger = ScaffoldMessenger.of(context);
+                messenger.hideCurrentSnackBar();
+                messenger.showSnackBar(
+                  SnackBar(
+                    duration: const Duration(seconds: 2),
+                    content: Text("${product.title} added to cart!"),
+                    action: SnackBarAction(
+                      label: "UNDO",
+                      onPressed: () {
+                        ref
+                            .read(cartProvider.notifier)
+                            .removeSingleItem(product.id);
+                      },
+                    ),
+                  ),
+                );
               } catch (error) {
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Oops something went wrong")),
+                  const SnackBar(content: Text("Oops, could not add to cart")),
                 );
               } finally {
-                setState(() {
-                  _isLoading = false;
-                });
+                // This ensures the spinner stops whether it succeeds OR fails
+                if (context.mounted) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                }
               }
             },
             icon: Icon(
@@ -120,10 +122,8 @@ class _ProductItemState extends ConsumerState<ProductItem> {
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
-          backgroundColor: Theme.of(
-            context,
-          ).colorScheme.surface.withOpacity(0.7),
         ),
+
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: Image.network(product.imageUrl, fit: BoxFit.cover),
