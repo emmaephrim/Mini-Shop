@@ -2,73 +2,48 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/providers/cart_provider.dart';
 import 'package:mini_shop_app/providers/filtered_product_provider.dart';
-import 'package:mini_shop_app/providers/product_provider.dart';
+import 'package:mini_shop_app/providers/product_controller.dart';
 import 'package:mini_shop_app/widgets/product_item.dart';
 
-class ProductsGrid extends ConsumerStatefulWidget {
+class ProductsGrid extends ConsumerWidget {
   const ProductsGrid({super.key});
 
   @override
-  ConsumerState<ProductsGrid> createState() => _ProductsGridState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncProducts = ref.watch(filteredProductsProvider);
 
-class _ProductsGridState extends ConsumerState<ProductsGrid> {
-  bool _isInitLoading = false;
-  @override
-  void initState() {
-    super.initState();
-    _isInitLoading = true;
-    Future.wait([
-          ref.read(productsProvider.notifier).fetchAndSetProducts(),
-          ref.read(cartProvider.notifier).fetchAndSetCart(),
-        ])
-        .then((_) {
-          setState(() {
-            _isInitLoading = false;
-          });
-        })
-        .catchError((error) {
-          setState(() {
-            _isInitLoading = false;
-          });
-        });
-  }
+    return asyncProducts.when(
+      data: (products) {
+        // Only build the Grid and RefreshIndicator if we have actual data
+        return RefreshIndicator(
+          onRefresh: () async {
+            // Industry standard refresh: Invalidate the providers!
+            // This destroys the old data and triggers their build() methods again.
+            ref.invalidate(productsProvider);
+            ref.invalidate(cartProvider);
 
-  @override
-  Widget build(BuildContext context) {
-    final products = ref.watch(filteredProductsProvider);
-
-    return _isInitLoading
-        ? Center(child: CircularProgressIndicator())
-        : RefreshIndicator(
-            onRefresh: () async {
-              try {
-                await Future.wait([
-                  ref.read(productsProvider.notifier).fetchAndSetProducts(),
-                  ref.read(cartProvider.notifier).fetchAndSetCart(),
-                ]);
-              } catch (error) {
-                if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("something went wrong!")),
-                );
-              } finally {
-                setState(() {
-                  _isInitLoading = false;
-                });
-              }
-            },
-            child: GridView.builder(
-              padding: const EdgeInsets.all(10),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 3 / 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemCount: products.length,
-              itemBuilder: (ctx, index) => ProductItem(id: products[index].id),
+            // Wait for both of them to finish loading the new data
+            // before the RefreshIndicator spinning circle disappears
+            await ref.read(productsProvider.future);
+            // await ref.read(cartProvider.future);
+          },
+          child: GridView.builder(
+            padding: const EdgeInsets.all(10),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 3 / 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
             ),
-          );
+            itemCount: products.length,
+            itemBuilder: ((ctx, index) =>
+                ProductItem(product: products[index])),
+          ),
+        );
+      },
+      error: (error, stackTrace) =>
+          Center(child: Text('Something went wrong! \n$error')),
+      loading: () => const Center(child: CircularProgressIndicator()),
+    );
   }
 }
