@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mini_shop_app/features/orders/views/orders_screen.dart';
 import 'package:mini_shop_app/features/products/views/products_overview_screen.dart';
-import 'package:mini_shop_app/features/products/widgets/user_products_screen.dart';
+import 'package:mini_shop_app/features/products/views/user_products_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
