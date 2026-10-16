@@ -14,7 +14,7 @@ import 'package:mini_shop_app/features/products/views/edit_product_screen.dart';
 import 'package:mini_shop_app/features/orders/views/orders_screen.dart';
 import 'package:mini_shop_app/features/products/views/product_detail_screen.dart';
 import 'package:mini_shop_app/features/products/views/products_overview_screen.dart';
-import 'package:mini_shop_app/features/products/widgets/user_products_screen.dart';
+import 'package:mini_shop_app/features/products/views/user_products_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
