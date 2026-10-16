@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/models/product.dart';
-import 'package:mini_shop_app/providers/product_provider.dart';
+import 'package:mini_shop_app/providers/product_controller.dart';
 
 class ProductDetailScreen extends ConsumerWidget {
   static const routeName = "/product-detail";
