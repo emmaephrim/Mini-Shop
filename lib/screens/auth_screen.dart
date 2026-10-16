@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mini_shop_app/constants/auth_mode.dart';
+import 'package:mini_shop_app/core/constants/auth_mode.dart';
 import 'package:mini_shop_app/providers/auth_controller.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
