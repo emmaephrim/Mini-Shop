@@ -5,8 +5,6 @@ import 'package:mini_shop_app/features/orders/controllers/order_provider.dart';
 import 'package:mini_shop_app/features/cart/widgets/cart_item.dart';
 
 class CartScreen extends ConsumerStatefulWidget {
-  static const routeName = 'cart';
-
   const CartScreen({super.key});
   @override
   ConsumerState<CartScreen> createState() => _CartScreenState();
