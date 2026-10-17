@@ -46,7 +46,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       // Rule 2: If they ARE logged in, but trying to go to the login screen...
       if (!isLoggedIn && !isGoingToLogIn) {
-        return AuthScreen.routeName; // KICK THEM TO LOGIN!
+        return state.namedLocation(AuthScreen.routeName); // KICK THEM TO LOGIN!
       }
       if (isLoggedIn && isGoingToLogIn) {
         return state.namedLocation(
