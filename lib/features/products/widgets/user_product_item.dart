@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mini_shop_app/features/products/models/product.dart';
+import 'package:mini_shop_app/config/routes/app_routes.dart';
 import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
-import 'package:mini_shop_app/features/products/views/edit_product_screen.dart';
+import 'package:mini_shop_app/features/products/models/product.dart';
 
 class UserProductItem extends ConsumerStatefulWidget {
   final Product product;
@@ -30,7 +30,7 @@ class _UserProductItemState extends ConsumerState<UserProductItem> {
           children: [
             IconButton(
               onPressed: () => context.pushNamed(
-                EditProductScreen.routeName,
+                AppRoute.editProduct.name,
                 pathParameters: {'id': product.id},
               ),
               icon: Icon(
