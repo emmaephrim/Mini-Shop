@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mini_shop_app/config/routes/app_routes.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 import 'package:mini_shop_app/features/auth/views/auth_screen.dart';
 import 'package:mini_shop_app/features/cart/views/cart_screen.dart';
@@ -30,11 +31,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   });
 
   return GoRouter(
-    initialLocation: '/',
     // THE TRIGGER: We give GoRouter the bridge. Now, any time the user
     // logs in or logs out, GoRouter instantly forces a new redirect check!
     refreshListenable: authStateNotifier,
-    // THE BOUNCER: This runs before EVERY single navigation.
+    // This runs before EVERY single navigation.
     redirect: (context, state) {
       // Get the current user state
       final authState = ref.read(authStateProvider);
@@ -42,48 +42,48 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       if (authState.isLoading) return null;
 
       final bool isLoggedIn = authState.value != null;
-      final bool isGoingToLogIn = state.matchedLocation == AuthScreen.routeName;
+      final bool isGoingToLogIn = state.matchedLocation == AppRoute.auth.path;
 
       // Rule 2: If they ARE logged in, but trying to go to the login screen...
       if (!isLoggedIn && !isGoingToLogIn) {
-        return state.namedLocation(AuthScreen.routeName); // KICK THEM TO LOGIN!
+        return AppRoute.auth.path; // KICK THEM TO LOGIN!
       }
       if (isLoggedIn && isGoingToLogIn) {
-        return state.namedLocation(
-          ProductsOverviewScreen.routeName,
-        ); // SEND THEM HOME!
+        return AppRoute.home.path; // SEND THEM HOME!
       }
+
       // Rule 3: Otherwise, let them pass normally.
       return null;
     },
     observers: [observer],
+    initialLocation: AppRoute.home.path,
     routes: [
       GoRoute(
-        path: '/',
-        name: ProductsOverviewScreen.routeName,
+        path: AppRoute.home.path,
+        name: AppRoute.home.name,
         builder: (context, state) => const ProductsOverviewScreen(),
       ),
       GoRoute(
-        path: '/auth',
-        name: AuthScreen.routeName,
+        path: AppRoute.auth.path,
+        name: AppRoute.auth.name,
         builder: (context, state) => AuthScreen(),
       ),
       GoRoute(
-        path: '/cart',
-        name: CartScreen.routeName,
+        path: AppRoute.cart.path,
+        name: AppRoute.cart.name,
         builder: (context, state) => const CartScreen(),
       ),
       GoRoute(
-        path: '/product/:id',
-        name: ProductDetailScreen.routeName,
+        path: AppRoute.productDetail.path,
+        name: AppRoute.productDetail.name,
         builder: (context, state) {
           final productId = state.pathParameters['id'];
           return ProductDetailScreen(productId: productId!);
         },
       ),
       GoRoute(
-        path: '/edit-product/:id',
-        name: EditProductScreen.routeName,
+        path: AppRoute.editProduct.path,
+        name: AppRoute.editProduct.name,
         builder: (context, state) {
           final productId = state.pathParameters['id'];
           return EditProductScreen(productId: productId!);
@@ -91,13 +91,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       // work on data arguments
       GoRoute(
-        path: '/user-products',
-        name: UserProductsScreen.routeName,
+        path: AppRoute.userProducts.path,
+        name: AppRoute.userProducts.name,
         builder: (context, state) => UserProductsScreen(),
       ),
       GoRoute(
-        path: '/orders',
-        name: OrdersScreen.routeName,
+        path: AppRoute.orders.path,
+        name: AppRoute.orders.name,
         builder: (context, state) => OrdersScreen(),
       ),
     ],
