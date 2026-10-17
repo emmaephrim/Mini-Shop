@@ -5,7 +5,6 @@ import 'package:mini_shop_app/features/products/models/product.dart';
 import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
 
 class ProductDetailScreen extends ConsumerWidget {
-  static const routeName = "productDetail";
   final String productId;
   const ProductDetailScreen({super.key, required this.productId});
 
