@@ -4,8 +4,6 @@ import 'package:mini_shop_app/features/products/models/product.dart';
 import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
 
 class EditProductScreen extends ConsumerStatefulWidget {
-  static const routeName = 'editProduct';
-
   final String productId;
   const EditProductScreen({super.key, required this.productId});
 
