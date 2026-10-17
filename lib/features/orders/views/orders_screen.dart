@@ -5,8 +5,6 @@ import 'package:mini_shop_app/core/widgets/app_drawer.dart';
 import 'package:mini_shop_app/features/orders/widgets/order_item.dart';
 
 class OrdersScreen extends ConsumerStatefulWidget {
-  static const routeName = 'orders';
-
   const OrdersScreen({super.key});
 
   @override
