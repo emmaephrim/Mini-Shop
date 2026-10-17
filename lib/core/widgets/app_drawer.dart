@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mini_shop_app/config/routes/app_routes.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_controller.dart';
-import 'package:mini_shop_app/features/orders/views/orders_screen.dart';
-import 'package:mini_shop_app/features/products/views/products_overview_screen.dart';
-import 'package:mini_shop_app/features/products/views/user_products_screen.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
@@ -23,19 +21,20 @@ class AppDrawer extends ConsumerWidget {
             automaticallyImplyLeading: false,
           ),
           ListTile(
-            onTap: () => context.goNamed(ProductsOverviewScreen.routeName),
+            onTap: () => context.pushReplacementNamed(AppRoute.home.name),
             leading: Icon(Icons.shop_2),
             title: Text("Shop"),
           ),
           Divider(),
           ListTile(
-            onTap: () => context.goNamed(OrdersScreen.routeName),
+            onTap: () => context.pushReplacementNamed(AppRoute.orders.name),
             leading: Icon(Icons.shopping_bag_outlined),
             title: Text("Orders"),
           ),
           Divider(),
           ListTile(
-            onTap: () => context.goNamed(UserProductsScreen.routeName),
+            onTap: () =>
+                context.pushReplacementNamed(AppRoute.userProducts.name),
             leading: Icon(Icons.edit),
             title: Text("Manage Products"),
           ),
