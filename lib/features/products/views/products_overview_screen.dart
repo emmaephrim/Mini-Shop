@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/core/constants/filter_options.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_controller.dart';
-
 import 'package:mini_shop_app/features/cart/controllers/cart_provider.dart';
 import 'package:mini_shop_app/features/products/controllers/show_favorite_only_provider.dart';
 import 'package:mini_shop_app/features/cart/views/cart_screen.dart';
@@ -10,7 +10,7 @@ import 'package:mini_shop_app/core/widgets/app_drawer.dart';
 import 'package:mini_shop_app/features/products/widgets/products_grid.dart';
 
 class ProductsOverviewScreen extends ConsumerStatefulWidget {
-  static const routeName = '/products-overview';
+  static const routeName = 'home';
 
   const ProductsOverviewScreen({super.key});
 
@@ -28,8 +28,7 @@ class _ProductsOverviewScreenState
         title: Text('MiniShop'),
         actions: [
           IconButton(
-            onPressed: () =>
-                Navigator.of(context).pushNamed(CartScreen.routeName),
+            onPressed: () => context.pushNamed(CartScreen.routeName),
             icon: Badge.count(
               textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
               textColor: Theme.of(context).colorScheme.onErrorContainer,
