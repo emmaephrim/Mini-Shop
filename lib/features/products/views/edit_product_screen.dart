@@ -4,9 +4,10 @@ import 'package:mini_shop_app/features/products/models/product.dart';
 import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
 
 class EditProductScreen extends ConsumerStatefulWidget {
-  static const routeName = '/edit-product';
+  static const routeName = 'editProduct';
 
-  const EditProductScreen({super.key});
+  final String productId;
+  const EditProductScreen({super.key, required this.productId});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -35,10 +36,9 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final rawArguments = ModalRoute.of(context)?.settings.arguments;
-      final productId = rawArguments is String ? rawArguments : null;
+      final productId = widget.productId;
 
-      if (productId != null && productId.isNotEmpty) {
+      if (productId.isNotEmpty) {
         final existingProduct = ref
             .read(productsProvider.notifier)
             .findById(productId);
