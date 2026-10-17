@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/features/orders/views/orders_screen.dart';
 import 'package:mini_shop_app/features/products/views/products_overview_screen.dart';
 import 'package:mini_shop_app/features/products/views/user_products_screen.dart';
@@ -18,17 +19,13 @@ class AppDrawer extends StatelessWidget {
             automaticallyImplyLeading: false,
           ),
           ListTile(
-            onTap: () => Navigator.of(
-              context,
-            ).pushReplacementNamed(ProductsOverviewScreen.routeName),
+            onTap: () => context.goNamed(ProductsOverviewScreen.routeName),
             leading: Icon(Icons.shop_2),
             title: Text("Shop"),
           ),
           Divider(),
           ListTile(
-            onTap: () => Navigator.of(
-              context,
-            ).pushReplacementNamed(OrdersScreen.routeName),
+            onTap: () => context.goNamed(OrdersScreen.routeName),
             leading: Icon(Icons.shopping_bag_outlined),
             title: Text("Orders"),
           ),
@@ -42,9 +39,7 @@ class AppDrawer extends StatelessWidget {
           //   ),
           //   Divider(),
           ListTile(
-            onTap: () => Navigator.of(
-              context,
-            ).pushReplacementNamed(UserProductsScreen.routeName),
+            onTap: () => context.goNamed(UserProductsScreen.routeName),
             leading: Icon(Icons.edit),
             title: Text("Manage Products"),
           ),
