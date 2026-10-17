@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mini_shop_app/core/utils/logger.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 
 final authControllerProvider = AsyncNotifierProvider<AuthController, void>(
@@ -36,11 +38,15 @@ class AuthController extends AsyncNotifier<void> {
     return !state.hasError;
   }
 
-  Future<bool> signOut() async {
+  Future<void> signOut() async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(
-      () => ref.read(authServiceProvider).signOut(),
-    );
-    return !state.hasError;
+    try {
+      await ref.read(authServiceProvider).signOut();
+      state = const AsyncValue.data(null);
+    } catch (error, stackTrace) {
+      state = AsyncValue.error(error, stackTrace);
+      logger.e('Sign out failed', error: error, stackTrace: stackTrace);
+      await FirebaseCrashlytics.instance.recordError(error, stackTrace);
+    }
   }
 }
