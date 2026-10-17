@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/features/products/models/product.dart';
 import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
 import 'package:mini_shop_app/features/products/views/edit_product_screen.dart';
@@ -28,9 +29,10 @@ class _UserProductItemState extends ConsumerState<UserProductItem> {
         child: Row(
           children: [
             IconButton(
-              onPressed: () => Navigator.of(
-                context,
-              ).pushNamed(EditProductScreen.routeName, arguments: product.id),
+              onPressed: () => context.pushNamed(
+                EditProductScreen.routeName,
+                pathParameters: {'id': product.id},
+              ),
               icon: Icon(
                 Icons.edit,
                 color: Theme.of(context).colorScheme.primary,
@@ -51,7 +53,7 @@ class _UserProductItemState extends ConsumerState<UserProductItem> {
                               ),
                               actions: [
                                 TextButton(
-                                  onPressed: () => Navigator.of(context).pop(),
+                                  onPressed: () => context.pop(),
                                   child: Text("No"),
                                 ),
                                 TextButton(
@@ -61,7 +63,7 @@ class _UserProductItemState extends ConsumerState<UserProductItem> {
                                     });
                                     try {
                                       if (!context.mounted) return;
-                                      Navigator.of(context).pop();
+                                      context.pop();
 
                                       await ref
                                           .read(productsProvider.notifier)
@@ -86,7 +88,7 @@ class _UserProductItemState extends ConsumerState<UserProductItem> {
                                                 setState(() {
                                                   _isLoading = false;
                                                 });
-                                                Navigator.of(context).pop();
+                                                context.pop();
                                               },
                                               child: Text('Cancel'),
                                             ),
