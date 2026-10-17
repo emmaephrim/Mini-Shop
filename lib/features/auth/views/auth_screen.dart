@@ -5,7 +5,7 @@ import 'package:mini_shop_app/core/constants/auth_mode.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_controller.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
-  static const routeName = '/auth';
+  static const routeName = 'auth';
   const AuthScreen({super.key});
 
   @override
