@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mini_shop_app/core/constants/filter_options.dart';
+import 'package:mini_shop_app/config/routes/app_routes.dart';
+import 'package:mini_shop_app/core/widgets/app_drawer.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_controller.dart';
 import 'package:mini_shop_app/features/cart/controllers/cart_provider.dart';
 import 'package:mini_shop_app/features/products/controllers/show_favorite_only_provider.dart';
-import 'package:mini_shop_app/features/cart/views/cart_screen.dart';
-import 'package:mini_shop_app/core/widgets/app_drawer.dart';
+import 'package:mini_shop_app/features/products/models/filter_options.dart';
 import 'package:mini_shop_app/features/products/widgets/products_grid.dart';
 
 class ProductsOverviewScreen extends ConsumerStatefulWidget {
-  static const routeName = 'home';
-
   const ProductsOverviewScreen({super.key});
 
   @override
@@ -28,7 +26,7 @@ class _ProductsOverviewScreenState
         title: Text('MiniShop'),
         actions: [
           IconButton(
-            onPressed: () => context.pushNamed(CartScreen.routeName),
+            onPressed: () => context.pushNamed(AppRoute.cart.name),
             icon: Badge.count(
               textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
               textColor: Theme.of(context).colorScheme.onErrorContainer,
@@ -63,12 +61,7 @@ class _ProductsOverviewScreenState
                 onPressed: () async {
                   try {
                     await ref.read(authControllerProvider.notifier).signOut();
-                  } catch (error, stackTrace) {
-                    // logger.e(
-                    //   'sign out error',
-                    //   error: error,
-                    //   stackTrace: stackTrace,
-                    // );
+                  } catch (error) {
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Something went wrong!")),
