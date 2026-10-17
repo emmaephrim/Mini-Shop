@@ -6,7 +6,6 @@ import 'package:mini_shop_app/config/routes/app_router.dart';
 import 'package:mini_shop_app/core/theme/create_textTheme.dart';
 import 'package:mini_shop_app/core/theme/theme.dart';
 import 'package:mini_shop_app/core/theme/theme_mode_provider.dart';
-import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 import 'package:mini_shop_app/firebase_options.dart';
 
 void main() async {
@@ -24,7 +23,6 @@ class ShopApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(goRouterProvider);
     final currentThemeMode = ref.watch(themeModeProvider);
-    final authState = ref.watch(authStateProvider);
 
     TextTheme textTheme = createTextTheme(context, "Lato", "Anton");
 
@@ -45,23 +43,7 @@ class ShopApp extends ConsumerWidget {
         ),
       ),
       themeMode: currentThemeMode,
-      // home: authState.when(
-      //   data: (user) =>
-      //       user != null ? const ProductsOverviewScreen() : const AuthScreen(),
-      //   error: (err, stack) =>
-      //       Scaffold(body: Center(child: Text('Error: $err'))),
-      //   loading: () =>
-      //       const Scaffold(body: Center(child: CircularProgressIndicator())),
-      // ),
       routerConfig: router,
-      // routes: {
-      //   ProductsOverviewScreen.routeName: (context) => ProductsOverviewScreen(),
-      //   ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
-      //   CartScreen.routeName: (context) => CartScreen(),
-      //   OrdersScreen.routeName: (context) => OrdersScreen(),
-      //   UserProductsScreen.routeName: (context) => UserProductsScreen(),
-      //   EditProductScreen.routeName: (context) => EditProductScreen(),
-      // },
     );
   }
 }
