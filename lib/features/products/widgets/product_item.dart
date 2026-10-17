@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/features/products/models/product.dart';
 import 'package:mini_shop_app/features/cart/controllers/cart_provider.dart';
 import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
@@ -29,9 +30,10 @@ class _ProductItemState extends ConsumerState<ProductItem> {
     );
 
     return GestureDetector(
-      onTap: () => Navigator.of(
-        context,
-      ).pushNamed(ProductDetailScreen.routeName, arguments: product.id),
+      onTap: () => context.pushNamed(
+        ProductDetailScreen.routeName,
+        pathParameters: {'id': product.id},
+      ),
       child: GridTile(
         footer: GridTileBar(
           backgroundColor: Theme.of(
