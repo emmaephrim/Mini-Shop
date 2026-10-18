@@ -10,6 +10,7 @@ class AuthService {
 
   Future<UserCredential?> signInWithGoogle() async {
     await _googleSignIn.initialize();
+    // ignore: unnecessary_nullable_for_final_variable_declarations
     final GoogleSignInAccount? googleUser = await _googleSignIn.authenticate();
 
     if (googleUser == null) return null;
