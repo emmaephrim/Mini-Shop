@@ -64,7 +64,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                               await ref.read(cartProvider.notifier).clear();
                             });
                       } catch (e) {
-                        if (!mounted) return;
+                        if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Oops Something went wrong!')),
                         );
