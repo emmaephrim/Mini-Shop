@@ -65,7 +65,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
-    final success = _authMode == AuthMode.login
+    final bool success = _authMode == AuthMode.login
         ? await controller.signInWithEmail(email, password)
         : await controller.signUpWithEmail(email, password);
 
@@ -81,7 +81,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   }
 
   Future<void> _handleGoogleSignIn() async {
-    final success = await ref
+    final bool success = await ref
         .read(authControllerProvider.notifier)
         .signInWithGoogle();
     if (!success && mounted) {
