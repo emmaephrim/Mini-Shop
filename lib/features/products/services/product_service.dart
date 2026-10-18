@@ -1,7 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mini_shop_app/core/errors/http_exception.dart';
+import 'package:mini_shop_app/core/errors/exceptions.dart';
 import 'package:mini_shop_app/features/products/models/product.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,8 +11,7 @@ final productServiceProvider = Provider<ProductService>(
 );
 
 class ProductService {
-  final String baseUrl =
-      'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app';
+  String get baseUrl => dotenv.env['FIREBASE_DB_URL']!;
 
   Future<List<Product>> fetchProducts() async {
     final res = await http.get(Uri.https(baseUrl, 'products.json'));
