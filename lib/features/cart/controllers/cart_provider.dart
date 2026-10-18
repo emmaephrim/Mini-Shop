@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/core/utils/logger.dart';
 import 'package:mini_shop_app/features/cart/models/cart.dart';
@@ -20,8 +21,7 @@ class CartProvider extends Notifier<CartState> {
     return CartState(items: {});
   }
 
-  final String baseUrl =
-      'mini-shop-flutter-default-rtdb.asia-southeast1.firebasedatabase.app';
+  String get baseUrl => dotenv.env['FIREBASE_DB_URL']!;
 
   Future<Map<String, Cart>> fetchAndSetCart() async {
     try {
