@@ -4,7 +4,7 @@ import 'package:mini_shop_app/features/cart/controllers/cart_provider.dart';
 
 class CartItem extends ConsumerWidget {
   final String id;
-  CartItem({super.key, required this.id});
+  const CartItem({super.key, required this.id});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
