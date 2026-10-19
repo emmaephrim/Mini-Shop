@@ -47,7 +47,7 @@ class _ProductItemState extends ConsumerState<ProductItem> {
             onPressed: () async {
               try {
                 // Call the toggle method. Because of your Optimistic Update,
-                // the UI will react instantly!
+                // the UI will react instantly
                 await ref
                     .read(productsProvider.notifier)
                     .toggleFavoriteStatus(product.id);
@@ -78,9 +78,7 @@ class _ProductItemState extends ConsumerState<ProductItem> {
               setState(() {
                 _isLoading = true;
               });
-
               try {
-                // 4. Clean await/try/catch block (No more .then!)
                 await ref
                     .read(cartControllerProvider.notifier)
                     .addItem(product.id, product.price, product.title);
@@ -91,11 +89,8 @@ class _ProductItemState extends ConsumerState<ProductItem> {
                 messenger.hideCurrentSnackBar();
                 messenger.showSnackBar(
                   SnackBar(
-                    // Make it float above the UI instead of sticking to the absolute bottom
                     behavior: SnackBarBehavior.floating,
-                    // Add a slight margin so it looks like a modern notification pill
                     margin: const EdgeInsets.all(16),
-
                     duration: const Duration(seconds: 2),
                     content: Text("${product.title} added to cart!"),
                     action: SnackBarAction(

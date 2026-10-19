@@ -23,8 +23,6 @@ class ProductNotifier extends AsyncNotifier<List<Product>> {
 
   // ====== Add Product
   Future<void> addProduct(Product product) async {
-    // I do not set state to loading here, because I want the user to
-    // keep seeing the old products while the new one uploads
     try {
       final newId = await ref.read(productServiceProvider).addProduct(product);
       final Product newProduct = product.copyWith(id: newId);
