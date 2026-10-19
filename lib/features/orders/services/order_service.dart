@@ -8,7 +8,7 @@ import 'package:mini_shop_app/features/orders/models/order.dart';
 final orderServiceProvider = Provider<OrderService>((ref) => OrderService());
 
 class OrderService {
-  String get baseUrl => dotenv.env['FIREBASE_DB_RUL']!;
+  String get baseUrl => dotenv.env['FIREBASE_DB_URL']!;
 
   Future<List<Order>> fetchOrders() async {
     final List<Order> loadedOrders = [];
