@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/features/products/models/product.dart';
 import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
 
 class EditProductScreen extends ConsumerStatefulWidget {
-  final String productId;
-  const EditProductScreen({super.key, required this.productId});
+  final String? productId;
+  const EditProductScreen({super.key, this.productId});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -16,7 +17,6 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
   final _imageUrlController = TextEditingController();
   final _form = GlobalKey<FormState>();
 
-  var _isInit = true;
   var _isEditMode = false;
   var _isLoading = false;
 
@@ -32,30 +32,26 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
   var _initValues = {'title': '', 'description': '', 'price': ''};
 
   @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      final productId = widget.productId;
+  void initState() {
+    super.initState();
 
-      if (productId.isNotEmpty) {
-        final existingProduct = ref
-            .read(productsProvider.notifier)
-            .findById(productId);
+    // 2. CLEAN INITIALIZATION
+    // We check the widget directly. No need for didChangeDependencies!
+    if (widget.productId != null) {
+      _isEditMode = true;
 
-        _isEditMode = true;
-        _editedProduct = existingProduct;
+      _editedProduct = ref
+          .read(productsProvider.notifier)
+          .findById(widget.productId!);
 
-        _initValues = {
-          'id': _editedProduct.id,
-          'title': _editedProduct.title,
-          'description': _editedProduct.description,
-          'price': _editedProduct.price.toString(),
-        };
+      _initValues = {
+        'title': _editedProduct.title,
+        'description': _editedProduct.description,
+        'price': _editedProduct.price.toString(),
+      };
 
-        _imageUrlController.text = _editedProduct.imageUrl;
-      }
-      _isInit = false; // Prevent this block from running again on rebuilds
+      _imageUrlController.text = _editedProduct.imageUrl;
     }
-    super.didChangeDependencies();
   }
 
   @override
@@ -64,75 +60,50 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
     super.dispose();
   }
 
-  void _saveForm() {
-    final isValid = _form.currentState?.validate();
-    if (isValid != null && !isValid) return;
+  Future<void> _saveForm() async {
+    final isValid = _form.currentState?.validate() ?? false;
+    if (!isValid) return;
+    FocusScope.of(context).unfocus();
+
     _form.currentState?.save();
+
     setState(() {
       _isLoading = true;
     });
 
-    final notifier = ref.read(productsProvider.notifier);
+    try {
+      final notifier = ref.read(productsProvider.notifier);
 
-    if (_isEditMode) {
-      notifier
-          .updateProduct(_editedProduct)
-          .then((_) {
-            setState(() {
-              _isLoading = false;
-            });
-            Navigator.of(context).pop();
-          })
-          .catchError((error) {
-            showDialog(
-              context: context,
-              builder: (ctx) => AlertDialog(
-                title: Text("An error occurred"),
-                content: Text("Something went wrong!"),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _isLoading = false;
-                      });
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Cancel'),
-                  ),
-                ],
-              ),
-            );
-          });
-    } else {
-      // creates new product and assigns id here.
-      notifier
-          .addProduct(_editedProduct.copyWith(id: DateTime.now().toString()))
-          .then((_) {
-            setState(() {
-              _isLoading = false;
-            });
-            Navigator.of(context).pop();
-          })
-          .catchError((error) {
-            showDialog(
-              context: context,
-              builder: (ctx) => AlertDialog(
-                title: Text("An error occurred"),
-                content: Text("Something went wrong!"),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _isLoading = false;
-                      });
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Cancel'),
-                  ),
-                ],
-              ),
-            );
-          });
+      if (_isEditMode) {
+        await notifier.updateProduct(_editedProduct);
+      } else {
+        await notifier.addProduct(_editedProduct);
+      }
+
+      if (!context.mounted) return;
+      context.pop();
+    } catch (error) {
+      if (!context.mounted) return;
+
+      await showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text("An error occurred"),
+          content: const Text("Something went wrong!"),
+          actions: [
+            TextButton(
+              onPressed: () => context.pop(), // Closes the dialog
+              child: const Text('Okay'),
+            ),
+          ],
+        ),
+      );
+    } finally {
+      if (context.mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 

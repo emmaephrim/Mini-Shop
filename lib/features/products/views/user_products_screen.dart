@@ -18,7 +18,7 @@ class UserProductsScreen extends ConsumerWidget {
         title: Text("Your Products"),
         actions: [
           IconButton(
-            onPressed: () => context.pushNamed(AppRoute.editProduct.name),
+            onPressed: () => context.pushNamed(AppRoute.addProduct.name),
             icon: Icon(Icons.add),
           ),
         ],
