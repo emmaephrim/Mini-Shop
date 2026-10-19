@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mini_shop_app/features/cart/controllers/cart_provider.dart';
+import 'package:mini_shop_app/features/cart/controllers/cart_controller.dart';
+import 'package:mini_shop_app/features/cart/models/cart.dart';
 
 class CartItem extends ConsumerWidget {
-  final String id;
-  const CartItem({super.key, required this.id});
+  final Cart cartItem;
+  const CartItem({super.key, required this.cartItem});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final itemInCart = ref.watch(cartProvider).items[id];
-
-    if (itemInCart == null) return const SizedBox.shrink();
-
     return Dismissible(
       direction: DismissDirection.endToStart,
-      key: ValueKey(itemInCart.id),
+      key: ValueKey(cartItem.id),
       background: Container(
         color: Theme.of(context).colorScheme.error,
         alignment: Alignment.centerRight,
@@ -31,16 +28,16 @@ class CartItem extends ConsumerWidget {
           padding: EdgeInsets.all(8),
           child: ListTile(
             subtitle: Text(
-              'Total: \$${(itemInCart.price * itemInCart.quantity).toStringAsFixed(2)}',
+              'Total: \$${(cartItem.price * cartItem.quantity).toStringAsFixed(2)}',
             ),
-            title: Text(itemInCart.title),
+            title: Text(cartItem.title),
             leading: CircleAvatar(
               child: Padding(
                 padding: const EdgeInsets.all(3.0),
-                child: FittedBox(child: Text('\$${itemInCart.price}')),
+                child: FittedBox(child: Text('\$${cartItem.price}')),
               ),
             ),
-            trailing: Text('${itemInCart.quantity} x'),
+            trailing: Text('${cartItem.quantity} x'),
             //   trailing: ListTile(
             //     title: Text('${itemInCart.quantity} x'),
             //     leading: IconButton(onPressed: () {}, icon: Icon(Icons.minimize)),
@@ -69,7 +66,7 @@ class CartItem extends ConsumerWidget {
         );
       },
       onDismissed: (direction) {
-        ref.read(cartProvider.notifier).removeItem(id);
+        ref.read(cartControllerProvider.notifier).removeItem(cartItem.id);
       },
     );
   }
