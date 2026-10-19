@@ -10,6 +10,7 @@ class AppDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authControllerProvider);
+    ScaffoldMessenger.of(context).clearSnackBars();
 
     return Drawer(
       // backgroundColor: Theme.of(context).colorScheme.secondary,
