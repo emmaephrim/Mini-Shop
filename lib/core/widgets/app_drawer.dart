@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/config/routes/app_routes.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_controller.dart';
+import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
@@ -18,7 +19,10 @@ class AppDrawer extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppBar(
-            title: Text("Hello Friend!"),
+            title: Text(
+              ref.watch(authStateProvider).value?.email.toString() ??
+                  "Hey there!",
+            ),
             automaticallyImplyLeading: false,
           ),
           ListTile(
