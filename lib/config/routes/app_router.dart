@@ -82,11 +82,16 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
+        path: AppRoute.addProduct.path,
+        name: AppRoute.addProduct.name,
+        builder: (context, state) => EditProductScreen(),
+      ),
+      GoRoute(
         path: AppRoute.editProduct.path,
         name: AppRoute.editProduct.name,
         builder: (context, state) {
-          final productId = state.pathParameters['id'];
-          return EditProductScreen(productId: productId!);
+          final productId = state.pathParameters['id']!;
+          return EditProductScreen(productId: productId);
         },
       ),
       // work on data arguments

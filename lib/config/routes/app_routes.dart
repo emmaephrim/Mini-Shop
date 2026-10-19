@@ -2,9 +2,9 @@ enum AppRoute {
   home('/'),
   auth('/auth'),
   cart('/cart'),
-
+  addProduct('/add-product'),
+  editProduct('/edit-product/:id'),
   productDetail('/product/:id'),
-  editProduct('/product/:id'),
   userProducts('/user-products'),
   orders('/orders');
 
