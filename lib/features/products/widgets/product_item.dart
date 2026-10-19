@@ -91,6 +91,11 @@ class _ProductItemState extends ConsumerState<ProductItem> {
                 messenger.hideCurrentSnackBar();
                 messenger.showSnackBar(
                   SnackBar(
+                    // Make it float above the UI instead of sticking to the absolute bottom
+                    behavior: SnackBarBehavior.floating,
+                    // Add a slight margin so it looks like a modern notification pill
+                    margin: const EdgeInsets.all(16),
+
                     duration: const Duration(seconds: 2),
                     content: Text("${product.title} added to cart!"),
                     action: SnackBarAction(
