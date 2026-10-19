@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mini_shop_app/features/cart/controllers/cart_provider.dart';
+import 'package:mini_shop_app/features/cart/controllers/cart_controller.dart';
 import 'package:mini_shop_app/features/products/controllers/filtered_product_provider.dart';
 import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
 import 'package:mini_shop_app/features/products/widgets/product_item.dart';
@@ -20,7 +20,7 @@ class ProductsGrid extends ConsumerWidget {
             // Industry standard refresh: Invalidate the providers!
             // This destroys the old data and triggers their build() methods again.
             ref.invalidate(productsProvider);
-            ref.invalidate(cartProvider);
+            ref.invalidate(cartControllerProvider);
 
             // Wait for both of them to finish loading the new data
             // before the RefreshIndicator spinning circle disappears
