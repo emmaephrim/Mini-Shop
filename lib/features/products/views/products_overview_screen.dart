@@ -26,7 +26,10 @@ class _ProductsOverviewScreenState
         title: Text('MiniShop'),
         actions: [
           IconButton(
-            onPressed: () => context.pushNamed(AppRoute.cart.name),
+            onPressed: () {
+              ScaffoldMessenger.of(context).clearSnackBars();
+              context.pushNamed(AppRoute.cart.name);
+            },
             icon: Badge.count(
               textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
               textColor: Theme.of(context).colorScheme.onErrorContainer,
