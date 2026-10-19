@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/config/routes/app_routes.dart';
 import 'package:mini_shop_app/core/widgets/app_drawer.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_controller.dart';
-import 'package:mini_shop_app/features/cart/controllers/cart_provider.dart';
+import 'package:mini_shop_app/features/cart/controllers/cart_controller.dart';
 import 'package:mini_shop_app/features/products/controllers/show_favorite_only_provider.dart';
 import 'package:mini_shop_app/features/products/models/filter_options.dart';
 import 'package:mini_shop_app/features/products/widgets/products_grid.dart';
@@ -32,7 +32,9 @@ class _ProductsOverviewScreenState
               textColor: Theme.of(context).colorScheme.onErrorContainer,
               backgroundColor: Theme.of(context).colorScheme.errorContainer,
               count: ref.watch(
-                cartProvider.select((list) => list.items.length),
+                cartControllerProvider.select(
+                  (list) => list.value?.items.length ?? 0,
+                ),
               ),
               child: const Icon(Icons.shopping_cart),
             ),
