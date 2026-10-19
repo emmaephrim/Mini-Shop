@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/config/routes/app_routes.dart';
-import 'package:mini_shop_app/features/cart/controllers/cart_provider.dart';
+import 'package:mini_shop_app/features/cart/controllers/cart_controller.dart';
 import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
 import 'package:mini_shop_app/features/products/models/product.dart';
 
@@ -26,7 +26,9 @@ class _ProductItemState extends ConsumerState<ProductItem> {
     // this stays exactly the same. (If it IS an AsyncValue now, you would do
     // .select((asyncBox) => asyncBox.value?.items.containsKey(product.id) ?? false)
     final bool isCartItem = ref.watch(
-      cartProvider.select((map) => map.items.containsKey(product.id)),
+      cartControllerProvider.select(
+        (asyncBox) => asyncBox.value?.items.containsKey(product.id) ?? false,
+      ),
     );
 
     return GestureDetector(
@@ -80,7 +82,7 @@ class _ProductItemState extends ConsumerState<ProductItem> {
               try {
                 // 4. Clean await/try/catch block (No more .then!)
                 await ref
-                    .read(cartProvider.notifier)
+                    .read(cartControllerProvider.notifier)
                     .addItem(product.id, product.price, product.title);
 
                 if (!context.mounted) return;
@@ -95,7 +97,7 @@ class _ProductItemState extends ConsumerState<ProductItem> {
                       label: "UNDO",
                       onPressed: () {
                         ref
-                            .read(cartProvider.notifier)
+                            .read(cartControllerProvider.notifier)
                             .removeSingleItem(product.id);
                       },
                     ),
