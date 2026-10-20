@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/features/auth/models/auth_mode.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_controller.dart';
+import 'package:mini_shop_app/features/auth/models/user_role.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -16,6 +17,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  UserRole _selectedRole = UserRole.buyer;
 
   AuthMode _authMode = AuthMode.login;
   bool _obscurePassword = true;
@@ -59,6 +61,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState?.save();
     FocusScope.of(context).unfocus();
 
     final controller = ref.read(authControllerProvider.notifier);
@@ -67,7 +70,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
     final bool success = _authMode == AuthMode.login
         ? await controller.signInWithEmail(email, password)
-        : await controller.signUpWithEmail(email, password);
+        : await controller.signUpWithEmail(
+            email: email,
+            password: password,
+            role: _selectedRole.name,
+          );
 
     if (!success && mounted) {
       final error = ref.read(authControllerProvider).error;
@@ -83,7 +90,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   Future<void> _handleGoogleSignIn() async {
     final bool success = await ref
         .read(authControllerProvider.notifier)
-        .signInWithGoogle();
+        .signInWithGoogle(role: _selectedRole.name);
     if (!success && mounted) {
       final error = ref.read(authControllerProvider).error;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -235,7 +242,49 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                       },
                     ),
                   ],
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
+                  // The AnimatedSize makes the transition from Login to Signup butter-smooth
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    child: _authMode == AuthMode.login
+                        ? const SizedBox.shrink() // Takes up zero space during Login
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  'I want to register as a:',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 8),
+                                SegmentedButton<UserRole>(
+                                  segments: const [
+                                    ButtonSegment(
+                                      value: UserRole.buyer,
+                                      label: Text('Buyer'),
+                                      icon: Icon(Icons.shopping_bag_outlined),
+                                    ),
+                                    ButtonSegment(
+                                      value: UserRole.seller,
+                                      label: Text('Seller'),
+                                      icon: Icon(Icons.storefront_outlined),
+                                    ),
+                                  ],
+                                  selected: {_selectedRole},
+                                  onSelectionChanged: (Set<UserRole> newSelection) {
+                                    setState(() {
+                                      // newSelection.first extracts the single chosen role
+                                      _selectedRole = newSelection.first;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                  ),
 
                   // Primary Submit button
                   FilledButton(

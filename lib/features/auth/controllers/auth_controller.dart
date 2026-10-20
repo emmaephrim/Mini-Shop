@@ -22,18 +22,32 @@ class AuthController extends AsyncNotifier<void> {
     return !state.hasError;
   }
 
-  Future<bool> signUpWithEmail(String email, String password) async {
+  Future<bool> signUpWithEmail({
+    required String email,
+    required String password,
+    required String role,
+  }) async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(
-      () => ref.read(authServiceProvider).signUpWithEmail(email, password),
-    );
-    return !state.hasError;
+    try {
+      await AsyncValue.guard(
+        () => ref
+            .read(authServiceProvider)
+            .signUpWithEmail(email: email, password: password, role: role),
+      );
+      state = AsyncValue.data(null);
+      return !state.hasError;
+    } catch (error, stackTrace) {
+      state = AsyncValue.error(error, stackTrace);
+      logger.e('Sign up failed', error: error, stackTrace: stackTrace);
+      FirebaseCrashlytics.instance.recordError(error, stackTrace);
+      rethrow;
+    }
   }
 
-  Future<bool> signInWithGoogle() async {
+  Future<bool> signInWithGoogle({required String role}) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(
-      () => ref.read(authServiceProvider).signInWithGoogle(),
+      () => ref.read(authServiceProvider).signInWithGoogle(role: role),
     );
     return !state.hasError;
   }
