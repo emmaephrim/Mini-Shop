@@ -22,9 +22,6 @@ class _ProductItemState extends ConsumerState<ProductItem> {
   Widget build(BuildContext context) {
     final product = widget.product;
 
-    // 3. Assuming your cartProvider hasn't been upgraded to AsyncValue yet,
-    // this stays exactly the same. (If it IS an AsyncValue now, you would do
-    // .select((asyncBox) => asyncBox.value?.items.containsKey(product.id) ?? false)
     final bool isCartItem = ref.watch(
       cartControllerProvider.select(
         (asyncBox) => asyncBox.value?.items.containsKey(product.id) ?? false,
