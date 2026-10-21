@@ -10,7 +10,8 @@ class AppDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authControllerProvider);
+    final authState = ref.watch(authStateProvider);
+    final asyncProfile = ref.watch(userProfileProvider);
     ScaffoldMessenger.of(context).clearSnackBars();
 
     return Drawer(
@@ -20,8 +21,7 @@ class AppDrawer extends ConsumerWidget {
         children: [
           AppBar(
             title: Text(
-              ref.watch(authStateProvider).value?.email.toString() ??
-                  "Hey there!",
+              ref.watch(authStateProvider).value?.email ?? "Hey there!",
             ),
             automaticallyImplyLeading: false,
           ),
@@ -30,6 +30,18 @@ class AppDrawer extends ConsumerWidget {
             leading: Icon(Icons.shop_2),
             title: Text("Shop"),
           ),
+          asyncProfile.whenData((profile) {
+                if (profile != null && (profile.isSeller || profile.isAdmin)) {
+                  return ListTile(
+                    leading: const Icon(Icons.edit),
+                    title: const Text('Mange Products'),
+                    onTap: () => context.pushReplacementNamed(
+                      AppRoute.userProducts.name,
+                    ),
+                  );
+                }
+              }).value ??
+              const SizedBox.shrink(),
           Divider(),
           ListTile(
             onTap: () => context.pushReplacementNamed(AppRoute.orders.name),
@@ -37,12 +49,12 @@ class AppDrawer extends ConsumerWidget {
             title: Text("Orders"),
           ),
           Divider(),
-          ListTile(
-            onTap: () =>
-                context.pushReplacementNamed(AppRoute.userProducts.name),
-            leading: Icon(Icons.edit),
-            title: Text("Manage Products"),
-          ),
+          // ListTile(
+          //   onTap: () =>
+          //       context.pushReplacementNamed(AppRoute.userProducts.name),
+          //   leading: Icon(Icons.edit),
+          //   title: Text("Manage Products"),
+          // ),
           Divider(),
           ListTile(
             onTap: () {
