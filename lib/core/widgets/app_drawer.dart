@@ -20,9 +20,7 @@ class AppDrawer extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppBar(
-            title: Text(
-              ref.watch(authStateProvider).value?.email ?? "Hey there!",
-            ),
+            title: Text(asyncProfile.value?.email ?? "Hey there!"),
             automaticallyImplyLeading: false,
           ),
           ListTile(
