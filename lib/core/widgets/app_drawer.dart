@@ -48,7 +48,7 @@ class AppDrawer extends ConsumerWidget {
             leading: Icon(Icons.shopping_bag_outlined),
             title: Text("Orders"),
           ),
-          Divider(),
+          // Divider(),
           // ListTile(
           //   onTap: () =>
           //       context.pushReplacementNamed(AppRoute.userProducts.name),
