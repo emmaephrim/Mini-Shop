@@ -26,6 +26,7 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
     description: '',
     price: 0,
     imageUrl: '',
+    sellerId: '',
   );
 
   // Initial Values for non-controller fields

@@ -8,6 +8,7 @@ class Product {
   final double price;
   final String imageUrl;
   bool isFavorite;
+  final String sellerId;
 
   Product({
     required this.id,
@@ -16,6 +17,7 @@ class Product {
     required this.price,
     required this.imageUrl,
     this.isFavorite = false,
+    required this.sellerId,
   });
 
   Product copyWith({
@@ -25,6 +27,7 @@ class Product {
     double? price,
     String? imageUrl,
     bool? isFavorite,
+    String? sellerId,
   }) {
     return Product(
       id: id ?? this.id,
@@ -33,6 +36,7 @@ class Product {
       price: price ?? this.price,
       imageUrl: imageUrl ?? this.imageUrl,
       isFavorite: isFavorite ?? this.isFavorite,
+      sellerId: sellerId ?? this.sellerId,
     );
   }
 
@@ -44,6 +48,7 @@ class Product {
       'price': price,
       'imageUrl': imageUrl,
       'isFavorite': isFavorite,
+      'sellerId': sellerId,
     };
   }
 
@@ -55,6 +60,7 @@ class Product {
       price: map['price'] as double,
       imageUrl: map['imageUrl'] as String,
       isFavorite: map['isFavorite'] as bool,
+      sellerId: map['sellerId'],
     );
   }
 
@@ -65,7 +71,7 @@ class Product {
 
   @override
   String toString() {
-    return 'Product(id: $id, title: $title, description: $description, price: $price, imageUrl: $imageUrl, isFavorite: $isFavorite)';
+    return 'Product(id: $id, title: $title, description: $description, price: $price, imageUrl: $imageUrl, isFavorite: $isFavorite, sellerId: $sellerId)';
   }
 
   @override
@@ -77,7 +83,8 @@ class Product {
         other.description == description &&
         other.price == price &&
         other.imageUrl == imageUrl &&
-        other.isFavorite == isFavorite;
+        other.isFavorite == isFavorite &&
+        other.sellerId == sellerId;
   }
 
   @override
@@ -87,6 +94,7 @@ class Product {
         description.hashCode ^
         price.hashCode ^
         imageUrl.hashCode ^
-        isFavorite.hashCode;
+        isFavorite.hashCode ^
+        sellerId.hashCode;
   }
 }

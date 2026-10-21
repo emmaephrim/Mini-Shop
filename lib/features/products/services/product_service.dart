@@ -29,6 +29,7 @@ class ProductService {
           price: (prodData['price'] as num?)?.toDouble() ?? 0.0,
           imageUrl: prodData['imageUrl'] ?? '',
           isFavorite: prodData['isFavorite'] ?? false,
+          sellerId: prodData['sellerId'] ?? '',
         ),
       );
     });
