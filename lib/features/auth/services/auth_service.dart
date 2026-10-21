@@ -62,10 +62,7 @@ class AuthService {
     if (response.statusCode >= 400 || response.body == 'null') {
       return null;
     }
-    final data = UserProfile.fromJson(
-      id: uid,
-      source: json.decode(response.body),
-    );
+    final data = UserProfile.fromJson(id: uid, source: response.body);
     return data;
   }
 

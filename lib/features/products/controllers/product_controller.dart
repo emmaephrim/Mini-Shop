@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/core/utils/logger.dart';
+import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 import 'package:mini_shop_app/features/products/models/product.dart';
 import 'package:mini_shop_app/features/products/services/product_service.dart';
 
@@ -24,8 +25,17 @@ class ProductNotifier extends AsyncNotifier<List<Product>> {
   // ====== Add Product
   Future<void> addProduct(Product product) async {
     try {
-      final newId = await ref.read(productServiceProvider).addProduct(product);
-      final Product newProduct = product.copyWith(id: newId);
+      final currentUser = ref.read(authServiceProvider).currentUser;
+      final token = await currentUser?.getIdToken();
+      if (token == null) throw Exception('Security token missing');
+
+      final newId = await ref
+          .read(productServiceProvider)
+          .addProduct(product, token);
+      final Product newProduct = product.copyWith(
+        id: newId,
+        sellerId: currentUser!.uid,
+      );
       state = AsyncValue.data([..._currentList, newProduct]);
     } catch (error, stackTrace) {
       logger.e(
