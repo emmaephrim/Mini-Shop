@@ -25,7 +25,7 @@ class ProductsGrid extends ConsumerWidget {
             // Wait for both of them to finish loading the new data
             // before the RefreshIndicator spinning circle disappears
             await ref.read(productsProvider.future);
-            // await ref.read(cartProvider.future);
+            await ref.read(cartControllerProvider.future);
           },
           child: GridView.builder(
             padding: const EdgeInsets.all(10),
