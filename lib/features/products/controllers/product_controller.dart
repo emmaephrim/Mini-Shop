@@ -31,11 +31,8 @@ class ProductNotifier extends AsyncNotifier<List<Product>> {
 
       final newId = await ref
           .read(productServiceProvider)
-          .addProduct(product, token);
-      final Product newProduct = product.copyWith(
-        id: newId,
-        sellerId: currentUser!.uid,
-      );
+          .addProduct(product.copyWith(sellerId: currentUser!.uid), token);
+      final Product newProduct = product.copyWith(id: newId);
       state = AsyncValue.data([..._currentList, newProduct]);
     } catch (error, stackTrace) {
       logger.e(
