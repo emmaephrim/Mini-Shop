@@ -4,7 +4,7 @@ import 'package:mini_shop_app/features/products/controllers/product_controller.d
 import 'package:mini_shop_app/features/products/controllers/show_favorite_only_provider.dart';
 
 final filteredProductsProvider = Provider<AsyncValue<List<Product>>>((ref) {
-  final asyncProducts = ref.watch(productsProvider);
+  final asyncProducts = ref.watch(productsControllerProvider);
   final showFavoritesOnly = ref.watch(showFavoritesOnlyProvider);
 
   // .whenData automatically passes loading/error states straight to the UI,

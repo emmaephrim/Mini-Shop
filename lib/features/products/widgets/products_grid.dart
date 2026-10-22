@@ -19,12 +19,12 @@ class ProductsGrid extends ConsumerWidget {
           onRefresh: () async {
             // Industry standard refresh: Invalidate the providers!
             // This destroys the old data and triggers their build() methods again.
-            ref.invalidate(productsProvider);
+            ref.invalidate(productsControllerProvider);
             ref.invalidate(cartControllerProvider);
 
             // Wait for both of them to finish loading the new data
             // before the RefreshIndicator spinning circle disappears
-            await ref.read(productsProvider.future);
+            await ref.read(productsControllerProvider.future);
             await ref.read(cartControllerProvider.future);
           },
           child: GridView.builder(

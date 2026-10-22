@@ -7,9 +7,8 @@ import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 import 'package:mini_shop_app/features/products/models/product.dart';
 import 'package:mini_shop_app/features/products/services/product_service.dart';
 
-final productsProvider = AsyncNotifierProvider<ProductNotifier, List<Product>>(
-  ProductNotifier.new,
-);
+final productsControllerProvider =
+    AsyncNotifierProvider<ProductNotifier, List<Product>>(ProductNotifier.new);
 
 class ProductNotifier extends AsyncNotifier<List<Product>> {
   // Because it returns a Future, Riverpod automatically sets the state

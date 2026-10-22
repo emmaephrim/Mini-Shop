@@ -46,7 +46,7 @@ class _ProductItemState extends ConsumerState<ProductItem> {
                 // Call the toggle method. Because of your Optimistic Update,
                 // the UI will react instantly
                 await ref
-                    .read(productsProvider.notifier)
+                    .read(productsControllerProvider.notifier)
                     .toggleFavoriteStatus(product.id);
               } catch (error) {
                 if (!context.mounted) return;

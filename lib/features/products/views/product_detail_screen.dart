@@ -10,7 +10,7 @@ class ProductDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final products = ref.read(productsProvider.notifier);
+    final products = ref.read(productsControllerProvider.notifier);
 
     final Product product = products.findById(productId);
     return Scaffold(

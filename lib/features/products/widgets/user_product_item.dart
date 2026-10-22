@@ -66,7 +66,9 @@ class _UserProductItemState extends ConsumerState<UserProductItem> {
                                       context.pop();
 
                                       await ref
-                                          .read(productsProvider.notifier)
+                                          .read(
+                                            productsControllerProvider.notifier,
+                                          )
                                           .deleteProductById(product.id)
                                           .then((_) {
                                             setState(() {

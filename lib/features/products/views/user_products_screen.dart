@@ -12,7 +12,7 @@ class UserProductsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncProducts = ref.watch(productsProvider);
+    final asyncProducts = ref.watch(productsControllerProvider);
     final userProfile = ref.watch(userProfileProvider).value!;
     return Scaffold(
       appBar: AppBar(
@@ -35,8 +35,8 @@ class UserProductsScreen extends ConsumerWidget {
                       .toList();
             return RefreshIndicator(
               onRefresh: () async {
-                ref.invalidate(productsProvider);
-                await ref.read(productsProvider.future);
+                ref.invalidate(productsControllerProvider);
+                await ref.read(productsControllerProvider.future);
               },
               child: (sellerProducts.isEmpty
                   ? Center(

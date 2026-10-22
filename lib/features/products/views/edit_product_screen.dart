@@ -42,7 +42,7 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
       _isEditMode = true;
 
       _editedProduct = ref
-          .read(productsProvider.notifier)
+          .read(productsControllerProvider.notifier)
           .findById(widget.productId!);
 
       _initValues = {
@@ -73,7 +73,7 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
     });
 
     try {
-      final notifier = ref.read(productsProvider.notifier);
+      final notifier = ref.read(productsControllerProvider.notifier);
 
       if (_isEditMode) {
         await notifier.updateProduct(_editedProduct);
