@@ -33,22 +33,28 @@ class UserProductsScreen extends ConsumerWidget {
                 : products
                       .where((item) => item.sellerId == userProfile.id)
                       .toList();
-            if (sellerProducts.isEmpty) {
-              return Center(
-                child: TextButton(
-                  onPressed: () => context.pushNamed(AppRoute.addProduct.name),
-                  child: Text("Add product"),
-                ),
-              );
-            }
-            return ListView.builder(
-              itemCount: sellerProducts.length,
-              itemBuilder: ((context, index) => Column(
-                children: [
-                  UserProductItem(product: sellerProducts[index]),
-                  Divider(),
-                ],
-              )),
+            return RefreshIndicator(
+              onRefresh: () async {
+                ref.invalidate(productsProvider);
+                await ref.read(productsProvider.future);
+              },
+              child: (sellerProducts.isEmpty
+                  ? Center(
+                      child: TextButton(
+                        onPressed: () =>
+                            context.pushNamed(AppRoute.addProduct.name),
+                        child: Text("Add product"),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: sellerProducts.length,
+                      itemBuilder: ((context, index) => Column(
+                        children: [
+                          UserProductItem(product: sellerProducts[index]),
+                          Divider(),
+                        ],
+                      )),
+                    )),
             );
           },
           error: (error, stackTrace) => Text('Something went wrong! \n$error'),
