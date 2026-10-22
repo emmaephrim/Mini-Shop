@@ -8,9 +8,11 @@ import 'package:mini_shop_app/features/products/models/product.dart';
 import 'package:mini_shop_app/features/products/services/product_service.dart';
 
 final productsControllerProvider =
-    AsyncNotifierProvider<ProductNotifier, List<Product>>(ProductNotifier.new);
+    AsyncNotifierProvider<ProductControllerNotifier, List<Product>>(
+      ProductControllerNotifier.new,
+    );
 
-class ProductNotifier extends AsyncNotifier<List<Product>> {
+class ProductControllerNotifier extends AsyncNotifier<List<Product>> {
   // Because it returns a Future, Riverpod automatically sets the state
   // to AsyncValue.loading() for me until this finishes
   @override
