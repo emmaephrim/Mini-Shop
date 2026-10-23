@@ -66,9 +66,13 @@ class ProductControllerNotifier extends AsyncNotifier<List<Product>> {
     ]);
 
     try {
+      final token = await ref
+          .read(authServiceProvider)
+          .currentUser
+          ?.getIdToken();
       await ref
           .read(productServiceProvider)
-          .toggleFavoriteStatus(id, newFavoriteStatus);
+          .toggleFavoriteStatus(id, newFavoriteStatus, token);
     } catch (error, stackTrace) {
       state = previousState;
       logger.e('Toggle favorite failed', error: error, stackTrace: stackTrace);

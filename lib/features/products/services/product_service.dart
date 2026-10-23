@@ -52,9 +52,9 @@ class ProductService {
     return json.decode(res.body)['name'];
   }
 
-  Future<void> toggleFavoriteStatus(String id, bool isFavorite) async {
+  Future<void> toggleFavoriteStatus(String id, bool isFavorite, token) async {
     final res = await http.patch(
-      Uri.https(baseUrl, 'products/$id.json'),
+      Uri.https(baseUrl, 'products/$id.json', {'auth': token}),
       body: json.encode({'isFavorite': isFavorite}),
     );
     if (res.statusCode >= 400) {
