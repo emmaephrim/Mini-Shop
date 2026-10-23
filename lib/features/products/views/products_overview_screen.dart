@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/config/routes/app_routes.dart';
 import 'package:mini_shop_app/core/widgets/app_drawer.dart';
-import 'package:mini_shop_app/features/auth/controllers/auth_controller.dart';
+import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 import 'package:mini_shop_app/features/cart/controllers/cart_controller.dart';
 import 'package:mini_shop_app/features/products/controllers/show_favorite_only_provider.dart';
 import 'package:mini_shop_app/features/products/models/filter_options.dart';
@@ -21,6 +21,8 @@ class _ProductsOverviewScreenState
     extends ConsumerState<ProductsOverviewScreen> {
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(authServiceProvider).currentUser;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('MiniShop'),
@@ -28,6 +30,41 @@ class _ProductsOverviewScreenState
           IconButton(
             onPressed: () {
               ScaffoldMessenger.of(context).clearSnackBars();
+              if (user == null) {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (ctx) => Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.lock_outline,
+                          size: 50,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          "Sign in to add items to your cart",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        FilledButton(
+                          onPressed: () {
+                            Navigator.pop(ctx);
+                            context.pushNamed(AppRoute.auth.name);
+                          },
+                          child: const Text("Login In / Register"),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+                return;
+              }
               context.pushNamed(AppRoute.cart.name);
             },
             icon: Badge.count(
@@ -58,24 +95,6 @@ class _ProductsOverviewScreenState
                 {ref.read(showFavoritesOnlyProvider.notifier).showAll()},
             }),
             icon: Icon(Icons.more_vert),
-          ),
-          Padding(
-            padding: EdgeInsetsGeometry.only(right: 10.0),
-            child: CircleAvatar(
-              child: IconButton(
-                onPressed: () async {
-                  try {
-                    await ref.read(authControllerProvider.notifier).signOut();
-                  } catch (error) {
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Something went wrong!")),
-                    );
-                  }
-                },
-                icon: Icon(Icons.person),
-              ),
-            ),
           ),
         ],
       ),
