@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/config/routes/app_routes.dart';
+import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 import 'package:mini_shop_app/features/cart/controllers/cart_controller.dart';
 import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
 import 'package:mini_shop_app/features/products/models/product.dart';
@@ -17,10 +18,41 @@ class ProductItem extends ConsumerStatefulWidget {
 
 class _ProductItemState extends ConsumerState<ProductItem> {
   bool _isLoading = false;
+  void protectButtons(dynamic user) {
+    if (user == null) {
+      showModalBottomSheet(
+        context: context,
+        builder: (ctx) => Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.lock_outline, size: 50, color: Colors.grey),
+              const SizedBox(height: 16),
+              const Text(
+                "Sign in to add items to your cart",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 24),
+              FilledButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  context.pushNamed(AppRoute.auth.name);
+                },
+                child: const Text("Login In / Register"),
+              ),
+            ],
+          ),
+        ),
+      );
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final product = widget.product;
+    final user = ref.watch(authServiceProvider).currentUser;
 
     final bool isCartItem = ref.watch(
       cartControllerProvider.select(
@@ -42,6 +74,7 @@ class _ProductItemState extends ConsumerState<ProductItem> {
           // ================= FAVORITE BUTTON =================
           leading: IconButton(
             onPressed: () async {
+              protectButtons(user);
               try {
                 // Call the toggle method. Because of your Optimistic Update,
                 // the UI will react instantly
@@ -72,6 +105,7 @@ class _ProductItemState extends ConsumerState<ProductItem> {
           // ================= CART BUTTON =================
           trailing: IconButton(
             onPressed: () async {
+              protectButtons(user);
               setState(() {
                 _isLoading = true;
               });
