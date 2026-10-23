@@ -18,41 +18,55 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
     analytics: analytics,
   );
+  final authState = ref.watch(authStateProvider);
 
-  // THE BRIDGE: GoRouter needs a "Listenable" to know when to refresh.
-  // We create a simple ValueNotifier that holds our auth state.
   final authStateNotifier = ValueNotifier<AsyncValue<User?>>(
     const AsyncValue.loading(),
   );
 
-  // We tell Riverpod: "Every time the auth state changes, update the bridge."
   ref.listen(authStateProvider, (_, next) {
     authStateNotifier.value = next;
   });
 
+  final protectedRoutes = [
+    AppRoute.cart.path,
+    AppRoute.orders.path,
+    AppRoute.profile.path,
+    AppRoute.userProducts.path,
+    AppRoute.addProduct.path,
+  ];
+
   return GoRouter(
-    // THE TRIGGER: We give GoRouter the bridge. Now, any time the user
-    // logs in or logs out, GoRouter instantly forces a new redirect check!
     refreshListenable: authStateNotifier,
-    // This runs before EVERY single navigation.
     redirect: (context, state) {
-      // Get the current user state
-      final authState = ref.read(authStateProvider);
-      // We don't want to redirect while Firebase is still loading
       if (authState.isLoading) return null;
 
-      final bool isLoggedIn = authState.value != null;
-      final bool isGoingToLogIn = state.matchedLocation == AppRoute.auth.path;
+      // final bool isLoggedIn = authState.value != null;
+      // final bool isGoingToLogIn = state.matchedLocation == AppRoute.auth.path;
 
-      // Rule 2: If they ARE logged in, but trying to go to the login screen...
-      if (!isLoggedIn && !isGoingToLogIn) {
-        return AppRoute.auth.path; // KICK THEM TO LOGIN!
-      }
-      if (isLoggedIn && isGoingToLogIn) {
-        return AppRoute.home.path; // SEND THEM HOME!
-      }
+      // if (!isLoggedIn && !isGoingToLogIn) {
+      //   return AppRoute.auth.path; // KICK THEM TO LOGIN!
+      // }
+      // if (isLoggedIn && isGoingToLogIn) {
+      //   return AppRoute.home.path; // SEND THEM HOME!
+      // }
+      // return null;
 
-      // Rule 3: Otherwise, let them pass normally.
+      final isAuthenticated = authState.value != null;
+
+      final isGoingToProtectedRoute = protectedRoutes.any(
+        (route) => state.matchedLocation.startsWith(route.toString()),
+      );
+
+      final isGoingToLogin = state.matchedLocation == AppRoute.auth.path;
+
+      if (!isAuthenticated && isGoingToProtectedRoute) {
+        // I pass the route they wanted to go to as a query parameter
+        // so you can send them back there after they log in
+        return '${AppRoute.auth.path}?redirect=${state.matchedLocation}';
+      }
+      if (isAuthenticated && isGoingToLogin) return AppRoute.home.path;
+
       return null;
     },
     observers: [observer],
