@@ -7,6 +7,7 @@ import 'package:mini_shop_app/config/routes/app_routes.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 import 'package:mini_shop_app/features/auth/views/auth_screen.dart';
 import 'package:mini_shop_app/features/cart/views/cart_screen.dart';
+import 'package:mini_shop_app/features/home/views/home_screen.dart';
 import 'package:mini_shop_app/features/orders/views/orders_screen.dart';
 import 'package:mini_shop_app/features/products/views/edit_product_screen.dart';
 import 'package:mini_shop_app/features/products/views/product_detail_screen.dart';
@@ -75,7 +76,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoute.home.path,
         name: AppRoute.home.name,
-        builder: (context, state) => const ProductsOverviewScreen(),
+        // builder: (context, state) => const ProductsOverviewScreen(),
+        builder: (context, state) => const HomeScreen(),
       ),
       GoRoute(
         path: AppRoute.auth.path,
