@@ -13,7 +13,13 @@ final orderControllerProvider =
 class OrderController extends AsyncNotifier<List<Order>> {
   @override
   FutureOr<List<Order>> build() async {
-    return await ref.read(orderServiceProvider).fetchOrders();
+    try {
+      return await ref.read(orderServiceProvider).fetchOrders();
+    } catch (error, stackTrace) {
+      logger.e("Failed to fetch orders", error: error, stackTrace: stackTrace);
+      FirebaseCrashlytics.instance.recordError(error, stackTrace);
+      rethrow;
+    }
   }
 
   List<Order> get _currentList => state.value ?? [];
