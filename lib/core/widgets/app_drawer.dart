@@ -57,10 +57,17 @@ class AppDrawer extends ConsumerWidget {
           ListTile(
             onTap: () {
               if (authState.isLoading) return;
+              if (ref.read(authServiceProvider).currentUser == null) {
+                return context.goNamed(AppRoute.auth.name);
+              }
               ref.read(authControllerProvider.notifier).signOut();
             },
             leading: const Icon(Icons.exit_to_app),
-            title: Text("Logout"),
+            title: Text(
+              ref.watch(authServiceProvider).currentUser == null
+                  ? "Login"
+                  : "Logout",
+            ),
             trailing: authState.isLoading
                 ? const SizedBox(
                     height: 20,
