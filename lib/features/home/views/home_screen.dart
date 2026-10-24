@@ -4,6 +4,8 @@ import 'package:mini_shop_app/features/home/widgets/home_category_list.dart';
 import 'package:mini_shop_app/features/home/widgets/home_promo_carousel.dart';
 import 'package:mini_shop_app/features/home/widgets/home_search_bar.dart';
 import 'package:mini_shop_app/features/home/widgets/home_section_header.dart';
+import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
+import 'package:mini_shop_app/features/products/widgets/product_card.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -52,11 +54,14 @@ class HomeScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             sliver: SliverGrid(
               delegate: SliverChildBuilderDelegate((ctx, index) {
-                return Container(
-                  color: Colors.grey.shade200,
-                  alignment: Alignment.center,
-                  child: Text('Product $index'),
-                );
+                final products =
+                    ref.watch(productsControllerProvider).value ?? [];
+                // return Container(
+                //   color: Colors.grey.shade200,
+                //   alignment: Alignment.center,
+                //   child: Text('Product $index'),
+                // );
+                return ProductCard(product: products[index]);
               }, childCount: 10),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,

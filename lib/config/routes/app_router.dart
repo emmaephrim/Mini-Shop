@@ -80,6 +80,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const HomeScreen(),
       ),
       GoRoute(
+        path: AppRoute.viewProducts.path,
+        name: AppRoute.viewProducts.name,
+        builder: (context, state) => ProductsOverviewScreen(),
+      ),
+      GoRoute(
         path: AppRoute.auth.path,
         name: AppRoute.auth.name,
         builder: (context, state) => AuthScreen(),
