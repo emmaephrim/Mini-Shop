@@ -15,7 +15,13 @@ final cartControllerProvider =
 class CartControllerNotifier extends AsyncNotifier<CartState> {
   @override
   FutureOr<CartState> build() async {
-    return await ref.read(cartServiceProvider).fetchCart();
+    try {
+      return await ref.read(cartServiceProvider).fetchCart();
+    } catch (error, stackTrace) {
+      logger.e("Failed to fetch cart", error: error, stackTrace: stackTrace);
+      FirebaseCrashlytics.instance.recordError(error, stackTrace);
+      rethrow;
+    }
   }
 
   CartState get _currentMap => state.value ?? CartState(items: {});
