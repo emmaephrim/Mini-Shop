@@ -1,16 +1,13 @@
-import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
 import 'package:mini_shop_app/features/auth/models/user_profile.dart';
 
 class AuthService {
+  final Dio _dio;
+  AuthService({required this._dio});
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
-
-  String get baseUrl => dotenv.env['FIREBASE_DB_URL']!;
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
   User? get currentUser => _auth.currentUser;
@@ -55,33 +52,29 @@ class AuthService {
   }
 
   Future<UserProfile?> fetchUserProfile(String uid, String token) async {
-    final url = Uri.https(baseUrl, 'users/$uid.json', {'auth': token});
+    final response = await _dio.get('/users/$uid.json');
 
-    final response = await http.get(url);
+    if (response.data == 'null') return null;
+    if (response.statusCode! >= 400) return null;
 
-    if (response.statusCode >= 400 || response.body == 'null') {
-      return null;
-    }
-    final data = UserProfile.fromJson(id: uid, source: response.body);
+    final data = UserProfile.fromJson(id: uid, source: response.data);
     return data;
   }
 
   Future<void> getNewUser(UserCredential userCredential, String role) async {
     final user = userCredential.user;
     if (user == null) throw Exception('Failed to create auth account');
-    final token = await user.getIdToken();
-    final url = Uri.https(baseUrl, 'users/${user.uid}.json', {'auth': token});
 
-    final response = await http.put(
-      url,
-      body: json.encode({
+    final response = await _dio.put(
+      '/users/${user.uid}.json',
+      data: {
         'email': user.email,
         'role': role,
         // ISO 8601 is the industry standard for saving timestamps in databases
         'createdAt': DateTime.now().toIso8601String(),
-      }),
+      },
     );
-    if (response.statusCode >= 400) {
+    if (response.statusCode! >= 400) {
       // If the database write fails, ideally the Auth user should be deleted
       // here to prevent "orphan" accounts, but we'll throw an error for now.
       throw Exception('Could not create user profile in database.');
