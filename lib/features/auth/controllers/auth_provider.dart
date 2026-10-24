@@ -22,9 +22,7 @@ final userProfileProvider = FutureProvider<UserProfile?>((ref) async {
     if (authUser == null) return null;
     final token = await authUser.getIdToken();
     if (token == null) return null;
-    return await ref
-        .read(authServiceProvider)
-        .fetchUserProfile(authUser.uid, token);
+    return await ref.read(authServiceProvider).fetchUserProfile(authUser.uid);
   } catch (error, stackTrace) {
     logger.e(
       'Getting user Profile error',

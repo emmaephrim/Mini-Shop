@@ -51,13 +51,13 @@ class AuthService {
     await _auth.signOut();
   }
 
-  Future<UserProfile?> fetchUserProfile(String uid, String token) async {
+  Future<UserProfile?> fetchUserProfile(String uid) async {
     final response = await _dio.get('/users/$uid.json');
 
     if (response.data == 'null') return null;
     if (response.statusCode! >= 400) return null;
 
-    final data = UserProfile.fromJson(id: uid, source: response.data);
+    final data = UserProfile.fromMap(id: uid, map: response.data);
     return data;
   }
 
