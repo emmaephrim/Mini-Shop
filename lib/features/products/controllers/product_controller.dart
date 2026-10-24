@@ -17,7 +17,17 @@ class ProductControllerNotifier extends AsyncNotifier<List<Product>> {
   // to AsyncValue.loading() for me until this finishes
   @override
   FutureOr<List<Product>> build() async {
-    return await ref.read(productServiceProvider).fetchProducts();
+    try {
+      return await ref.read(productServiceProvider).fetchProducts();
+    } catch (error, stackTrace) {
+      logger.e(
+        'Failed to fetch products',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      FirebaseCrashlytics.instance.recordError(error, stackTrace);
+      rethrow;
+    }
   }
 
   // Helper method to safely get the current list of products
