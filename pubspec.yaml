@@ -28,6 +28,8 @@ dependencies:
   flutter_dotenv: ^6.0.1
   carousel_slider: ^5.1.2
   dio: ^5.11.1
+  image_picker: ^1.2.4
+  firebase_storage: ^13.6.1
 
 dev_dependencies:
   flutter_test:
