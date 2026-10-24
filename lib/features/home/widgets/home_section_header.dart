@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mini_shop_app/config/routes/app_routes.dart';
 
 class HomeSectionHeader extends StatelessWidget {
   final String title;
@@ -15,7 +17,10 @@ class HomeSectionHeader extends StatelessWidget {
             context,
           ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
-        TextButton(onPressed: () {}, child: const Text("See All")),
+        TextButton(
+          onPressed: () => context.pushNamed(AppRoute.viewProducts.name),
+          child: const Text("See All"),
+        ),
       ],
     );
   }
