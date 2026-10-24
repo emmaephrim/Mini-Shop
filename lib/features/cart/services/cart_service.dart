@@ -1,52 +1,47 @@
-import 'dart:convert';
-
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
+import 'package:mini_shop_app/core/network/dio_provider.dart';
 import 'package:mini_shop_app/features/cart/models/cart.dart';
 import 'package:mini_shop_app/features/cart/models/cart_state.dart';
 
-final cartServiceProvider = Provider<CartService>((ref) => CartService());
+final cartServiceProvider = Provider<CartService>(
+  (ref) => CartService(dio: ref.read(dioProvider)),
+);
 
 class CartService {
-  String get baseUrl => dotenv.env['FIREBASE_DB_URL']!;
+  final Dio _dio;
+  CartService({required this._dio});
 
   Future<CartState> fetchCart() async {
-    final res = await http.get(Uri.https(baseUrl, 'cart.json'));
+    final res = await _dio.get('/cart.json');
 
-    final decoded = json.decode(res.body) as Map<String, dynamic>?;
-    if (decoded == null) {
+    if (res.data == null) {
       return CartState(items: {});
     }
+    final data = res.data as Map<String, dynamic>;
 
-    final data = decoded.map(
+    final result = data.map(
       (key, value) =>
           MapEntry(key, Cart.fromMap(value as Map<String, dynamic>)),
     );
-    return CartState(items: data);
+    return CartState(items: result);
   }
 
   Future<void> addNewItem(Cart cart) async {
-    await http.put(
-      Uri.https(baseUrl, 'cart/${cart.id}.json'),
-      body: cart.toJson(),
-    );
+    await _dio.put('/cart/${cart.id}.json', data: cart);
   }
 
   Future<void> updateItemQuantity(String productId, int quantity) async {
-    await http.patch(
-      Uri.https(baseUrl, 'cart/$productId.json'),
-      body: json.encode({'quantity': quantity}),
-    );
+    await _dio.patch('/cart/$productId.json', data: {'quantity': quantity});
   }
 
   Future<void> clear() async {
-    await http.delete(Uri.https(baseUrl, 'cart.json'));
+    await _dio.delete('/cart.json');
   }
 
   // Deletes one specific product from the cart in the database
   Future<void> removeItem(String productId) async {
-    await http.delete(Uri.https(baseUrl, 'cart/$productId.json'));
+    await _dio.delete('/cart/$productId.json');
   }
   // void removeItem(String key) {
   //   final currentItems = state.items;
