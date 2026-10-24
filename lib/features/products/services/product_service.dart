@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mini_shop_app/core/errors/exceptions.dart';
+import 'package:mini_shop_app/core/errors/app_exception.dart';
 import 'package:mini_shop_app/core/network/dio_provider.dart';
 import 'package:mini_shop_app/features/products/models/product.dart';
 
@@ -57,7 +57,7 @@ class ProductService {
       data: {'isFavorite': isFavorite},
     );
     if ((res.statusCode ?? 0) >= 400) {
-      throw HttpException("Oops, Could not add product to favorites!");
+      throw AppException("Oops, Could not add product to favorites!");
     }
   }
 
@@ -73,13 +73,13 @@ class ProductService {
       },
     );
     if ((res.statusCode ?? 0) >= 400)
-      throw HttpException("Could not update product");
+      throw AppException("Could not update product");
   }
 
   Future<void> deleteProduct(String id) async {
     final response = await _dio.delete('/products/$id.json');
     if ((response.statusCode ?? 0) >= 500) {
-      throw HttpException("Could not delete product");
+      throw AppException("Could not delete product");
     }
   }
 }

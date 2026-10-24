@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mini_shop_app/core/errors/error_interceptor.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   final baseUrl = 'https://${dotenv.env['FIREBASE_DB_URL']!}';
@@ -30,6 +31,8 @@ final dioProvider = Provider<Dio>((ref) {
       },
     ),
   );
+
+  dio.interceptors.add(ErrorInterceptor());
 
   return dio;
 });
