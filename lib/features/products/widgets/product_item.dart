@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -81,11 +82,12 @@ class _ProductItemState extends ConsumerState<ProductItem> {
                 await ref
                     .read(productsControllerProvider.notifier)
                     .toggleFavoriteStatus(product.id);
-              } catch (error) {
+              } on DioException catch (e) {
+                final message = e.error.toString();
                 if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Oops, something went wrong")),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(message)));
               }
             },
             icon: Icon(
@@ -134,11 +136,12 @@ class _ProductItemState extends ConsumerState<ProductItem> {
                     ),
                   ),
                 );
-              } catch (error) {
+              } on DioException catch (e) {
+                final message = e.error.toString();
                 if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Oops, could not add to cart")),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(message)));
               } finally {
                 // This ensures the spinner stops whether it succeeds OR fails
                 if (context.mounted) {

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -83,14 +84,15 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
 
       if (!context.mounted) return;
       context.pop();
-    } catch (error) {
+    } on DioException catch (e) {
+      final message = e.error.toString();
       if (!context.mounted) return;
 
       await showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
           title: const Text("An error occurred"),
-          content: const Text("Something went wrong!"),
+          content: Text(message),
           actions: [
             TextButton(
               onPressed: () => context.pop(), // Closes the dialog

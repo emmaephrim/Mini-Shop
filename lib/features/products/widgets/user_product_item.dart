@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -75,15 +76,14 @@ class _UserProductItemState extends ConsumerState<UserProductItem> {
                                               _isLoading = false;
                                             });
                                           });
-                                    } catch (error) {
+                                    } on DioException catch (e) {
+                                      final message = e.error.toString();
                                       if (!context.mounted) return;
                                       showDialog(
                                         context: context,
                                         builder: (ctx) => AlertDialog(
                                           title: Text("An error occurred"),
-                                          content: Text(
-                                            "Something went wrong!",
-                                          ),
+                                          content: Text(message),
                                           actions: [
                                             TextButton(
                                               onPressed: () {

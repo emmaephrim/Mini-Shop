@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/features/cart/controllers/cart_controller.dart';
@@ -72,14 +73,11 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                                   await ref
                                       .read(cartControllerProvider.notifier)
                                       .clear();
-                                } catch (e) {
+                                } on DioException catch (e) {
+                                  final message = e.error.toString();
                                   if (!context.mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        'Oops, could not place order!',
-                                      ),
-                                    ),
+                                    SnackBar(content: Text(message)),
                                   );
                                 } finally {
                                   if (context.mounted) {
