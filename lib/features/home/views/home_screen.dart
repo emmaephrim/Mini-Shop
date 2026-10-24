@@ -54,14 +54,17 @@ class HomeScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             sliver: SliverGrid(
               delegate: SliverChildBuilderDelegate((ctx, index) {
-                final products =
-                    ref.watch(productsControllerProvider).value ?? [];
+                final products = ref.watch(productsControllerProvider);
                 // return Container(
                 //   color: Colors.grey.shade200,
                 //   alignment: Alignment.center,
                 //   child: Text('Product $index'),
                 // );
-                return ProductCard(product: products[index]);
+                return products.when(
+                  error: (error, stackTrace) => Text('Something went wrong!'),
+                  loading: () => Center(child: CircularProgressIndicator()),
+                  data: (data) => ProductCard(product: data[index]),
+                );
               }, childCount: 10),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
