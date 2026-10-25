@@ -96,6 +96,16 @@ class _ProductsOverviewScreenState
             }),
             icon: Icon(Icons.more_vert),
           ),
+
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: CircleAvatar(
+              child: IconButton(
+                onPressed: () => context.pushNamed(AppRoute.profile.name),
+                icon: Icon(Icons.person),
+              ),
+            ),
+          ),
         ],
       ),
       body: ProductsGrid(),

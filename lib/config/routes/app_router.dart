@@ -13,6 +13,7 @@ import 'package:mini_shop_app/features/products/views/edit_product_screen.dart';
 import 'package:mini_shop_app/features/products/views/product_detail_screen.dart';
 import 'package:mini_shop_app/features/products/views/products_overview_screen.dart';
 import 'package:mini_shop_app/features/products/views/user_products_screen.dart';
+import 'package:mini_shop_app/features/profile/views/profile_screen.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -125,6 +126,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoute.orders.path,
         name: AppRoute.orders.name,
         builder: (context, state) => OrdersScreen(),
+      ),
+      GoRoute(
+        path: AppRoute.profile.path,
+        name: AppRoute.profile.name,
+        builder: (context, state) => ProfileScreen(),
       ),
     ],
   );
