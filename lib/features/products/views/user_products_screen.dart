@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/config/routes/app_routes.dart';
 import 'package:mini_shop_app/core/widgets/app_drawer.dart';
-import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
 import 'package:mini_shop_app/features/products/widgets/user_product_item.dart';
+import 'package:mini_shop_app/features/profile/controllers/user_provider.dart';
 
 class UserProductsScreen extends ConsumerWidget {
   const UserProductsScreen({super.key});

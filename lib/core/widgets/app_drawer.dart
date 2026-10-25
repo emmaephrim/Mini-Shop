@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/config/routes/app_routes.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_controller.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
+import 'package:mini_shop_app/features/profile/controllers/user_provider.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});

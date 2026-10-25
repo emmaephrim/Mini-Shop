@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:mini_shop_app/features/auth/models/user_profile.dart';
 
 class AuthService {
   final Dio _dio;
@@ -49,16 +48,6 @@ class AuthService {
   Future<void> signOut() async {
     await _googleSignIn.signOut();
     await _auth.signOut();
-  }
-
-  Future<UserProfile?> fetchUserProfile(String uid) async {
-    final response = await _dio.get('/users/$uid.json');
-
-    if (response.data == 'null') return null;
-    if (response.statusCode! >= 400) return null;
-
-    final data = UserProfile.fromMap(id: uid, map: response.data);
-    return data;
   }
 
   Future<void> getNewUser(UserCredential userCredential, String role) async {

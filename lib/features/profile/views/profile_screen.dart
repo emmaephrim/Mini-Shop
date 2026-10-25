@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
+import 'package:mini_shop_app/features/profile/controllers/user_provider.dart';
 import 'package:mini_shop_app/features/profile/widgets/profile_list_tile.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
