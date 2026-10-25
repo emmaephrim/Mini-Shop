@@ -7,6 +7,7 @@ class UserProfile {
   String email;
   String? phone;
   String? fullName;
+  String? avatarUrl;
 
   UserProfile({
     required this.id,
@@ -14,6 +15,7 @@ class UserProfile {
     required this.email,
     this.phone,
     this.fullName,
+    this.avatarUrl,
   });
 
   UserProfile copyWith({
@@ -22,6 +24,7 @@ class UserProfile {
     String? email,
     String? phone,
     String? fullName,
+    String? avatarUrl,
   }) {
     return UserProfile(
       id: id ?? this.id,
@@ -29,6 +32,7 @@ class UserProfile {
       email: email ?? this.email,
       phone: phone ?? this.phone,
       fullName: fullName ?? this.fullName,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
     );
   }
 
@@ -39,6 +43,7 @@ class UserProfile {
       'email': email,
       'phone': phone,
       'fullName': fullName,
+      'avatarUrl': avatarUrl,
     };
   }
 
@@ -52,6 +57,7 @@ class UserProfile {
       email: map['email'] as String,
       phone: map['phone'] != null ? map['phone'] as String : null,
       fullName: map['fullName'] != null ? map['fullName'] as String : null,
+      avatarUrl: map['avatarUrl'] != null ? map['avatarUrl'] as String : null,
     );
   }
 
@@ -68,7 +74,7 @@ class UserProfile {
 
   @override
   String toString() {
-    return 'UserProfile(id: $id, role: $role, email: $email, phone: $phone, fullName: $fullName)';
+    return 'UserProfile(id: $id, role: $role, email: $email, phone: $phone, fullName: $fullName, avatarUrl: $avatarUrl)';
   }
 
   @override
@@ -79,7 +85,8 @@ class UserProfile {
         other.role == role &&
         other.email == email &&
         other.phone == phone &&
-        other.fullName == fullName;
+        other.fullName == fullName &&
+        other.avatarUrl == avatarUrl;
   }
 
   @override
@@ -88,6 +95,7 @@ class UserProfile {
         role.hashCode ^
         email.hashCode ^
         phone.hashCode ^
-        fullName.hashCode;
+        fullName.hashCode ^
+        avatarUrl.hashCode;
   }
 }
