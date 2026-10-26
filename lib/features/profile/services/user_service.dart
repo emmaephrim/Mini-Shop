@@ -37,6 +37,6 @@ class UserService {
   }
 
   Future<void> updateProfileAvatar(String uid, String avatarUrl) async {
-    await _dio.patch('/users/$uid.json', data: {'avatarURL': avatarUrl});
+    await _dio.patch('/users/$uid.json', data: {'avatarUrl': avatarUrl});
   }
 }
