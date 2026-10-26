@@ -21,7 +21,7 @@ class UserProfileControllerNotifier extends AsyncNotifier<UserProfile?> {
     // if(currentUser == null) return null;
     // final uid = currentUser.uid;
     // return await ref.read(userServiceProvider).fetchUserProfile(uid);
-    return await ref.read(userProfileProvider.future);
+    return await ref.watch(userProfileProvider.future);
   }
 
   Future<void> uploadAndSaveAvatar(File imageFile) async {
@@ -42,8 +42,8 @@ class UserProfileControllerNotifier extends AsyncNotifier<UserProfile?> {
       // 3. Force the Profile screen to refresh and show the new image!
       // (Assuming you named your FutureProvider 'userProfileProvider')
       ref.invalidate(userProfileProvider);
-    } catch (error) {
-      logger.e('Failed to upload avatar', error: error);
+    } catch (error, stackTrace) {
+      logger.e('Failed to upload avatar', error: error, stackTrace: stackTrace);
       rethrow;
     }
   }

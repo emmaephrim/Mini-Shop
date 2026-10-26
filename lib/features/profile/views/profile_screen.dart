@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
+import 'package:mini_shop_app/features/profile/controllers/user_profile_controller.dart';
 import 'package:mini_shop_app/features/profile/controllers/user_provider.dart';
 import 'package:mini_shop_app/features/profile/widgets/profile_list_tile.dart';
 
@@ -29,21 +30,41 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     if (pickedFile == null) return;
     setState(() {
+      _isUploading = true;
       _selectedImage = File(pickedFile.path);
     });
-    // TODO: Trigger Firebase Storage upload here
-    // _uploadAvatar(_selectedImage!);
+    try {
+      await ref
+          .read(userProfileControllerProvider.notifier)
+          .uploadAndSaveAvatar(_selectedImage!);
+    } catch (error) {
+      if (!context.mounted) return;
+      setState(() {
+        _selectedImage = null;
+      });
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Failed to upload image')));
+    } finally {
+      if (context.mounted) {
+        setState(() {
+          _isUploading = false;
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final userProfile = ref.watch(userProfileProvider).value;
+    final previousAvatarUrl = userProfile?.avatarUrl;
 
     return Scaffold(
       appBar: AppBar(title: const Text("My profile"), centerTitle: true),
       body: ListView(
         padding: EdgeInsets.all(24.0),
         children: [
+          // Text(userProfile.toString()),
           Center(
             child: Stack(
               clipBehavior: Clip.none,
@@ -53,10 +74,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   backgroundColor: Theme.of(
                     context,
                   ).colorScheme.surfaceContainerHighest,
-                  backgroundImage: _selectedImage != null
+                  backgroundImage: previousAvatarUrl != null
+                      ? NetworkImage(previousAvatarUrl)
+                      : _selectedImage != null
                       ? FileImage(_selectedImage!) as ImageProvider
                       : const NetworkImage('https://via.placeholder.com/150'),
-                  child: _selectedImage == null
+                  child: _isUploading
+                      ? CircularProgressIndicator()
+                      : _selectedImage == null
                       ? const Icon(Icons.person, size: 60, color: Colors.grey)
                       : null,
                 ),
