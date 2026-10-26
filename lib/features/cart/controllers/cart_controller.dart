@@ -61,7 +61,7 @@ class CartControllerNotifier extends AsyncNotifier<CartState> {
     } catch (error, stackTrace) {
       state = previousState;
       logger.e(
-        'Add new item to cart failed',
+        'Failed to add new item to carts',
         error: error,
         stackTrace: stackTrace,
       );

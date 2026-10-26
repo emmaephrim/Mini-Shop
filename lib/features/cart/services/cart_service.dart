@@ -1,19 +1,22 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/core/network/dio_provider.dart';
+import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 import 'package:mini_shop_app/features/cart/models/cart.dart';
 import 'package:mini_shop_app/features/cart/models/cart_state.dart';
 
-final cartServiceProvider = Provider<CartService>(
-  (ref) => CartService(dio: ref.read(dioProvider)),
-);
+final cartServiceProvider = Provider<CartService>((ref) {
+  final userId = ref.watch(authServiceProvider).currentUser!.uid;
+  return CartService(dio: ref.read(dioProvider), uid: userId);
+});
 
 class CartService {
   final Dio _dio;
-  CartService({required this._dio});
+  final String _uid;
+  CartService({required this._dio, required this._uid});
 
   Future<CartState> fetchCart() async {
-    final res = await _dio.get('/cart.json');
+    final res = await _dio.get('/carts/$_uid.json');
 
     if (res.data == null) {
       return CartState(items: {});
@@ -28,20 +31,23 @@ class CartService {
   }
 
   Future<void> addNewItem(Cart cart) async {
-    await _dio.put('/cart/${cart.id}.json', data: cart);
+    await _dio.put('/carts/$_uid/${cart.id}.json', data: cart.toJson());
   }
 
   Future<void> updateItemQuantity(String productId, int quantity) async {
-    await _dio.patch('/cart/$productId.json', data: {'quantity': quantity});
+    await _dio.patch(
+      '/carts/$_uid/$productId.json',
+      data: {'quantity': quantity},
+    );
   }
 
   Future<void> clear() async {
-    await _dio.delete('/cart.json');
+    await _dio.delete('/carts/$_uid.json');
   }
 
   // Deletes one specific product from the cart in the database
   Future<void> removeItem(String productId) async {
-    await _dio.delete('/cart/$productId.json');
+    await _dio.delete('/carts/$_uid/$productId.json');
   }
   // void removeItem(String key) {
   //   final currentItems = state.items;
