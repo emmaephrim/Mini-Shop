@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 import 'package:mini_shop_app/features/profile/controllers/user_profile_controller.dart';
 import 'package:mini_shop_app/features/profile/controllers/user_provider.dart';
 import 'package:mini_shop_app/features/profile/widgets/profile_list_tile.dart';
@@ -64,7 +63,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       body: ListView(
         padding: EdgeInsets.all(24.0),
         children: [
-          // Text(userProfile.toString()),
           Center(
             child: Stack(
               clipBehavior: Clip.none,
@@ -74,14 +72,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   backgroundColor: Theme.of(
                     context,
                   ).colorScheme.surfaceContainerHighest,
-                  backgroundImage: previousAvatarUrl != null
-                      ? NetworkImage(previousAvatarUrl)
-                      : _selectedImage != null
+                  backgroundImage: _selectedImage != null
                       ? FileImage(_selectedImage!) as ImageProvider
+                      : previousAvatarUrl != null
+                      ? NetworkImage(previousAvatarUrl)
                       : const NetworkImage('https://via.placeholder.com/150'),
                   child: _isUploading
                       ? CircularProgressIndicator()
-                      : _selectedImage == null
+                      : _selectedImage == null && previousAvatarUrl == null
                       ? const Icon(Icons.person, size: 60, color: Colors.grey)
                       : null,
                 ),
