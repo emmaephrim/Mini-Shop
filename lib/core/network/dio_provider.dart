@@ -32,7 +32,8 @@ final dioProvider = Provider<Dio>((ref) {
     ),
   );
 
-  dio.interceptors.add(ErrorInterceptor());
+  final retryDio = Dio(BaseOptions(baseUrl: baseUrl));
+  dio.interceptors.add(ErrorInterceptor(dio: retryDio));
 
   return dio;
 });
