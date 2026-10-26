@@ -9,6 +9,7 @@ class Product {
   final String imageUrl;
   bool isFavorite;
   final String sellerId;
+  bool isPublic;
 
   Product({
     required this.id,
@@ -18,6 +19,7 @@ class Product {
     required this.imageUrl,
     this.isFavorite = false,
     required this.sellerId,
+    this.isPublic = true,
   });
 
   Product copyWith({
@@ -28,6 +30,7 @@ class Product {
     String? imageUrl,
     bool? isFavorite,
     String? sellerId,
+    bool? isPublic,
   }) {
     return Product(
       id: id ?? this.id,
@@ -37,6 +40,7 @@ class Product {
       imageUrl: imageUrl ?? this.imageUrl,
       isFavorite: isFavorite ?? this.isFavorite,
       sellerId: sellerId ?? this.sellerId,
+      isPublic: isPublic ?? this.isPublic,
     );
   }
 
@@ -49,6 +53,7 @@ class Product {
       'imageUrl': imageUrl,
       'isFavorite': isFavorite,
       'sellerId': sellerId,
+      'isPublic': isPublic,
     };
   }
 
@@ -60,7 +65,8 @@ class Product {
       price: map['price'] as double,
       imageUrl: map['imageUrl'] as String,
       isFavorite: map['isFavorite'] as bool,
-      sellerId: map['sellerId'],
+      sellerId: map['sellerId'] as String,
+      isPublic: map['isPublic'] as bool,
     );
   }
 
@@ -71,7 +77,7 @@ class Product {
 
   @override
   String toString() {
-    return 'Product(id: $id, title: $title, description: $description, price: $price, imageUrl: $imageUrl, isFavorite: $isFavorite, sellerId: $sellerId)';
+    return 'Product(id: $id, title: $title, description: $description, price: $price, imageUrl: $imageUrl, isFavorite: $isFavorite, sellerId: $sellerId, isPublic: $isPublic)';
   }
 
   @override
@@ -84,6 +90,7 @@ class Product {
         other.price == price &&
         other.imageUrl == imageUrl &&
         other.isFavorite == isFavorite &&
+        other.isPublic == isPublic &&
         other.sellerId == sellerId;
   }
 
@@ -95,6 +102,7 @@ class Product {
         price.hashCode ^
         imageUrl.hashCode ^
         isFavorite.hashCode ^
+        isPublic.hashCode ^
         sellerId.hashCode;
   }
 }
