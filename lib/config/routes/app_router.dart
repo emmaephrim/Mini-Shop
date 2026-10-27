@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/config/routes/app_routes.dart';
+import 'package:mini_shop_app/core/widgets/app_shell.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 import 'package:mini_shop_app/features/auth/views/auth_screen.dart';
 import 'package:mini_shop_app/features/cart/views/cart_screen.dart';
+import 'package:mini_shop_app/features/categories/views/categories_screen.dart';
 import 'package:mini_shop_app/features/home/views/home_screen.dart';
 import 'package:mini_shop_app/features/orders/views/orders_screen.dart';
 import 'package:mini_shop_app/features/products/views/edit_product_screen.dart';
@@ -74,12 +76,70 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     observers: [observer],
     initialLocation: AppRoute.home.path,
     routes: [
-      GoRoute(
-        path: AppRoute.home.path,
-        name: AppRoute.home.name,
-        // builder: (context, state) => const ProductsOverviewScreen(),
-        builder: (context, state) => const HomeScreen(),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          // Return the built Shell widget
+          return AppShell(navigationShell: navigationShell);
+        },
+        branches: [
+          // BRANCH 0: HOME
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoute.home.path,
+                name: AppRoute.home.name,
+                builder: (context, state) => const HomeScreen(),
+                // Sub-routes (like Product Details) go here so the Bottom Nav
+                // stays visible when viewing a product!
+                routes: [
+                  GoRoute(
+                    path: AppRoute.productDetail.path,
+                    name: AppRoute.productDetail.name,
+                    builder: (context, state) {
+                      final productId = state.pathParameters['id'];
+                      return ProductDetailScreen(productId: productId!);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          // BRANCH 2: CATEGORIES
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoute.categories.path,
+                name: AppRoute.categories.name,
+                builder: (context, state) => CategoriesScreen(),
+              ),
+            ],
+          ),
+
+          // BRANCH 1: CART
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoute.cart.path,
+                name: AppRoute.cart.name,
+                builder: (context, state) => const CartScreen(),
+              ),
+            ],
+          ),
+
+          // BRANCH 3: PROFILE
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoute.profile.path,
+                name: AppRoute.profile.name,
+                builder: (context, state) => ProfileScreen(),
+              ),
+            ],
+          ),
+        ],
       ),
+
       GoRoute(
         path: AppRoute.viewProducts.path,
         name: AppRoute.viewProducts.name,
@@ -90,19 +150,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: AppRoute.auth.name,
         builder: (context, state) => AuthScreen(),
       ),
-      GoRoute(
-        path: AppRoute.cart.path,
-        name: AppRoute.cart.name,
-        builder: (context, state) => const CartScreen(),
-      ),
-      GoRoute(
-        path: AppRoute.productDetail.path,
-        name: AppRoute.productDetail.name,
-        builder: (context, state) {
-          final productId = state.pathParameters['id'];
-          return ProductDetailScreen(productId: productId!);
-        },
-      ),
+
       GoRoute(
         path: AppRoute.addProduct.path,
         name: AppRoute.addProduct.name,
@@ -126,11 +174,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoute.orders.path,
         name: AppRoute.orders.name,
         builder: (context, state) => OrdersScreen(),
-      ),
-      GoRoute(
-        path: AppRoute.profile.path,
-        name: AppRoute.profile.name,
-        builder: (context, state) => ProfileScreen(),
       ),
     ],
   );
