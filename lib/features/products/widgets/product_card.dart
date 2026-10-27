@@ -61,15 +61,19 @@ class ProductCard extends ConsumerWidget {
                                 .read(favoritesController.notifier)
                                 .toggleFavorite(product.id);
                             if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).clearSnackBars();
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  "${product.title} added to favorites",
+                                  isFavorite
+                                      ? "${product.title} removed from favorites"
+                                      : '${product.title} added to favorites',
                                 ),
                               ),
                             );
                           } on DioException catch (e) {
                             if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).clearSnackBars();
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(

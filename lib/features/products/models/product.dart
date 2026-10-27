@@ -7,7 +7,6 @@ class Product {
   final String description;
   final double price;
   final String imageUrl;
-  bool isFavorite;
   final String sellerId;
   bool isPublic;
 
@@ -17,7 +16,6 @@ class Product {
     required this.description,
     required this.price,
     required this.imageUrl,
-    this.isFavorite = false,
     required this.sellerId,
     this.isPublic = true,
   });
@@ -38,7 +36,6 @@ class Product {
       description: description ?? this.description,
       price: price ?? this.price,
       imageUrl: imageUrl ?? this.imageUrl,
-      isFavorite: isFavorite ?? this.isFavorite,
       sellerId: sellerId ?? this.sellerId,
       isPublic: isPublic ?? this.isPublic,
     );
@@ -51,7 +48,6 @@ class Product {
       'description': description,
       'price': price,
       'imageUrl': imageUrl,
-      'isFavorite': isFavorite,
       'sellerId': sellerId,
       'isPublic': isPublic,
     };
@@ -64,7 +60,6 @@ class Product {
       description: map['description'] as String,
       price: map['price'] as double,
       imageUrl: map['imageUrl'] as String,
-      isFavorite: map['isFavorite'] as bool,
       sellerId: map['sellerId'] as String,
       isPublic: map['isPublic'] as bool,
     );
@@ -77,7 +72,7 @@ class Product {
 
   @override
   String toString() {
-    return 'Product(id: $id, title: $title, description: $description, price: $price, imageUrl: $imageUrl, isFavorite: $isFavorite, sellerId: $sellerId, isPublic: $isPublic)';
+    return 'Product(id: $id, title: $title, description: $description, price: $price, imageUrl: $imageUrl, sellerId: $sellerId, isPublic: $isPublic)';
   }
 
   @override
@@ -89,7 +84,6 @@ class Product {
         other.description == description &&
         other.price == price &&
         other.imageUrl == imageUrl &&
-        other.isFavorite == isFavorite &&
         other.isPublic == isPublic &&
         other.sellerId == sellerId;
   }
@@ -101,7 +95,6 @@ class Product {
         description.hashCode ^
         price.hashCode ^
         imageUrl.hashCode ^
-        isFavorite.hashCode ^
         isPublic.hashCode ^
         sellerId.hashCode;
   }

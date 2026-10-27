@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/config/routes/app_routes.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 import 'package:mini_shop_app/features/cart/controllers/cart_controller.dart';
-import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
+import 'package:mini_shop_app/features/favorite/controllers/favorites_controller.dart';
 import 'package:mini_shop_app/features/products/models/product.dart';
 
 class ProductItem extends ConsumerStatefulWidget {
@@ -54,6 +54,7 @@ class _ProductItemState extends ConsumerState<ProductItem> {
   Widget build(BuildContext context) {
     final product = widget.product;
     final user = ref.watch(authServiceProvider).currentUser;
+    final favorites = ref.watch(favoritesController).value?.productIds ?? {};
 
     final bool isCartItem = ref.watch(
       cartControllerProvider.select(
@@ -80,8 +81,8 @@ class _ProductItemState extends ConsumerState<ProductItem> {
                 // Call the toggle method. Because of your Optimistic Update,
                 // the UI will react instantly
                 await ref
-                    .read(productsControllerProvider.notifier)
-                    .toggleFavoriteStatus(product.id);
+                    .read(favoritesController.notifier)
+                    .toggleFavorite(product.id);
               } on DioException catch (e) {
                 final message = e.error.toString();
                 if (!context.mounted) return;
@@ -91,7 +92,7 @@ class _ProductItemState extends ConsumerState<ProductItem> {
               }
             },
             icon: Icon(
-              product.isFavorite
+              favorites.contains(product.id)
                   ? Icons.favorite
                   : Icons.favorite_outline_outlined,
               color: Theme.of(context).colorScheme.primary,

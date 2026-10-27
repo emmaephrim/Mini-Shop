@@ -60,37 +60,6 @@ class ProductControllerNotifier extends AsyncNotifier<List<Product>> {
   Product findById(String id) =>
       _currentList.firstWhere((item) => item.id == id);
 
-  // ===== Toggle Favorites Status (Optimistic update)
-  Future<void> toggleFavoriteStatus(String id) async {
-    final previousState = state;
-    final Product productToToggle = findById(id);
-    final bool newFavoriteStatus = !productToToggle.isFavorite;
-
-    // Instantly update UI before the internet finishes (Optimistic update)
-    state = AsyncValue.data([
-      for (final item in _currentList)
-        if (item.id == id)
-          item.copyWith(isFavorite: newFavoriteStatus)
-        else
-          item,
-    ]);
-
-    try {
-      final token = await ref
-          .read(authServiceProvider)
-          .currentUser
-          ?.getIdToken();
-      await ref
-          .read(productServiceProvider)
-          .toggleFavoriteStatus(id, newFavoriteStatus, token);
-    } catch (error, stackTrace) {
-      state = previousState;
-      logger.e('Toggle favorite failed', error: error, stackTrace: stackTrace);
-      await FirebaseCrashlytics.instance.recordError(error, stackTrace);
-      rethrow;
-    }
-  }
-
   Future<void> updateProduct(Product product) async {
     final previousState = state;
 

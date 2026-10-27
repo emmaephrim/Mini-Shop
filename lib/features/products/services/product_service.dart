@@ -27,7 +27,6 @@ class ProductService {
           description: prodData['description'] ?? '',
           price: (prodData['price'] as num?)?.toDouble() ?? 0.0,
           imageUrl: prodData['imageUrl'] ?? '',
-          isFavorite: prodData['isFavorite'] ?? false,
           sellerId: prodData['sellerId'] ?? '',
         ),
       );
@@ -43,7 +42,6 @@ class ProductService {
         'description': product.description,
         'imageUrl': product.imageUrl,
         'price': product.price,
-        'isFavorite': product.isFavorite,
         'sellerId': product.sellerId,
       },
     );
@@ -69,7 +67,6 @@ class ProductService {
         'description': product.description,
         'imageUrl': product.imageUrl,
         'price': product.price,
-        'isFavorite': product.isFavorite,
       },
     );
     if ((res.statusCode ?? 0) >= 400)
