@@ -28,6 +28,11 @@ class _EditProductScreenState extends ConsumerState<EditProductScreen> {
     price: 0,
     imageUrl: '',
     sellerId: '',
+    category: '',
+    createdAt: DateTime.now(),
+    rating: 0,
+    reviewCount: 0,
+    stock: 10,
   );
 
   // Initial Values for non-controller fields

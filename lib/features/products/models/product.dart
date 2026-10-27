@@ -8,7 +8,12 @@ class Product {
   final double price;
   final String imageUrl;
   final String sellerId;
-  bool isPublic;
+  final bool isPublic;
+  final String category;
+  final int stock;
+  final double rating;
+  final int reviewCount;
+  final DateTime createdAt;
 
   Product({
     required this.id,
@@ -18,6 +23,11 @@ class Product {
     required this.imageUrl,
     required this.sellerId,
     this.isPublic = true,
+    required this.category,
+    required this.stock,
+    required this.rating,
+    required this.reviewCount,
+    required this.createdAt,
   });
 
   Product copyWith({
@@ -26,9 +36,13 @@ class Product {
     String? description,
     double? price,
     String? imageUrl,
-    bool? isFavorite,
     String? sellerId,
     bool? isPublic,
+    String? category,
+    int? stock,
+    double? rating,
+    int? reviewCount,
+    DateTime? createdAt,
   }) {
     return Product(
       id: id ?? this.id,
@@ -38,6 +52,11 @@ class Product {
       imageUrl: imageUrl ?? this.imageUrl,
       sellerId: sellerId ?? this.sellerId,
       isPublic: isPublic ?? this.isPublic,
+      category: category ?? this.category,
+      stock: stock ?? this.stock,
+      rating: rating ?? this.rating,
+      reviewCount: reviewCount ?? this.reviewCount,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -50,6 +69,11 @@ class Product {
       'imageUrl': imageUrl,
       'sellerId': sellerId,
       'isPublic': isPublic,
+      'category': category,
+      'stock': stock,
+      'rating': rating,
+      'reviewCount': reviewCount,
+      'createdAt': createdAt.millisecondsSinceEpoch,
     };
   }
 
@@ -62,6 +86,11 @@ class Product {
       imageUrl: map['imageUrl'] as String,
       sellerId: map['sellerId'] as String,
       isPublic: map['isPublic'] as bool,
+      category: map['category'] as String,
+      stock: map['stock'] as int,
+      rating: map['rating'] as double,
+      reviewCount: map['reviewCount'] as int,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
     );
   }
 
@@ -72,7 +101,7 @@ class Product {
 
   @override
   String toString() {
-    return 'Product(id: $id, title: $title, description: $description, price: $price, imageUrl: $imageUrl, sellerId: $sellerId, isPublic: $isPublic)';
+    return 'Product(id: $id, title: $title, description: $description, price: $price, imageUrl: $imageUrl, sellerId: $sellerId, isPublic: $isPublic, category: $category, stock: $stock, rating: $rating, reviewCount: $reviewCount, createdAt: $createdAt)';
   }
 
   @override
@@ -84,8 +113,13 @@ class Product {
         other.description == description &&
         other.price == price &&
         other.imageUrl == imageUrl &&
+        other.sellerId == sellerId &&
         other.isPublic == isPublic &&
-        other.sellerId == sellerId;
+        other.category == category &&
+        other.stock == stock &&
+        other.rating == rating &&
+        other.reviewCount == reviewCount &&
+        other.createdAt == createdAt;
   }
 
   @override
@@ -95,7 +129,12 @@ class Product {
         description.hashCode ^
         price.hashCode ^
         imageUrl.hashCode ^
+        sellerId.hashCode ^
         isPublic.hashCode ^
-        sellerId.hashCode;
+        category.hashCode ^
+        stock.hashCode ^
+        rating.hashCode ^
+        reviewCount.hashCode ^
+        createdAt.hashCode;
   }
 }

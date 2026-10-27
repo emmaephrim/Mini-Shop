@@ -28,6 +28,11 @@ class ProductService {
           price: (prodData['price'] as num?)?.toDouble() ?? 0.0,
           imageUrl: prodData['imageUrl'] ?? '',
           sellerId: prodData['sellerId'] ?? '',
+          category: prodData['category'] ?? '',
+          createdAt: prodData['createdAt'] ?? DateTime.now(),
+          rating: prodData['rating'] ?? 0,
+          reviewCount: prodData['reviewCount'] ?? 0,
+          stock: prodData['stock'] ?? 11,
         ),
       );
     });
