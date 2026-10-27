@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mini_shop_app/core/errors/app_exception.dart';
 
 class ErrorInterceptor extends Interceptor {
@@ -13,7 +12,7 @@ class ErrorInterceptor extends Interceptor {
 
     //   if (user != null) {
     //     try {
-    //       // Passing 'true' force firebase to ignore the localcache and fetch a
+    //       // Passing 'true' force firebase to ignore the local cache and fetch a
     //       // brand new token directly from Google's servers
     //       final newToken = await user.getIdToken(true);
     //       if (newToken != null) {
