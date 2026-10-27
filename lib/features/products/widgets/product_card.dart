@@ -31,12 +31,18 @@ class ProductCard extends ConsumerWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network(
-                    product.imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      color: Colors.grey.shade200,
-                      child: const Icon(Icons.image_not_supported),
+                  GestureDetector(
+                    onTap: () => context.pushNamed(
+                      AppRoute.productDetail.name,
+                      pathParameters: {'id': product.id},
+                    ),
+                    child: Image.network(
+                      product.imageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: Colors.grey.shade200,
+                        child: const Icon(Icons.image_not_supported),
+                      ),
                     ),
                   ),
 
