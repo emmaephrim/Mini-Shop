@@ -1,12 +1,22 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mini_shop_app/config/routes/app_routes.dart';
+import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
+import 'package:mini_shop_app/features/favorite/controllers/favorites_controller.dart';
 import 'package:mini_shop_app/features/products/models/product.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends ConsumerWidget {
   const ProductCard({super.key, required this.product});
 
   final Product product;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final favorites = ref.watch(favoritesController).value?.productIds ?? {};
+    final isFavorite = favorites.contains(product.id);
+    final userId = ref.watch(authServiceProvider).currentUser?.uid;
+
     return Card(
       elevation: 2,
       shadowColor: Colors.black.withValues(alpha: 0.1),
@@ -42,14 +52,36 @@ class ProductCard extends StatelessWidget {
                       child: IconButton(
                         iconSize: 18,
                         padding: EdgeInsets.zero,
-                        onPressed: () {},
+                        onPressed: () async {
+                          if (userId == null) {
+                            return context.goNamed(AppRoute.auth.name);
+                          }
+                          try {
+                            await ref
+                                .read(favoritesController.notifier)
+                                .toggleFavorite(product.id);
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "${product.title} added to favorites",
+                                ),
+                              ),
+                            );
+                          } on DioException catch (e) {
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Oops! Something went wrong. \n$e',
+                                ),
+                              ),
+                            );
+                          }
+                        },
                         icon: Icon(
-                          product.isFavorite
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: product.isFavorite
-                              ? Colors.red
-                              : Colors.grey.shade200,
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: isFavorite ? Colors.red : Colors.grey.shade200,
                         ),
                       ),
                     ),
