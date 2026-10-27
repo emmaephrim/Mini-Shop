@@ -3,32 +3,32 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mini_shop_app/core/errors/app_exception.dart';
 
 class ErrorInterceptor extends Interceptor {
-  final Dio _dio;
-  ErrorInterceptor({required this._dio});
+  // final Dio _dio;
+  // ErrorInterceptor({required this._dio});
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode == 401) {
-      final user = FirebaseAuth.instance.currentUser;
+    // if (err.response?.statusCode == 401) {
+    //   final user = FirebaseAuth.instance.currentUser;
 
-      if (user != null) {
-        try {
-          // Passing 'true' force firebase to ignore the localcache and fetch a
-          // brand new token directly from Google's servers
-          final newToken = await user.getIdToken(true);
-          if (newToken != null) {
-            final options = err.requestOptions;
-            options.queryParameters['auth'] = newToken;
+    //   if (user != null) {
+    //     try {
+    //       // Passing 'true' force firebase to ignore the localcache and fetch a
+    //       // brand new token directly from Google's servers
+    //       final newToken = await user.getIdToken(true);
+    //       if (newToken != null) {
+    //         final options = err.requestOptions;
+    //         options.queryParameters['auth'] = newToken;
 
-            // Retry the exact same request using our Dio instance
-            final retryResponse = await _dio.fetch(options);
-            return handler.resolve(retryResponse);
-          }
-        } catch (refreshError) {
-          //
-        }
-      }
-    }
+    //         // Retry the exact same request using our Dio instance
+    //         final retryResponse = await _dio.fetch(options);
+    //         return handler.resolve(retryResponse);
+    //       }
+    //     } catch (refreshError) {
+    //       //
+    //     }
+    //   }
+    // }
 
     String friendlyMessage = 'An unexpected error occurred';
     switch (err.type) {
