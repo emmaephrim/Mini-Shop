@@ -25,7 +25,7 @@ class AppDrawer extends ConsumerWidget {
             automaticallyImplyLeading: false,
           ),
           ListTile(
-            onTap: () => context.pushReplacementNamed(AppRoute.home.name),
+            onTap: () => context.goNamed(AppRoute.home.name),
             leading: Icon(Icons.shop_2),
             title: Text("Shop"),
           ),

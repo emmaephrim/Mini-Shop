@@ -18,7 +18,7 @@ class HomeSectionHeader extends StatelessWidget {
           ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
         TextButton(
-          onPressed: () => context.pushNamed(AppRoute.viewProducts.name),
+          onPressed: () => context.goNamed(AppRoute.viewProducts.name),
           child: const Text("See All"),
         ),
       ],
