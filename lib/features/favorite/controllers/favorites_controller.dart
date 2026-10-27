@@ -31,12 +31,13 @@ class FavoritesControllerNotifier extends AsyncNotifier<UserFavorite> {
     final currentFavorites = state.value ?? UserFavorite(productIds: {});
     final isCurrentFavorite = currentFavorites.productIds.contains(productId);
 
+    final newFavorites = Set<String>.from(currentFavorites.productIds);
     if (isCurrentFavorite) {
-      currentFavorites.productIds.remove(productId);
+      newFavorites.remove(productId);
     } else {
-      currentFavorites.productIds.add(productId);
+      newFavorites.add(productId);
     }
-    state = AsyncValue.data(currentFavorites);
+    state = AsyncValue.data(UserFavorite(productIds: newFavorites));
     try {
       await ref
           .read(favoriteServiceProvider)
