@@ -7,7 +7,11 @@ class HomePromoCarousel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final promos = ['Slide 1', 'Slide 2', 'Slide 3'];
+    final promos = [
+      'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0.jpg',
+      'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0.png',
+      'https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?w=500&auto=format&fit=crop&q=80.jpg',
+    ];
     return CarouselSlider(
       items: promos.map((promo) {
         return Builder(
@@ -17,8 +21,12 @@ class HomePromoCarousel extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primaryContainer,
                 borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                  image: NetworkImage(promo),
+                  fit: BoxFit.cover,
+                ),
               ),
-              child: Text(promo, style: const TextStyle(fontSize: 24.0)),
+              // child: Text(promo, style: const TextStyle(fontSize: 24.0)),
             );
           },
         );
