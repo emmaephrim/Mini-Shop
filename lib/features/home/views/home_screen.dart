@@ -4,7 +4,9 @@ import 'package:mini_shop_app/features/home/widgets/home_category_list.dart';
 import 'package:mini_shop_app/features/home/widgets/home_promo_carousel.dart';
 import 'package:mini_shop_app/features/home/widgets/home_search_bar.dart';
 import 'package:mini_shop_app/features/home/widgets/home_section_header.dart';
+import 'package:mini_shop_app/features/products/controllers/filter_provider.dart';
 import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
+import 'package:mini_shop_app/features/products/widgets/filter_drawer.dart';
 import 'package:mini_shop_app/features/products/widgets/product_card.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -12,7 +14,22 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final filteredProducts = ref.watch(filteredProductsControllerProvider);
+    final currentFilter = ref.watch(filterControllerProvider);
+    final categories = [
+      'electronics',
+      'fashion',
+      'home',
+      'beauty',
+      'sports',
+      'kids',
+      'automotive',
+      'stationery',
+      'health',
+    ];
+
     return Scaffold(
+      endDrawer: FilterDrawer(),
       body: CustomScrollView(
         slivers: [
           // FLOATING APP BAR & SEARCH
@@ -24,6 +41,12 @@ class HomeScreen extends ConsumerWidget {
               IconButton(
                 onPressed: () {},
                 icon: Icon(Icons.notifications_none),
+              ),
+              Builder(
+                builder: (ctx) => IconButton(
+                  onPressed: () => Scaffold.of(ctx).openEndDrawer(),
+                  icon: const Icon(Icons.tune),
+                ),
               ),
             ],
           ),
