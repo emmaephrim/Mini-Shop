@@ -21,14 +21,19 @@ class HomeCategoryList extends StatelessWidget {
                 GestureDetector(
                   onTap: () {},
                   child: CircleAvatar(
-                    backgroundImage: AssetImage(
-                      ('assets/images/categories/${categories[index]}.jpeg'),
-                    ),
                     radius: 30,
                     backgroundColor: Theme.of(
                       context,
-                    ).colorScheme.secondaryContainer,
-                    // color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    ).colorScheme.onSecondaryContainer,
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage(
+                        ('assets/images/categories/${categories[index]}.jpeg'),
+                      ),
+                      radius: 28,
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.secondaryContainer,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 9),
