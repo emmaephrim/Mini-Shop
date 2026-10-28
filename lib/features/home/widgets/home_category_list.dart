@@ -5,7 +5,17 @@ class HomeCategoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categories = ['electronics', 'fashion', 'home', 'beauty', 'sports'];
+    final categories = [
+      'electronics',
+      'fashion',
+      'home',
+      'beauty',
+      'sports',
+      'kids',
+      'automotive',
+      'stationery',
+      'health',
+    ];
 
     return SizedBox(
       height: 100,
@@ -21,7 +31,7 @@ class HomeCategoryList extends StatelessWidget {
                 GestureDetector(
                   onTap: () {},
                   child: CircleAvatar(
-                    radius: 30,
+                    radius: 32,
                     backgroundColor: Theme.of(
                       context,
                     ).colorScheme.onSecondaryContainer,
@@ -29,7 +39,7 @@ class HomeCategoryList extends StatelessWidget {
                       backgroundImage: AssetImage(
                         ('assets/images/categories/${categories[index]}.jpeg'),
                       ),
-                      radius: 28,
+                      radius: 30,
                       backgroundColor: Theme.of(
                         context,
                       ).colorScheme.secondaryContainer,
