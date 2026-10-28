@@ -5,7 +5,7 @@ class HomeCategoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categories = ['Electronics', 'Fashion', 'Home', 'Beauty', 'Sports'];
+    final categories = ['electronics', 'fashion', 'home', 'beauty', 'sports'];
 
     return SizedBox(
       height: 100,
@@ -18,19 +18,23 @@ class HomeCategoryList extends StatelessWidget {
             padding: EdgeInsets.only(right: 16),
             child: Column(
               children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Theme.of(
-                    context,
-                  ).colorScheme.secondaryContainer,
-                  child: Icon(
-                    Icons.category,
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                GestureDetector(
+                  onTap: () {},
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage(
+                      ('assets/images/categories/${categories[index]}.jpeg'),
+                    ),
+                    radius: 30,
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.secondaryContainer,
+                    // color: Theme.of(context).colorScheme.onSecondaryContainer,
                   ),
                 ),
                 const SizedBox(height: 9),
                 Text(
-                  categories[index],
+                  categories[index][0].toUpperCase() +
+                      categories[index].substring(1),
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
               ],
