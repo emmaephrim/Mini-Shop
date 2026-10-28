@@ -91,7 +91,7 @@ class ProductCard extends ConsumerWidget {
                         },
                         icon: Icon(
                           isFavorite ? Icons.favorite : Icons.favorite_border,
-                          color: isFavorite ? Colors.red : Colors.grey.shade200,
+                          color: isFavorite ? Colors.red : Colors.grey.shade600,
                         ),
                       ),
                     ),
