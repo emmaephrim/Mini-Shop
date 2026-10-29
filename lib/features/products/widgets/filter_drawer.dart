@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/features/products/controllers/filter_provider.dart';
+import 'package:mini_shop_app/features/products/models/sort_option.dart';
 
 class FilterDrawer extends ConsumerStatefulWidget {
   const FilterDrawer({super.key});
@@ -11,6 +12,7 @@ class FilterDrawer extends ConsumerStatefulWidget {
 
 class _FilterDrawerState extends ConsumerState<FilterDrawer> {
   late RangeValues _currentRange;
+  final _sortOptions = SortOption.values.toList();
 
   @override
   void initState() {
@@ -21,6 +23,7 @@ class _FilterDrawerState extends ConsumerState<FilterDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    final filters = ref.watch(filterControllerProvider);
     return Drawer(
       child: SafeArea(
         child: Column(
@@ -55,6 +58,21 @@ class _FilterDrawerState extends ConsumerState<FilterDrawer> {
                   _currentRange = values;
                 });
               },
+            ),
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: DropdownButton<SortOption>(
+                value: filters.sortOption,
+                items: _sortOptions.map((option) {
+                  return DropdownMenuItem(
+                    value: option,
+                    child: Text(option.name),
+                  );
+                }).toList(),
+                onChanged: (value) => ref
+                    .read(filterControllerProvider.notifier)
+                    .setSortOption(value!),
+              ),
             ),
 
             const Spacer(),
