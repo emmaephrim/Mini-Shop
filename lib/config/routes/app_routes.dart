@@ -9,7 +9,8 @@ enum AppRoute {
   userProducts('/user-products'),
   orders('/orders'),
   profile('/profile'),
-  categories('/categories');
+  categories('/categories'),
+  explorer('/explorer');
 
   // This variable holds the string URL for the enum
   final String path;
