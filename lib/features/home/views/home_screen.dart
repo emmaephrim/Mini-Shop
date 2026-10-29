@@ -42,12 +42,12 @@ class HomeScreen extends ConsumerWidget {
                 onPressed: () {},
                 icon: Icon(Icons.notifications_none),
               ),
-              Builder(
-                builder: (ctx) => IconButton(
-                  onPressed: () => Scaffold.of(ctx).openEndDrawer(),
-                  icon: const Icon(Icons.tune),
-                ),
-              ),
+              // Builder(
+              //   builder: (ctx) => IconButton(
+              //     onPressed: () => Scaffold.of(ctx).openEndDrawer(),
+              //     icon: const Icon(Icons.tune),
+              //   ),
+              // ),
             ],
           ),
 
