@@ -14,19 +14,30 @@ class ProductExplorerScreen extends ConsumerWidget {
     return Scaffold(
       endDrawer: FilterDrawer(),
       appBar: AppBar(
-        title: TextField(
-          textInputAction: TextInputAction.done,
-          controller: TextEditingController(text: currentFilters.searchQuery),
-          autofocus:
-              currentFilters.searchQuery.isEmpty &&
-              currentFilters.category == 'All',
-          decoration: InputDecoration(
-            hintText:
-                'Search ${currentFilters.category == 'All' ? 'products' : currentFilters.category}..',
-            border: InputBorder.none,
+        title: Container(
+          height: 40,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(9),
           ),
-          onSubmitted: (value) =>
-              ref.read(filterControllerProvider.notifier).setQuery(value),
+          child: TextField(
+            textInputAction: TextInputAction.done,
+            controller: TextEditingController(text: currentFilters.searchQuery),
+            autofocus:
+                currentFilters.searchQuery.isEmpty &&
+                currentFilters.category == 'All',
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 10,
+              ),
+              hintText:
+                  'Search ${currentFilters.category == 'All' ? 'products' : currentFilters.category}..',
+              border: InputBorder.none,
+            ),
+            onSubmitted: (value) =>
+                ref.read(filterControllerProvider.notifier).setQuery(value),
+          ),
         ),
         actions: [
           Builder(
