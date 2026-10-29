@@ -1,0 +1,56 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mini_shop_app/features/products/controllers/filter_provider.dart';
+import 'package:mini_shop_app/features/products/widgets/filter_drawer.dart';
+import 'package:mini_shop_app/features/products/widgets/product_item.dart';
+
+class ProductExplorerScreen extends ConsumerWidget {
+  const ProductExplorerScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final products = ref.watch(filteredProductsControllerProvider);
+    final currentFilters = ref.watch(filterControllerProvider);
+    return Scaffold(
+      endDrawer: FilterDrawer(),
+      appBar: AppBar(
+        title: TextField(
+          textInputAction: TextInputAction.done,
+          controller: TextEditingController(text: currentFilters.searchQuery),
+          autofocus:
+              currentFilters.searchQuery.isEmpty &&
+              currentFilters.category == 'All',
+          decoration: InputDecoration(
+            hintText:
+                'Search ${currentFilters.category == 'All' ? 'products' : currentFilters.category}..',
+            border: InputBorder.none,
+          ),
+          onSubmitted: (value) =>
+              ref.read(filterControllerProvider.notifier).setQuery(value),
+        ),
+        actions: [
+          Builder(
+            builder: ((ctx) => IconButton(
+              onPressed: () => Scaffold.of(ctx).openEndDrawer(),
+              icon: const Icon(Icons.tune),
+            )),
+          ),
+        ],
+      ),
+      body: products.isEmpty
+          ? const Center(child: Text("No products found."))
+          : GridView.builder(
+              padding: EdgeInsets.all(10),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+                childAspectRatio: 3 / 2,
+              ),
+              itemCount: products.length,
+              itemBuilder: (ctx, index) =>
+                  ProductItem(product: products[index]),
+            ),
+    );
+  }
+}

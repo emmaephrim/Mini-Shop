@@ -13,6 +13,7 @@ import 'package:mini_shop_app/features/home/views/home_screen.dart';
 import 'package:mini_shop_app/features/orders/views/orders_screen.dart';
 import 'package:mini_shop_app/features/products/views/edit_product_screen.dart';
 import 'package:mini_shop_app/features/products/views/product_detail_screen.dart';
+import 'package:mini_shop_app/features/products/views/product_explorer_screen.dart';
 import 'package:mini_shop_app/features/products/views/products_overview_screen.dart';
 import 'package:mini_shop_app/features/products/views/user_products_screen.dart';
 import 'package:mini_shop_app/features/profile/views/profile_screen.dart';
@@ -138,6 +139,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
         ],
+      ),
+
+      GoRoute(
+        path: AppRoute.explorer.path,
+        name: AppRoute.explorer.name,
+        builder: (context, state) => ProductExplorerScreen(),
       ),
 
       GoRoute(

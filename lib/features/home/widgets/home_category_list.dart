@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mini_shop_app/config/routes/app_routes.dart';
+import 'package:mini_shop_app/features/products/controllers/filter_provider.dart';
 
-class HomeCategoryList extends StatelessWidget {
+class HomeCategoryList extends ConsumerWidget {
   const HomeCategoryList({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final categories = [
       'electronics',
       'fashion',
@@ -29,7 +33,12 @@ class HomeCategoryList extends StatelessWidget {
             child: Column(
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    ref
+                        .read(filterControllerProvider.notifier)
+                        .initializeExplorer(category: categories[index]);
+                    context.pushNamed(AppRoute.explorer.name);
+                  },
                   child: CircleAvatar(
                     radius: 32,
                     backgroundColor: Theme.of(
