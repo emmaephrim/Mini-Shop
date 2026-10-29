@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/features/products/controllers/filter_provider.dart';
+import 'package:mini_shop_app/features/products/widgets/explorer_product_card.dart';
 import 'package:mini_shop_app/features/products/widgets/filter_drawer.dart';
 import 'package:mini_shop_app/features/products/widgets/product_item.dart';
 
@@ -54,13 +55,13 @@ class ProductExplorerScreen extends ConsumerWidget {
               padding: EdgeInsets.all(10),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                childAspectRatio: 3 / 2,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 0.65,
               ),
               itemCount: products.length,
               itemBuilder: (ctx, index) =>
-                  ProductItem(product: products[index]),
+                  ExplorerProductCard(product: products[index]),
             ),
     );
   }
