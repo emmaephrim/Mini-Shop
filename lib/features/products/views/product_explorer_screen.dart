@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mini_shop_app/features/products/controllers/filter_provider.dart';
 import 'package:mini_shop_app/features/products/widgets/explorer_product_card.dart';
 import 'package:mini_shop_app/features/products/widgets/filter_drawer.dart';
-import 'package:mini_shop_app/features/products/widgets/product_item.dart';
 
 class ProductExplorerScreen extends ConsumerWidget {
   const ProductExplorerScreen({super.key});
