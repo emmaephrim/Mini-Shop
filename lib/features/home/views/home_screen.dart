@@ -13,20 +13,6 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final filteredProducts = ref.watch(filteredProductsControllerProvider);
-    // final currentFilter = ref.watch(filterControllerProvider);
-    // final categories = [
-    //   'electronics',
-    //   'fashion',
-    //   'home',
-    //   'beauty',
-    //   'sports',
-    //   'kids',
-    //   'automotive',
-    //   'stationery',
-    //   'health',
-    // ];
-
     return Scaffold(
       endDrawer: FilterDrawer(),
       body: CustomScrollView(
@@ -41,12 +27,6 @@ class HomeScreen extends ConsumerWidget {
                 onPressed: () {},
                 icon: Icon(Icons.notifications_none),
               ),
-              // Builder(
-              //   builder: (ctx) => IconButton(
-              //     onPressed: () => Scaffold.of(ctx).openEndDrawer(),
-              //     icon: const Icon(Icons.tune),
-              //   ),
-              // ),
             ],
           ),
 
@@ -77,11 +57,7 @@ class HomeScreen extends ConsumerWidget {
             sliver: SliverGrid(
               delegate: SliverChildBuilderDelegate((ctx, index) {
                 final products = ref.watch(productsControllerProvider);
-                // return Container(
-                //   color: Colors.grey.shade200,
-                //   alignment: Alignment.center,
-                //   child: Text('Product $index'),
-                // );
+
                 return products.when(
                   error: (error, stackTrace) => Text('Something went wrong!'),
                   loading: () => Center(child: CircularProgressIndicator()),
