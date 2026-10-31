@@ -42,9 +42,9 @@ class AppShell extends StatelessWidget {
             selectedIcon: Icon(Icons.shopping_cart),
           ),
           NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            label: 'Profile',
-            selectedIcon: Icon(Icons.person_outline),
+            icon: Icon(Icons.chat_outlined),
+            label: 'Messages',
+            selectedIcon: Icon(Icons.chat),
           ),
         ],
       ),

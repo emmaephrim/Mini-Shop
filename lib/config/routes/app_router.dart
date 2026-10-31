@@ -9,6 +9,7 @@ import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 import 'package:mini_shop_app/features/auth/views/auth_screen.dart';
 import 'package:mini_shop_app/features/cart/views/cart_screen.dart';
 import 'package:mini_shop_app/features/categories/views/categories_screen.dart';
+import 'package:mini_shop_app/features/chat/views/chat_screen.dart';
 import 'package:mini_shop_app/features/home/views/home_screen.dart';
 import 'package:mini_shop_app/features/orders/views/orders_screen.dart';
 import 'package:mini_shop_app/features/products/views/edit_product_screen.dart';
@@ -39,6 +40,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     AppRoute.profile.path,
     AppRoute.userProducts.path,
     AppRoute.addProduct.path,
+    AppRoute.chats.path,
   ];
 
   return GoRouter(
@@ -128,9 +130,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
 
-          // BRANCH 3: PROFILE
+          // BRANCH 3: CHATS
           StatefulShellBranch(
             routes: [
+              // GoRoute(
+              //   path: AppRoute.chats.path,
+              //   name: AppRoute.chats.name,
+              //   builder: (context, state) => ChatScreen(),
+              // ),
               GoRoute(
                 path: AppRoute.profile.path,
                 name: AppRoute.profile.name,
@@ -141,6 +148,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         ],
       ),
 
+      // GoRoute(
+      //   path: AppRoute.profile.path,
+      //   name: AppRoute.profile.name,
+      //   builder: (context, state) => ProfileScreen(),
+      // ),
       GoRoute(
         path: AppRoute.explorer.path,
         name: AppRoute.explorer.name,
