@@ -24,6 +24,8 @@ final chatMessagesStreamProvider = StreamProvider.family<List<Message>, String>(
   },
 );
 
+final chatServiceProvider = Provider<ChatService>((ref) => ChatService());
+
 class ChatService {
   Future<void> sendMessage({
     required String chatId,
