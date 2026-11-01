@@ -40,7 +40,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     AppRoute.profile.path,
     AppRoute.userProducts.path,
     AppRoute.addProduct.path,
-    AppRoute.chats.path,
+    AppRoute.chat.path,
   ];
 
   return GoRouter(
@@ -153,6 +153,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       //   name: AppRoute.profile.name,
       //   builder: (context, state) => ProfileScreen(),
       // ),
+      GoRoute(
+        path: AppRoute.chat.path,
+        name: AppRoute.chat.name,
+        builder: (context, state) {
+          final chatId = state.pathParameters['chatId']!;
+          final receiverName = state.extra.toString();
+          return ChatScreen(chatId: chatId, receiverName: receiverName);
+        },
+      ),
       GoRoute(
         path: AppRoute.explorer.path,
         name: AppRoute.explorer.name,

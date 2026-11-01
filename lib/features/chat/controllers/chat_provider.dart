@@ -55,4 +55,19 @@ class ChatService {
     uids.sort();
     return '${uids[0]}_$uids[1]';
   }
+
+  Future<String> initializeChat(String currentUserId, String sellerId) async {
+    final chatId = generateChatId(currentUserId, sellerId);
+    final dbRef = FirebaseDatabase.instance.ref('chats/$chatId');
+    // .update instead of .set()
+    //If the chat already exists, this safely re-asserts the participation
+    //WITHOUT erasing their 'lastMessage' history
+    await dbRef.update({
+      'participants': {currentUserId: true, sellerId: true},
+
+      // We do not overwrite lastMessage or timestamp here
+    });
+
+    return chatId;
+  }
 }

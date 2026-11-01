@@ -11,7 +11,7 @@ enum AppRoute {
   profile('/profile'),
   categories('/categories'),
   explorer('/explorer'),
-  chats('/chats');
+  chat('/chat/:id');
 
   // This variable holds the string URL for the enum
   final String path;

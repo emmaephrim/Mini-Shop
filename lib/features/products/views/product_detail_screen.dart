@@ -1,6 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mini_shop_app/config/routes/app_routes.dart';
+import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
+import 'package:mini_shop_app/features/chat/controllers/chat_provider.dart';
 import 'package:mini_shop_app/features/products/models/product.dart';
 import 'package:mini_shop_app/features/products/controllers/product_controller.dart';
 
@@ -40,6 +44,45 @@ class ProductDetailScreen extends ConsumerWidget {
                 textAlign: TextAlign.center,
                 softWrap: true,
               ),
+            ),
+            const SizedBox(height: 10),
+            FilledButton.icon(
+              onPressed: () async {
+                final currentUser = ref.read(authServiceProvider).currentUser;
+                // Show login bottom sheet
+                if (currentUser == null) return;
+
+                if (currentUser.uid == product.sellerId) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('You cannot message yourself'),
+                    ),
+                  );
+                  return;
+                }
+
+                try {
+                  // initialize the chat room securely
+                  final chatId = await ref
+                      .read(chatServiceProvider)
+                      .initializeChat(currentUser.uid, product.sellerId);
+
+                  if (!context.mounted) return;
+
+                  // Navigate to the chat room
+                  context.pushNamed(
+                    AppRoute.chat.name,
+                    pathParameters: {'chatId': chatId},
+                    extra: 'Seller Name',
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to start chat')),
+                  );
+                }
+              },
+              icon: Icon(Icons.bubble_chart_outlined),
+              label: const Text("Contact Seller"),
             ),
           ],
         ),
