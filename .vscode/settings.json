@@ -3,6 +3,7 @@
         "buildlog",
         "Lato",
         "swiftpm",
-        "Symbolication"
+        "Symbolication",
+        "uids"
     ]
 }

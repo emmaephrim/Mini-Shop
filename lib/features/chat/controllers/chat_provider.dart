@@ -48,4 +48,11 @@ class ChatService {
       'lastMessageTime': timestamp,
     });
   }
+
+  String generateChatId(String uid1, String uid2) {
+    // put but IDs in a list
+    final uids = [uid1, uid2];
+    uids.sort();
+    return '${uids[0]}_$uids[1]';
+  }
 }
