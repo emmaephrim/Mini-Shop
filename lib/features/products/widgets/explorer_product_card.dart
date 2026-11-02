@@ -12,14 +12,15 @@ class ExplorerProductCard extends ConsumerStatefulWidget {
   const ExplorerProductCard({super.key, required this.product});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
+  ConsumerState<ExplorerProductCard> createState() =>
       _ExplorerProductCardState();
 }
 
 class _ExplorerProductCardState extends ConsumerState<ExplorerProductCard> {
   bool _isLoading = false;
 
-  void _protectedButtons(dynamic user) {
+  // void _protectedButtons(dynamic user) {
+  bool _isaActionAllowed(dynamic user) {
     if (user == null) {
       showModalBottomSheet(
         context: context,
@@ -34,6 +35,7 @@ class _ExplorerProductCardState extends ConsumerState<ExplorerProductCard> {
                 'Sign in to add items to cart',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
+              const SizedBox(height: 16),
               FilledButton(
                 onPressed: () {
                   Navigator.pop(ctx);
@@ -45,8 +47,9 @@ class _ExplorerProductCardState extends ConsumerState<ExplorerProductCard> {
           ),
         ),
       );
-      throw Exception('Guest User Intercepted');
+      return false;
     }
+    return true;
   }
 
   @override
@@ -64,7 +67,7 @@ class _ExplorerProductCardState extends ConsumerState<ExplorerProductCard> {
     final bool isFav = favorites.contains(product.id);
 
     return GestureDetector(
-      onTap: () => context.pushNamed(
+      onTap: () => context.goNamed(
         AppRoute.productDetail.name,
         pathParameters: {'id': product.id},
       ),
@@ -107,12 +110,12 @@ class _ExplorerProductCardState extends ConsumerState<ExplorerProductCard> {
                         customBorder: const CircleBorder(),
                         onTap: () async {
                           try {
-                            _protectedButtons(user);
+                            if (!_isaActionAllowed(user)) return;
                             await ref
                                 .read(favoritesController.notifier)
                                 .toggleFavorite(product.id);
                           } catch (e) {
-                            if (e.toString().contains("Guest user")) return;
+                            if (e.toString().contains("Guest User")) return;
                             if (!context.mounted) return;
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(e.toString())),
@@ -204,8 +207,8 @@ class _ExplorerProductCardState extends ConsumerState<ExplorerProductCard> {
                                   color: Colors.white,
                                 ),
                           onPressed: () async {
+                            if (!_isaActionAllowed(user)) return;
                             try {
-                              _protectedButtons(user);
                               setState(() {
                                 _isLoading = true;
                               });
@@ -235,7 +238,7 @@ class _ExplorerProductCardState extends ConsumerState<ExplorerProductCard> {
                                 ),
                               );
                             } catch (e) {
-                              if (e.toString().contains('Guest users')) return;
+                              if (e.toString().contains('Guest Users')) return;
                               if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text(e.toString())),
