@@ -33,7 +33,7 @@ class Message {
       'id': id,
       'senderId': senderId,
       'text': text,
-      'timeStamp': timestamp.millisecondsSinceEpoch,
+      'timeStamp': timestamp.toIso8601String(),
     };
   }
 
@@ -42,7 +42,7 @@ class Message {
       id: id,
       senderId: map['senderId'] as String,
       text: map['text'] as String,
-      timestamp: DateTime.fromMillisecondsSinceEpoch(map['timeStamp'] as int),
+      timestamp: DateTime.parse(map['timeStamp'] as String),
     );
   }
 
