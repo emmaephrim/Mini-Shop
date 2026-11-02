@@ -133,11 +133,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           // BRANCH 3: CHATS
           StatefulShellBranch(
             routes: [
-              // GoRoute(
-              //   path: AppRoute.chats.path,
-              //   name: AppRoute.chats.name,
-              //   builder: (context, state) => ChatScreen(),
-              // ),
               GoRoute(
                 path: AppRoute.profile.path,
                 name: AppRoute.profile.name,
@@ -148,11 +143,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         ],
       ),
 
-      // GoRoute(
-      //   path: AppRoute.profile.path,
-      //   name: AppRoute.profile.name,
-      //   builder: (context, state) => ProfileScreen(),
-      // ),
       GoRoute(
         path: AppRoute.chat.path,
         name: AppRoute.chat.name,
