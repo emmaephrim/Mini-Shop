@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mini_shop_app/config/routes/app_routes.dart';
+import 'package:mini_shop_app/core/utils/logger.dart';
 import 'package:mini_shop_app/features/auth/controllers/auth_provider.dart';
 import 'package:mini_shop_app/features/chat/controllers/chat_provider.dart';
 import 'package:mini_shop_app/features/products/models/product.dart';
@@ -75,7 +76,12 @@ class ProductDetailScreen extends ConsumerWidget {
                     pathParameters: {'chatId': chatId},
                     extra: 'Seller Name',
                   );
-                } catch (e) {
+                } catch (e, stackTrace) {
+                  logger.e(
+                    'Failed to start chat',
+                    error: e,
+                    stackTrace: stackTrace,
+                  );
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Failed to start chat')),
                   );
