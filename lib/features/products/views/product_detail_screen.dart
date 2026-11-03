@@ -77,6 +77,9 @@ class ProductDetailScreen extends ConsumerWidget {
                     extra: 'Seller Name',
                   );
                 } catch (e, stackTrace) {
+                  logger.i(
+                    'credentials to chats: current user: ${currentUser.uid} and seller ID: ${product.sellerId}',
+                  );
                   logger.e(
                     'Failed to start chat',
                     error: e,
