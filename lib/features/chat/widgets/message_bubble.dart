@@ -28,7 +28,7 @@ class MessageBubble extends StatelessWidget {
           message.text,
           style: TextStyle(
             color: isMe
-                ? Theme.of(context).colorScheme.primary
+                ? Theme.of(context).colorScheme.onPrimary
                 : Theme.of(context).colorScheme.onSurface,
           ),
         ),
