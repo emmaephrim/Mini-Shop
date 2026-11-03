@@ -37,7 +37,7 @@ class Message {
     };
   }
 
-  factory Message.fromMap(String id, Map<String, dynamic> map) {
+  factory Message.fromMap(String id, Map<dynamic, dynamic> map) {
     return Message(
       id: id,
       senderId: map['senderId'] as String,
