@@ -53,7 +53,7 @@ class ChatService {
     // put but IDs in a list
     final uids = [uid1, uid2];
     uids.sort();
-    return '${uids[0]}_$uids[1]';
+    return '${uids[0]}_${uids[1]}';
   }
 
   Future<String> initializeChat(String currentUserId, String sellerId) async {
