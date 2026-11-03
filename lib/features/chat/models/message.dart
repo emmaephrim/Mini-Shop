@@ -18,13 +18,13 @@ class Message {
     String? id,
     String? senderId,
     String? text,
-    DateTime? timeStamp,
+    DateTime? timestamp,
   }) {
     return Message(
       id: id ?? this.id,
       senderId: senderId ?? this.senderId,
       text: text ?? this.text,
-      timestamp: timeStamp ?? this.timestamp,
+      timestamp: timestamp ?? this.timestamp,
     );
   }
 
@@ -33,7 +33,7 @@ class Message {
       'id': id,
       'senderId': senderId,
       'text': text,
-      'timeStamp': timestamp.toIso8601String(),
+      'timestamp': timestamp.toIso8601String(),
     };
   }
 
@@ -42,7 +42,7 @@ class Message {
       id: id,
       senderId: map['senderId'] as String,
       text: map['text'] as String,
-      timestamp: DateTime.parse(map['timeStamp'] as String),
+      timestamp: DateTime.parse(map['timestamp'] as String),
     );
   }
 
@@ -53,7 +53,7 @@ class Message {
 
   @override
   String toString() {
-    return 'Message(id: $id, senderId: $senderId, text: $text, timeStamp: $timestamp)';
+    return 'Message(id: $id, senderId: $senderId, text: $text, timestamp: $timestamp)';
   }
 
   @override
